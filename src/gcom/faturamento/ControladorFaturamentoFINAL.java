@@ -4529,10 +4529,10 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
 		int quantTotalEconomia = 0;
-		int consumoPorEconomia = 0;
+		BigDecimal consumoPorEconomia = new BigDecimal("0");
 		int consumoMinimoCategoriaOuSubcategoria = 0;
-		int consumoExcedenteCategoriaOuSubcategoria = 0;
-		int consumoEconomiaCategoriaOuSubcategoria = 0;
+		BigDecimal consumoExcedenteCategoriaOuSubcategoria = new BigDecimal("0");
+		BigDecimal consumoEconomiaCategoriaOuSubcategoria = new BigDecimal("0");
 		int consumoFaturadoCategoriaOuSubcategoria = 0;
 		BigDecimal vlTarifaMinimaCategoriaOuSubcategoria = new BigDecimal("0");
 		BigDecimal vlEconomiaCategoriaOuSubcategoria = new BigDecimal("0");
@@ -4621,7 +4621,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// multiplo das economias
 		// Roberta Costa - 27/07/2006
 		if (quantTotalEconomia != 0) {
-			consumoPorEconomia = consumoFaturado.intValue() / quantTotalEconomia;
+			consumoPorEconomia = new BigDecimal(consumoFaturado / quantTotalEconomia);
 		}
 		System.out.println("consumoFaturado: " + consumoFaturado);
 		System.out.println("consumoPorEconomia: " + consumoPorEconomia);
@@ -4631,7 +4631,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		System.out.println("calculoExcessoImovel: " + calculoExcessoImovel);
 		// Cálculo do Excesso por economia = Consumo Excedente / quantidade
 		// total de economias do imóvel
-		int calculoExcessoEconomia = calculoExcessoImovel / quantTotalEconomia;
+		BigDecimal calculoExcessoEconomia = new BigDecimal(calculoExcessoImovel / quantTotalEconomia);
 		System.out.println("calculoExcessoEconomia: " + calculoExcessoEconomia);
 		// --------------------------------------------------------------------------
 		// Seleciona as tarifas de consumo por categoria
@@ -4726,13 +4726,13 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			 * economia
 			 */
 			if (calculoExcessoImovel > 0) {
-				consumoEconomiaCategoriaOuSubcategoria = consumoTarifaCategoria.getNumeroConsumoMinimo().intValue();
+				consumoEconomiaCategoriaOuSubcategoria = new BigDecimal(consumoTarifaCategoria.getNumeroConsumoMinimo().intValue());
 			} else {
 				if (consumoTarifaCategoria.getNumeroConsumoMinimo() != null) {
-					if (consumoPorEconomia > consumoTarifaCategoria.getNumeroConsumoMinimo().intValue()) {
+					if (consumoPorEconomia.compareTo(new BigDecimal(consumoTarifaCategoria.getNumeroConsumoMinimo())) == 1) {
 
-						consumoEconomiaCategoriaOuSubcategoria = consumoTarifaCategoria.getNumeroConsumoMinimo()
-								.intValue();
+						consumoEconomiaCategoriaOuSubcategoria = new BigDecimal(consumoTarifaCategoria.getNumeroConsumoMinimo()
+								.intValue());
 					} else {
 						consumoEconomiaCategoriaOuSubcategoria = consumoPorEconomia;
 					}
@@ -4757,8 +4757,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			} else if (consumoTarifaCategoria.getNumeroConsumoMinimo() != null) {
 
-				consumoExcedenteCategoriaOuSubcategoria = consumoPorEconomia
-						- consumoTarifaCategoria.getNumeroConsumoMinimo().intValue();
+				consumoExcedenteCategoriaOuSubcategoria = new BigDecimal(
+						consumoPorEconomia.subtract(new BigDecimal(consumoTarifaCategoria.getNumeroConsumoMinimo())));
 
 			}
 
@@ -4768,7 +4768,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			BigDecimal vlFaturadoFaixa = null;
 
 			// Caso o consumo excedente da categoria seja maior que zero
-			if (consumoExcedenteCategoriaOuSubcategoria > 0) {
+			if (consumoExcedenteCategoriaOuSubcategoria.compareTo(BigDecimal.ZERO)==1) {
 
 				int faixaFimAnterior = 0;
 
@@ -4799,7 +4799,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					sessionContext.setRollbackOnly();
 					throw new ControladorException("");
 				} else {
-					int consumoFaturadoFaixa = 0;
+					BigDecimal consumoFaturadoFaixa = BigDecimal.ZERO;
 					int limiteInicialConsumoFaixa = 0;
 					int limiteFinalConsumoFaixa = 0;
 					vlFaturadoFaixa = new BigDecimal("0");
@@ -4808,7 +4808,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					Iterator itConsumoTarifaFaixa = colecaoConsumoTarifaFaixa.iterator();
 					ConsumoTarifaFaixa consumoTarifaFaixa;
 
-					while (itConsumoTarifaFaixa.hasNext() && consumoExcedenteCategoriaOuSubcategoria > 0) {
+					while (itConsumoTarifaFaixa.hasNext() && consumoExcedenteCategoriaOuSubcategoria.compareTo(BigDecimal.ZERO) == 1) {
 
 						consumoTarifaFaixa = (ConsumoTarifaFaixa) itConsumoTarifaFaixa.next();
 
@@ -4821,7 +4821,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							if (consumoTarifaFaixa.getNumeroConsumoFaixaFim() != null
 									&& consumoPorEconomia <= consumoTarifaFaixa.getNumeroConsumoFaixaFim()) {
 
-								consumoFaturadoFaixa = consumoFaturado;
+								consumoFaturadoFaixa = new BigDecimal(consumoFaturado);
 
 								vlFaturadoFaixa = this.calcularValorFaturadoFaixaCAER(consumoPorEconomia,
 										vlTarifaMinimaCategoriaOuSubcategoria,
@@ -4829,7 +4829,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 								limiteInicialConsumoFaixa = consumoTarifaFaixa.getNumeroConsumoFaixaInicio();
 								limiteFinalConsumoFaixa = consumoTarifaFaixa.getNumeroConsumoFaixaFim();
-
+                                //TODO Validar se o valor e fracionado chamar outro medoto se nao chamar o atual
 								CalcularValoresAguaEsgotoFaixaHelper calcularValoresAguaEsgotoFaixaHelper = getCalcularValoresAguaEsgotoFaixaHelper(
 										tipoCalculo, consumoTarifaFaixa, consumoFaturadoFaixa,
 										limiteInicialConsumoFaixa, limiteFinalConsumoFaixa, vlFaturadoFaixa,
@@ -4856,7 +4856,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 							 * que o consumo faturado na faixa, consumo faturado
 							 * na faixa = consumo excedente da categoria
 							 */
-							if (consumoExcedenteCategoriaOuSubcategoria < consumoFaturadoFaixa) {
+							if (consumoExcedenteCategoriaOuSubcategoria.compareTo(new BigDecimal(consumoFaturadoFaixa)) == -1) {
 								consumoFaturadoFaixa = consumoExcedenteCategoriaOuSubcategoria;
 							}
 
@@ -53115,6 +53115,9 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		// [UC0120] - Calcular Valores de Água e/ou Esgoto
+		if(imovel.getId() == 6928676) {
+			System.out.println("Entrou");
+		}
 		Collection colecaoCalcularValoresAguaEsgotoHelper = calcularValoresAguaEsgoto(anoMesFaturamento, imovel
 				.getLigacaoAguaSituacao().getId(), imovel.getLigacaoEsgotoSituacao().getId(),
 				helper.getIndicadorFaturamentoAgua(), helper.getIndicadorFaturamentoEsgoto(),
