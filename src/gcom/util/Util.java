@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
@@ -6343,13 +6344,13 @@ public class Util {
 
 	private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN, Pattern.CASE_INSENSITIVE);
 
-	public static boolean emailValido(String email) {
+	public static boolean isEmailValido(String email) {
 		Matcher matcher = pattern.matcher(email);
 		return matcher.matches();
 	}
 	
-	public static boolean emailInvalido(String email) {
-		return !emailValido(email);
+	public static boolean isEmailInvalido(String email) {
+		return !isEmailValido(email);
 	}
 
     public static String removeZerosAEsquerda(String str)
@@ -6370,5 +6371,24 @@ public class Util {
         return sb.toString();  // return in String
     }
     
+    public static boolean isNumeroFracionado(BigDecimal valor) {
+    	valor = valor.setScale(2, RoundingMode.HALF_UP);
 
+    	String descValor = valor.toString();
+    	
+    	descValor = descValor.replace(".", "-");
+    	
+    	String[] arrayValor = descValor.split("-");
+    	
+    	if (arrayValor.length > 1) {
+    		String fracao = arrayValor[1];
+    		
+    		if (Integer.valueOf(fracao) > 0) {
+    			return true;
+    		}
+    	}
+    	
+    	return false;
+    }
+    
 }
