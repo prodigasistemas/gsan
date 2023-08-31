@@ -199,7 +199,7 @@ public class CadastroLoginClienteActionForm extends ActionForm {
 	private void validarEmail() {
 		if (campoInvalido(email)) {
 			errors.add(ERR_EMAIL, new ActionError("errors.portal.campo_obrigatorio"));
-		} else if (Util.emailInvalido(email)) {
+		} else if (Util.isEmailInvalido(email)) {
 			errors.add(ERR_EMAIL, new ActionError("errors.portal.invalido", "Email"));
 		}
 	}

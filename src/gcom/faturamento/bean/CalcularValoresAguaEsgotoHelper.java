@@ -18,10 +18,14 @@ public class CalcularValoresAguaEsgotoHelper implements Serializable {
 	private BigDecimal valorFaturadoAguaCategoria;
 
 	private Integer consumoFaturadoAguaCategoria;
+	
+	private BigDecimal consumoFaturadoAguaCategoriaResto;
 
 	private BigDecimal valorFaturadoEsgotoCategoria;
 
 	private Integer consumoFaturadoEsgotoCategoria;
+	
+	private BigDecimal consumoFaturadoEsgotoCategoriaResto;
 
 	private BigDecimal valorTarifaMinimaAguaCategoria;
 
@@ -36,7 +40,7 @@ public class CalcularValoresAguaEsgotoHelper implements Serializable {
 	public CalcularValoresAguaEsgotoHelper() {
 	}
 	
-	public CalcularValoresAguaEsgotoHelper(Integer idCategoria, Integer idConsumoTarifaCategoria, BigDecimal valorFaturadoAguaCategoria, Integer consumoFaturadoAguaCategoria, BigDecimal valorFaturadoEsgotoCategoria, Integer consumoFaturadoEsgotoCategoria, BigDecimal valorTarifaMinimaAguaCategoria, Integer consumoMinimoAguaCategoria, BigDecimal valorTarifaMinimaEsgotoCategoria, Integer consumoMinimoEsgotoCategoria, Collection<CalcularValoresAguaEsgotoFaixaHelper> faixaTarifaConsumo) {
+	public CalcularValoresAguaEsgotoHelper(Integer idCategoria, Integer idConsumoTarifaCategoria, BigDecimal valorFaturadoAguaCategoria, Integer consumoFaturadoAguaCategoria, BigDecimal valorFaturadoEsgotoCategoria, Integer consumoFaturadoEsgotoCategoria, BigDecimal valorTarifaMinimaAguaCategoria, Integer consumoMinimoAguaCategoria, BigDecimal valorTarifaMinimaEsgotoCategoria, Integer consumoMinimoEsgotoCategoria, Collection<CalcularValoresAguaEsgotoFaixaHelper> faixaTarifaConsumo, BigDecimal consumoFaturadoAguaCategoriaResto, BigDecimal consumoFaturadoEsgotoCategoriaResto) {
 		this.idCategoria = idCategoria;
 		this.idConsumoTarifaCategoria = idConsumoTarifaCategoria;
 		this.valorFaturadoAguaCategoria = valorFaturadoAguaCategoria;
@@ -48,6 +52,8 @@ public class CalcularValoresAguaEsgotoHelper implements Serializable {
 		this.valorTarifaMinimaEsgotoCategoria = valorTarifaMinimaEsgotoCategoria;
 		this.consumoMinimoEsgotoCategoria = consumoMinimoEsgotoCategoria;
 		this.faixaTarifaConsumo = faixaTarifaConsumo;
+		this.consumoFaturadoAguaCategoriaResto = consumoFaturadoAguaCategoriaResto;
+		this.consumoFaturadoEsgotoCategoriaResto = consumoFaturadoEsgotoCategoriaResto;
 	}
 
 	public Integer getConsumoFaturadoAguaCategoria() {
@@ -193,4 +199,20 @@ public class CalcularValoresAguaEsgotoHelper implements Serializable {
             this.valorFaturadoEsgotoCategoria = this.valorFaturadoEsgotoCategoria.add(valorRateioEsgoto);
         }
     }
+
+	public BigDecimal getConsumoFaturadoAguaCategoriaResto() {
+		return consumoFaturadoAguaCategoriaResto;
+	}
+
+	public void setConsumoFaturadoAguaCategoriaResto(BigDecimal consumoFaturadoAguaCategoriaResto) {
+		this.consumoFaturadoAguaCategoriaResto = consumoFaturadoAguaCategoriaResto;
+	}
+
+	public BigDecimal getConsumoFaturadoEsgotoCategoriaResto() {
+		return consumoFaturadoEsgotoCategoriaResto;
+	}
+
+	public void setConsumoFaturadoEsgotoCategoriaResto(BigDecimal consumoFaturadoEsgotoCategoriaResto) {
+		this.consumoFaturadoEsgotoCategoriaResto = consumoFaturadoEsgotoCategoriaResto;
+	}
 }

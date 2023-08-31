@@ -7,10 +7,14 @@ public class CalcularValoresAguaEsgotoFaixaHelper {
 	private Integer idConsumoTarifaFaixa;
 
 	private Integer consumoFaturadoAguaFaixa;
+	
+	private BigDecimal consumoFaturadoAguaFaixaResto;
 
 	private BigDecimal valorFaturadoAguaFaixa;
 
 	private Integer consumoFaturadoEsgotoFaixa;
+	
+	private BigDecimal consumoFaturadoEsgotoFaixaResto;
 
 	private BigDecimal valorFaturadoEsgotoFaixa;
 
@@ -30,7 +34,9 @@ public class CalcularValoresAguaEsgotoFaixaHelper {
 			Integer consumoFaturadoEsgotoFaixa,
 			BigDecimal valorFaturadoEsgotoFaixa,
 			Integer limiteInicialConsumoFaixa, Integer limiteFinalConsumoFaixa,
-			BigDecimal valorTarifaFaixa) {
+			BigDecimal valorTarifaFaixa,
+			BigDecimal consumoFaturadoAguaFaixaResto,
+			BigDecimal consumoFaturadoEsgotoFaixaResto) {
 		this.idConsumoTarifaFaixa = idConsumoTarifaFaixa; 
 		this.consumoFaturadoAguaFaixa = consumoFaturadoAguaFaixa;
 		this.valorFaturadoAguaFaixa = valorFaturadoAguaFaixa;
@@ -39,6 +45,8 @@ public class CalcularValoresAguaEsgotoFaixaHelper {
 		this.limiteInicialConsumoFaixa = limiteInicialConsumoFaixa;
 		this.limiteFinalConsumoFaixa = limiteFinalConsumoFaixa;
 		this.valorTarifaFaixa = valorTarifaFaixa;
+		this.consumoFaturadoAguaFaixaResto = consumoFaturadoAguaFaixaResto;
+		this.consumoFaturadoEsgotoFaixaResto = consumoFaturadoEsgotoFaixaResto;
 	}
 
 	public Integer getConsumoFaturadoAguaFaixa() {
@@ -103,6 +111,22 @@ public class CalcularValoresAguaEsgotoFaixaHelper {
 
 	public void setIdConsumoTarifaFaixa(Integer idConsumoTarifaFaixa) {
 		this.idConsumoTarifaFaixa = idConsumoTarifaFaixa;
+	}
+
+	public BigDecimal getConsumoFaturadoAguaFaixaResto() {
+		return consumoFaturadoAguaFaixaResto;
+	}
+
+	public void setConsumoFaturadoAguaFaixaResto(BigDecimal consumoFaturadoAguaFaixaResto) {
+		this.consumoFaturadoAguaFaixaResto = consumoFaturadoAguaFaixaResto;
+	}
+
+	public BigDecimal getConsumoFaturadoEsgotoFaixaResto() {
+		return consumoFaturadoEsgotoFaixaResto;
+	}
+
+	public void setConsumoFaturadoEsgotoFaixaResto(BigDecimal consumoFaturadoEsgotoFaixaResto) {
+		this.consumoFaturadoEsgotoFaixaResto = consumoFaturadoEsgotoFaixaResto;
 	}
 
 }
