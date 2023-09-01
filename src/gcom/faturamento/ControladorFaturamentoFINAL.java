@@ -5275,7 +5275,11 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		// --------------------------------------------------------
 		// Gerando o novo objeto
 		CalcularValoresAguaEsgotoHelper calcularValoresAguaEsgotoHelper = new CalcularValoresAguaEsgotoHelper();
-
+		
+		String consumoFaturadoCategoriaOuSubcategoriaString = consumoFaturadoCategoriaOuSubcategoria.setScale(0, RoundingMode.UP).toString();
+		
+		Integer consumoFaturadoCategoriaOuSubcategoriaInteger =  Integer.parseInt(consumoFaturadoCategoriaOuSubcategoriaString);
+		
 		if (categoriaOuSubcategoria instanceof Categoria) {
 			Categoria categoria = (Categoria) categoriaOuSubcategoria;
 
@@ -5308,7 +5312,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			calcularValoresAguaEsgotoHelper.setValorFaturadoAguaCategoria(vlFaturadoCategoriaOuSubcategoria);
 			calcularValoresAguaEsgotoHelper
-					.setConsumoFaturadoAguaCategoriaResto(consumoFaturadoCategoriaOuSubcategoria);
+					.setConsumoFaturadoAguaCategoria(consumoFaturadoCategoriaOuSubcategoriaInteger);
 			calcularValoresAguaEsgotoHelper.setValorTarifaMinimaAguaCategoria(vlTarifaMinimaCategoriaOuSubcategoria);
 			calcularValoresAguaEsgotoHelper.setConsumoMinimoAguaCategoria(consumoMinimoCategoriaOuSubcategoria);
 
@@ -5328,7 +5332,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 
 			calcularValoresAguaEsgotoHelper.setValorFaturadoEsgotoCategoria(vlFaturadoCategoriaOuSubcategoria);
 			calcularValoresAguaEsgotoHelper
-					.setConsumoFaturadoEsgotoCategoriaResto(consumoFaturadoCategoriaOuSubcategoria);
+					.setConsumoFaturadoEsgotoCategoria(consumoFaturadoCategoriaOuSubcategoriaInteger);
 			calcularValoresAguaEsgotoHelper.setValorTarifaMinimaEsgotoCategoria(vlTarifaMinimaCategoriaOuSubcategoria);
 			calcularValoresAguaEsgotoHelper.setConsumoMinimoEsgotoCategoria(consumoMinimoCategoriaOuSubcategoria);
 
@@ -5382,15 +5386,19 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		calcularValoresAguaEsgotoFaixaHelper.setLimiteInicialConsumoFaixa(limiteInicialConsumoFaixa);
 		calcularValoresAguaEsgotoFaixaHelper.setLimiteFinalConsumoFaixa(limiteFinalConsumoFaixa);
 		calcularValoresAguaEsgotoFaixaHelper.setValorTarifaFaixa(vlTarifaFaixa);
-
+		
+		String consumoFaturamentoFaixaString = consumoFaturadoFaixa.setScale(0, RoundingMode.UP).toString();
+		
+		Integer consumoFaturamentoFaixaInteger = Integer.parseInt(consumoFaturamentoFaixaString);
+				
 		if (tipoCalculo.equalsIgnoreCase(ConstantesSistema.CALCULAR_AGUA)) {
 
-			calcularValoresAguaEsgotoFaixaHelper.setConsumoFaturadoAguaFaixaResto(consumoFaturadoFaixa);
+			calcularValoresAguaEsgotoFaixaHelper.setConsumoFaturadoAguaFaixa(consumoFaturamentoFaixaInteger);
 			calcularValoresAguaEsgotoFaixaHelper.setValorFaturadoAguaFaixa(vlFaturadoFaixa);
 
 		} else {
 
-			calcularValoresAguaEsgotoFaixaHelper.setConsumoFaturadoEsgotoFaixaResto(consumoFaturadoFaixa);
+			calcularValoresAguaEsgotoFaixaHelper.setConsumoFaturadoEsgotoFaixa(consumoFaturamentoFaixaInteger);
 			calcularValoresAguaEsgotoFaixaHelper.setValorFaturadoEsgotoFaixa(vlFaturadoFaixa);
 
 		}
@@ -52907,9 +52915,6 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 		}
 
 		// [UC0120] - Calcular Valores de Água e/ou Esgoto
-		if (imovel.getId() == 6928676) {
-			System.out.println("Entrou");
-		}
 		Collection colecaoCalcularValoresAguaEsgotoHelper = calcularValoresAguaEsgoto(anoMesFaturamento,
 				imovel.getLigacaoAguaSituacao().getId(), imovel.getLigacaoEsgotoSituacao().getId(),
 				helper.getIndicadorFaturamentoAgua(), helper.getIndicadorFaturamentoEsgoto(),
