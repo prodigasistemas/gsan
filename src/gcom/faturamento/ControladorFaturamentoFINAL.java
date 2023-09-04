@@ -4909,7 +4909,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 								colecaoCalcularValoresAguaEsgotoFaixaHelper
 										.add(calcularValoresAguaEsgotoFaixaBigDecimalHelper);
 							} else {
-								Integer consumoFaturadoFaixaInteger = Integer.parseInt(consumoFaturadoFaixa.toString());
+								Integer consumoFaturadoFaixaInteger = Integer.valueOf(Util.removerUltimosCaracteresAposOPonto(consumoFaturadoFaixa.toString()));
 								CalcularValoresAguaEsgotoFaixaHelper calcularValoresAguaEsgotoFaixaHelper = getCalcularValoresAguaEsgotoFaixaHelper(
 										tipoCalculo, consumoTarifaFaixa, consumoFaturadoFaixaInteger,
 										limiteInicialConsumoFaixa, limiteFinalConsumoFaixa, vlFaturadoFaixa,

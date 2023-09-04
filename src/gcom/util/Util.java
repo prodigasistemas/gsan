@@ -6391,4 +6391,9 @@ public class Util {
     	return false;
     }
     
+	public static String removerUltimosCaracteresAposOPonto(String valor) {
+		valor = valor.replace(".00", "");
+		return valor;
+	}
+    
 }
