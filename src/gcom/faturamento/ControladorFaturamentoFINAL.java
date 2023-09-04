@@ -4811,7 +4811,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											vlTarifaMinimaCategoriaOuSubcategoria,
 											consumoTarifaFaixa.getValorConsumoTarifa());
 								} else {
-									Integer consumoPorEconomiaInteger = Integer.parseInt(consumoPorEconomia.toString());
+									Integer consumoPorEconomiaInteger = Integer.parseInt(Util.removerUltimosCaracteresAposOPonto(consumoPorEconomia.toString()));
 									vlFaturadoFaixa = this.calcularValorFaturadoFaixaCAER(consumoPorEconomiaInteger,
 											vlTarifaMinimaCategoriaOuSubcategoria,
 											consumoTarifaFaixa.getValorConsumoTarifa());
@@ -4830,7 +4830,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 											.add(calcularValoresAguaEsgotoFaixaBigDecimalHelper);
 								} else {
 									Integer consumoFaturadoFaixaInteger = Integer
-											.parseInt(consumoFaturadoFaixa.toString());
+											.parseInt(Util.removerUltimosCaracteresAposOPonto(consumoFaturadoFaixa.toString()));
 									CalcularValoresAguaEsgotoFaixaHelper calcularValoresAguaEsgotoFaixaHelper = getCalcularValoresAguaEsgotoFaixaHelper(
 											tipoCalculo, consumoTarifaFaixa, consumoFaturadoFaixaInteger,
 											limiteInicialConsumoFaixa, limiteFinalConsumoFaixa, vlFaturadoFaixa,
@@ -4969,7 +4969,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 				colecaoRetorno.add(calcularValoresAguaEsgotoHelper);
 			} else {
 				Integer consumoFaturadoCategoriaOuSubcategoriaInteger = Integer
-						.parseInt(consumoFaturadoCategoriaOuSubcategoria.toString());
+						.parseInt(Util.removerUltimosCaracteresAposOPonto(consumoFaturadoCategoriaOuSubcategoria.toString()));
 				if (sistemaParametro.getIndicadorTarifaCategoria().equals(ConstantesSistema.SIM)) {
 					calcularValoresAguaEsgotoHelper = getCalcularValoresAguaEsgotoHelper(percentualEsgoto, tipoCalculo,
 							consumoMinimoCategoriaOuSubcategoria, consumoFaturadoCategoriaOuSubcategoriaInteger,
