@@ -425,26 +425,35 @@ public class SimularCalculoContaAction extends GcomAction {
 		httpServletRequest.setAttribute("valorTotalEsgoto", valorTotalEsgoto);
 		httpServletRequest.setAttribute("valorTotalCategorias",valorTotalCategorias);
 		
-		
-		
 		Integer consumoAgua = 0;
-		if (qtdEconnomia != 0 && consumoFaturadoAgua != null) {
-			consumoAgua = consumoFaturadoAgua
-					/ qtdEconnomia;
-			consumoAgua = consumoAgua * qtdEconnomia;
-			simularCalculoContaActionForm.setConsumoFaturadoAgua(consumoAgua.toString());
-		}
-		
-		
 		Integer consumoEsgoto = 0;
-		if (qtdEconnomia != 0 && consumoFaturadoEsgoto != null) {
-			consumoEsgoto = consumoFaturadoEsgoto
-					/ qtdEconnomia;
-			consumoEsgoto = consumoEsgoto * qtdEconnomia;
-			simularCalculoContaActionForm.setConsumoFaturadoEsgoto(consumoEsgoto.toString());
+		
+		Iterator iteratorCalcularValoresAguaEsgotoHelperPorCategoria = 
+				colecaoCalcularValoresAguaEsgotoHelperPorCategoria.iterator();
+		while (iteratorCalcularValoresAguaEsgotoHelperPorCategoria.hasNext()) {
+			CalcularValoresAguaEsgotoHelper objeto = (CalcularValoresAguaEsgotoHelper) 
+					iteratorCalcularValoresAguaEsgotoHelperPorCategoria.next();
+			if(objeto!=null) {
+				
+			if (objeto.getConsumoFaturadoAguaCategoria()!=null) {
+                consumoAgua = consumoAgua + objeto.getConsumoFaturadoAguaCategoria();
+                simularCalculoContaActionForm.setConsumoFaturadoAgua(consumoAgua.toString());
+			} else if (qtdEconnomia != 0 && consumoFaturadoAgua != null) {
+				consumoAgua = consumoFaturadoAgua / qtdEconnomia;
+				consumoAgua = consumoAgua * qtdEconnomia;
+				simularCalculoContaActionForm.setConsumoFaturadoAgua(consumoAgua.toString());
+			}
+			if (objeto.getConsumoFaturadoAguaCategoria()!=null) {
+				consumoEsgoto = consumoEsgoto + objeto.getConsumoFaturadoAguaCategoria();
+                simularCalculoContaActionForm.setConsumoFaturadoEsgoto(consumoEsgoto.toString());
+			} else if (qtdEconnomia != 0 && consumoFaturadoEsgoto != null) {
+				consumoEsgoto = consumoFaturadoEsgoto / qtdEconnomia;
+				consumoEsgoto = consumoEsgoto * qtdEconnomia;
+				simularCalculoContaActionForm.setConsumoFaturadoEsgoto(consumoEsgoto.toString());
+			}
+			}
+
 		}
-		
-		
 		
 		/*
 		 * Colocado por Raphael Rossiter em 14/03/2007
