@@ -2584,4 +2584,9 @@ public class ControladorClienteSEJB extends ControladorComum {
 		}
 	}
 	
+	public boolean verificarSeClientePossuiNis(Integer idCliente) throws ControladorException {
+		Cliente cliente = this.pesquisarCliente(idCliente);
+		return cliente.getNumeroNIS() != null;
+	}
+
 }

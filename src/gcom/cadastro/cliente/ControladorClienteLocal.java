@@ -201,5 +201,6 @@ public interface ControladorClienteLocal extends javax.ejb.EJBLocalObject {
 	public List<Integer> pesquisarClientesPorCadastroUnico() throws ControladorException;
 	
 	public void atualizarNISCliente(Integer idCliente, Integer clie_icbolsafamilia) throws ControladorException;
-	
+
+	public boolean verificarSeClientePossuiNis(Integer idCliente) throws ControladorException;
 }

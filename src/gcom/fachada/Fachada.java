@@ -40747,14 +40747,6 @@ public class Fachada {
 		}
 	}
 	
-	public void atualizarPerfilImovel(Integer idImovel, Integer idPerfil) throws ControladorException{
-		try {
-			getControladorImovel().atualizarPerfilImovel(idImovel, idPerfil);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
-		}
-	}
-
 	public ArrecadadorContratoConvenio pesquisarParametrosConvenioPorId(Integer idConvenio) throws ControladorException {
 		try {
 			return getControladorArrecadacao().pesquisarParametrosConvenioPorId(idConvenio);
@@ -40830,6 +40822,23 @@ public class Fachada {
 	public void isNisValido(String numeroNIS, Short tipoPessoa, Integer idCliente, Short tipoOperacao) throws ControladorException {
 		try {
 			this.getControladorCadastro().isNisValido(numeroNIS, tipoPessoa, idCliente, tipoOperacao);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public void validarPerfilImovelAoAtualizarImovelAbaCaracteristicas(Integer idImovel, ClienteImovel clienteImovel, 
+			Integer novoPerfil) {
+		try {
+			this.getControladorImovel().validarPerfilImovelAoAtualizarImovelAbaCaracteristicas(idImovel, clienteImovel, novoPerfil);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public boolean verificarSeClientePossuiNis(Integer idCliente) throws ControladorException {
+		try {
+			return this.getControladorCliente().verificarSeClientePossuiNis(idCliente);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

@@ -11818,7 +11818,6 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * @throws ErroRepositorioException
 	 * 
 	 */
-
 	public Cliente consultarClienteImovel(Imovel imovel, Short clienteRelacaoTipo)
 
 			throws ErroRepositorioException {
@@ -28172,6 +28171,78 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		System.out.println("IMOVEL ID: " + idImovel + " ATUALIZADO.");
 	}
 
+	public List<ClienteImovel> pesquisarImoveisDoCliente(Integer idCliente) throws ErroRepositorioException {
 
+		List<ClienteImovel> retorno = null;
+
+		Session session = HibernateUtil.getSession();
+
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+
+			consulta.append("SELECT clienteImovel ") 
+					.append("from ClienteImovel clienteImovel ")
+					.append(" inner join fetch clienteImovel.imovel imovel ") 
+					.append("left join clienteImovel.cliente cliente ")
+					.append("where clienteImovel.cliente.id = :idCliente  ")
+					.append(" and clienteImovel.dataFimRelacao is null ")
+					.append(" and clienteImovel.imovel.indicadorExclusao = :indicadorExclusao ");
+			
+			retorno = session.createQuery(consulta.toString())
+					.setInteger("idCliente", idCliente)
+					.setInteger("indicadorExclusao", 2).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 	
+	
+	public Cliente consultarClienteNomeContaDoImovel(Imovel imovel) throws ErroRepositorioException {
+
+		Cliente resultadoConsultar = null;
+
+		Session session = HibernateUtil.getSession();
+
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+
+			consulta.append("SELECT cli ")
+					.append("from ClienteImovel cliimo ")
+					.append("left join cliimo.cliente cli ")
+					.append("left join fetch cli.clienteFones cliFones ")
+					.append("left join fetch cli.clienteTipo cliTipo ")
+					.append("left join fetch cliTipo.esferaPoder esfPoder ")
+					.append("where cliimo.imovel.id = :idImovel ")
+					.append(" and cliimo.imovel.indicadorExclusao != 1 ")
+					.append(" and cliimo.dataFimRelacao is null  ")
+					.append(" and cliimo.indicadorNomeConta = :sim ");
+
+			resultadoConsultar = (Cliente) session.createQuery(consulta.toString())
+						.setInteger("idImovel", imovel.getId())
+						.setShort("sim", ConstantesSistema.SIM).setMaxResults(1).uniqueResult();
+
+		} catch (HibernateException e) {
+
+			// levanta a exce��o para a pr�xima camada
+
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+
+		} finally {
+
+			// fecha a sess�o
+
+			HibernateUtil.closeSession(session);
+
+		}
+
+		return resultadoConsultar;
+
+	}
 }

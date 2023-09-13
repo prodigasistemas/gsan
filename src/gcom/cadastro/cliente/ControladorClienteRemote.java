@@ -79,5 +79,5 @@ public interface ControladorClienteRemote extends javax.ejb.EJBObject {
 	 */
 	public Collection pesquisarCliente(FiltroCliente filtroCliente) throws ControladorException ;
 
-
+	public boolean verificarSeClientePossuiNis(Integer idCliente) throws ControladorException;
 }
