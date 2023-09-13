@@ -253,7 +253,7 @@ public class ControladorFinanceiro implements SessionBean {
 		ControladorLocalidadeLocalHome localHome = null;
 		ControladorLocalidadeLocal local = null;
 
-		// pega a instância do ServiceLocator.
+		// pega a instï¿½ncia do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -261,7 +261,7 @@ public class ControladorFinanceiro implements SessionBean {
 			locator = ServiceLocator.getInstancia();
 			localHome = (ControladorLocalidadeLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_LOCALIDADE_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
+			// guarda a referencia de um objeto capaz de fazer chamadas ï¿½
 			// objetos remotamente
 			local = localHome.create();
 
@@ -277,7 +277,7 @@ public class ControladorFinanceiro implements SessionBean {
 		ControladorImovelLocalHome localHome = null;
 		ControladorImovelLocal local = null;
 
-		// pega a instância do ServiceLocator.
+		// pega a instï¿½ncia do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -286,7 +286,7 @@ public class ControladorFinanceiro implements SessionBean {
 
 			localHome = (ControladorImovelLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
+			// guarda a referencia de um objeto capaz de fazer chamadas ï¿½
 			// objetos remotamente
 			local = localHome.create();
 
@@ -320,11 +320,11 @@ public class ControladorFinanceiro implements SessionBean {
 	}
 	
 	/**
-	 * [UC0175] - Gerar Lançamentos Contábeis do Faturamento
+	 * [UC0175] - Gerar Lanï¿½amentos Contï¿½beis do Faturamento
 	 * Author: Raphael Rossiter, Pedro Alexandre 
 	 * Data: 16/01/2006, 23/05/2007
 	 * 
-	 * Gera os lançamentos contábeis a partir dos dados selecionados na tabela RESUMO_FATURAMENTO
+	 * Gera os lanï¿½amentos contï¿½beis a partir dos dados selecionados na tabela RESUMO_FATURAMENTO
 	 * 
 	 * @param anoMesReferenciaFaturamento
 	 * @param idLocalidade
@@ -338,12 +338,12 @@ public class ControladorFinanceiro implements SessionBean {
 		int idFuncionalidadeIniciada) 
 		throws ControladorException{
 		
-		//[FS0001 - Validar ano/mês do Faturamento]
+		//[FS0001 - Validar ano/mï¿½s do Faturamento]
 		Integer anoMesFaturamentoAtual =  
 			getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento();
 		
 		if(anoMesReferenciaFaturamento.intValue() >anoMesFaturamentoAtual.intValue()){
-			//levanta a exceção para a próxima camada
+			//levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ControladorException("atencao.mes_ano.faturamento.inferior",
 				null,
 				Util.formatarAnoMesParaMesAno(anoMesFaturamentoAtual.toString()));
@@ -353,7 +353,7 @@ public class ControladorFinanceiro implements SessionBean {
 		int idUnidadeIniciada = 0;
 
 		/*
-		 * Registrar o início do processamento da Unidade de
+		 * Registrar o inï¿½cio do processamento da Unidade de
 		 * Processamento do Batch
 		*/
 		idUnidadeIniciada = 
@@ -365,13 +365,13 @@ public class ControladorFinanceiro implements SessionBean {
 		try {
 			
 			/*
-			 *  Pesquisa os dados do resumo do faturamento para o ano/mês de referência atual e 
+			 *  Pesquisa os dados do resumo do faturamento para o ano/mï¿½s de referï¿½ncia atual e 
 			 *  para a localidade informada.
 			 *  
 			 *  0 - id da localidade
-			 *  1 - id do tipo de lançamento
-			 *  2 - id do item de lançamento
-			 *  3 - id do item de lançamento contábil
+			 *  1 - id do tipo de lanï¿½amento
+			 *  2 - id do item de lanï¿½amento
+			 *  3 - id do item de lanï¿½amento contï¿½bil
 			 *  4 - id da categoria
 			 *  5 - soma do valor do resumo do faturamento 
 			 */
@@ -381,9 +381,9 @@ public class ControladorFinanceiro implements SessionBean {
 					idLocalidade);
 		
 			/*
-			 * Caso exista resumo de faturamento para a localidade e o ano/mês 
-			 * cria o lancamento contábil junto com seus items 
-			 * para cada conjunto de mesmo tipo de lançamento
+			 * Caso exista resumo de faturamento para a localidade e o ano/mï¿½s 
+			 * cria o lancamento contï¿½bil junto com seus items 
+			 * para cada conjunto de mesmo tipo de lanï¿½amento
 			 */
 			if (colecaoDadosResumoFaturamento != null && !colecaoDadosResumoFaturamento.isEmpty()){
 				
@@ -392,31 +392,31 @@ public class ControladorFinanceiro implements SessionBean {
 				int idTipoLancamentoTemp = -1;
 				Collection<Object[]> colecaoDadosResumoPorTipoLancamento = new ArrayList();
 				
-				// definição da origem do lançamento
+				// definiï¿½ï¿½o da origem do lanï¿½amento
 				LancamentoOrigem lancamentoOrigem = new LancamentoOrigem();
 				lancamentoOrigem.setId(LancamentoOrigem.FATURAMENTO);
 				
-				//Cria a variável que vai armazenar o lançamento contábil
+				//Cria a variï¿½vel que vai armazenar o lanï¿½amento contï¿½bil
 				LancamentoContabil lancamentoContabilInsert = null;
 				
-				//laço para gerar os lançamentos por grupo de tipo de lançamento
+				//laï¿½o para gerar os lanï¿½amentos por grupo de tipo de lanï¿½amento
 				for(Object[] dadosResumoFaturamento : colecaoDadosResumoFaturamento){
 					
-					//recupera o tipo de lançamento atual 
+					//recupera o tipo de lanï¿½amento atual 
 					Integer idTipoLancamento = (Integer) dadosResumoFaturamento[1];
 					
 					/*
 					 * Caso seja a primeira entrada do "for"
-					 * adiciona os dados a coleção e atualiza o item temporario
-					 * criando também o lançamento contabil que ira ser inserindo
+					 * adiciona os dados a coleï¿½ï¿½o e atualiza o item temporario
+					 * criando tambï¿½m o lanï¿½amento contabil que ira ser inserindo
 					 * junto com seus items.
 					 * 
-					 *  Caso contrário (não seja a primeira entrada do laço "for")
-					 *  verifica se o item de lançamento mudou, caso não tenha mudado 
+					 *  Caso contrï¿½rio (nï¿½o seja a primeira entrada do laï¿½o "for")
+					 *  verifica se o item de lanï¿½amento mudou, caso nï¿½o tenha mudado 
 					 *  adiciona os dados ao conjunto do mesmo item
-					 *  caso contrário, se mudou o item de lançamento o conjunto está fechado
-					 *  para o lançamento contábil e chama o me´todo para inserir o
-					 *  lançamento contábil junto com seus itens. 
+					 *  caso contrï¿½rio, se mudou o item de lanï¿½amento o conjunto estï¿½ fechado
+					 *  para o lanï¿½amento contï¿½bil e chama o meï¿½todo para inserir o
+					 *  lanï¿½amento contï¿½bil junto com seus itens. 
 					 */
 					if(flagPrimeiraVez){
 						colecaoDadosResumoPorTipoLancamento.add(dadosResumoFaturamento);
@@ -429,7 +429,7 @@ public class ControladorFinanceiro implements SessionBean {
 						Localidade localidade = new Localidade();
 						localidade.setId(idLocalidade);
 						
-						//cria o lançamento contábil para ser inserido 
+						//cria o lanï¿½amento contï¿½bil para ser inserido 
 						lancamentoContabilInsert = new LancamentoContabil();
 						lancamentoContabilInsert.setAnoMes(anoMesReferenciaFaturamento);
 						lancamentoContabilInsert.setLancamentoOrigem(lancamentoOrigem);
@@ -440,18 +440,18 @@ public class ControladorFinanceiro implements SessionBean {
 					}else{
 						/*
 						 * Caso ainda seja o mesmo item adicona os dados para 
-						 * ser gerado os itens do lançamento para o mesmo lançamento.
-						 * Caso contrário chama o metódo para inseri os itens e o lançamento contábil.
+						 * ser gerado os itens do lanï¿½amento para o mesmo lanï¿½amento.
+						 * Caso contrï¿½rio chama o metï¿½do para inseri os itens e o lanï¿½amento contï¿½bil.
 						 */
 						if(idTipoLancamento == idTipoLancamentoTemp){
 							colecaoDadosResumoPorTipoLancamento.add(dadosResumoFaturamento);
 						}else{
-							/* metódo para inserir o lançamento contábil assim como seus itens */
+							/* metï¿½do para inserir o lanï¿½amento contï¿½bil assim como seus itens */
 							this.inserirLancamentoContabilItemFaturamento(
 								lancamentoContabilInsert, 
 								colecaoDadosResumoPorTipoLancamento);
 							
-							//limpaa coleção e adiciona os dados do resumo atual
+							//limpaa coleï¿½ï¿½o e adiciona os dados do resumo atual
 							colecaoDadosResumoPorTipoLancamento.clear();
 							colecaoDadosResumoPorTipoLancamento.add(dadosResumoFaturamento);
 							
@@ -461,7 +461,7 @@ public class ControladorFinanceiro implements SessionBean {
 							Localidade localidade = new Localidade();
 							localidade.setId(idLocalidade);
 							
-							//cria o lançamento contábil que vai ser inserido
+							//cria o lanï¿½amento contï¿½bil que vai ser inserido
 							lancamentoContabilInsert = new LancamentoContabil();
 							lancamentoContabilInsert.setAnoMes(anoMesReferenciaFaturamento);
 							lancamentoContabilInsert.setLancamentoOrigem(lancamentoOrigem);
@@ -470,16 +470,16 @@ public class ControladorFinanceiro implements SessionBean {
 							lancamentoContabilInsert.setRecebimentoTipo(null);
 							lancamentoContabilInsert.setUltimaAlteracao(new Date());
 							
-							//atualiza o tipo de lançamento temporário com o novo valor
+							//atualiza o tipo de lanï¿½amento temporï¿½rio com o novo valor
 							idTipoLancamentoTemp = idTipoLancamento;
 						}
 					}
 				}
 				
 				/*
-				 * Último registro
-				 * Esse "if" é para verificar se ainda existe um último registro na coleção
-				 * caso exista algum item, adiciona o lançamento contábil junto com o item. 
+				 * ï¿½ltimo registro
+				 * Esse "if" ï¿½ para verificar se ainda existe um ï¿½ltimo registro na coleï¿½ï¿½o
+				 * caso exista algum item, adiciona o lanï¿½amento contï¿½bil junto com o item. 
 				 */
 				if(colecaoDadosResumoPorTipoLancamento != null && colecaoDadosResumoPorTipoLancamento.size() > 0 ){
 					this.inserirLancamentoContabilItemFaturamento(
@@ -500,9 +500,9 @@ public class ControladorFinanceiro implements SessionBean {
 	
 	
 	/**
-	 * Gera o lançamento contábil junto com seus itens. 
+	 * Gera o lanï¿½amento contï¿½bil junto com seus itens. 
 	 *
-	 * [UC0175] - Gerar Lançamentos Contábeis do Faturamento
+	 * [UC0175] - Gerar Lanï¿½amentos Contï¿½beis do Faturamento
 	 *
 	 * @author Pedro Alexandre
 	 * @date 24/05/2007
@@ -521,15 +521,15 @@ public class ControladorFinanceiro implements SessionBean {
 				
 				Collection colecaoLancamentoContabilItem = new ArrayList();
 				
-				//flag que indica se o lançamento contábil já foi inserido ou não. 
+				//flag que indica se o lanï¿½amento contï¿½bil jï¿½ foi inserido ou nï¿½o. 
 				boolean flagInseridoLancamentoContabil = false;
 				
 				/*
 				 * Dados do resumo do faturamento
 				 *  0 - id da localidade
-				 *  1 - id do tipo de lançamento
-				 *  2 - id do item de lançamento
-				 *  3 - id do item de lançamento contábil
+				 *  1 - id do tipo de lanï¿½amento
+				 *  2 - id do item de lanï¿½amento
+				 *  3 - id do item de lanï¿½amento contï¿½bil
 				 *  4 - id da categoria
 				 *  5 - soma do valor do resumo do faturamento
 				 */
@@ -543,21 +543,21 @@ public class ControladorFinanceiro implements SessionBean {
 					BigDecimal valorLancamento =       (BigDecimal) dadosResumoFaturamento[5]; 
 					
 					/* 
-					 * Verifica se existe conta contábil para o item que vai ser inserido 
+					 * Verifica se existe conta contï¿½bil para o item que vai ser inserido 
 					 * 
-					 * 0 - id conta contábil do débito
-					 * 1 - id conta contábil crédito 
-					 * 2 - descrição do histórico do débito
-					 * 3 - descrição do histórico do crédito
+					 * 0 - id conta contï¿½bil do dï¿½bito
+					 * 1 - id conta contï¿½bil crï¿½dito 
+					 * 2 - descriï¿½ï¿½o do histï¿½rico do dï¿½bito
+					 * 3 - descriï¿½ï¿½o do histï¿½rico do crï¿½dito
 					 */
 					Object[] dadosContaContabil = this.repositorioFinanceiro.obterParametrosContabilFaturamento(idCategoria, idLancamentoItemContabil, idLancamentoItem, idLancamentoTipo);
 					
 					if(dadosContaContabil != null){
 						Integer idLancamentoContabil = null;
 						/*
-						 * Caso exista dados para a conta contábil e o item contábil 
-						 * ainda não foi inserido 
-						 * inseri o item contábil na base.
+						 * Caso exista dados para a conta contï¿½bil e o item contï¿½bil 
+						 * ainda nï¿½o foi inserido 
+						 * inseri o item contï¿½bil na base.
 						 */
 						if(!flagInseridoLancamentoContabil){
 							idLancamentoContabil = (Integer)getControladorUtil().inserir(lancamentoContabil);
@@ -565,26 +565,26 @@ public class ControladorFinanceiro implements SessionBean {
 							flagInseridoLancamentoContabil = true;
 						}
 						
-						//recupera os dados da conta contábil para o item do resumo do faturamento.
+						//recupera os dados da conta contï¿½bil para o item do resumo do faturamento.
 						Integer idContaContabilDebito = (Integer) dadosContaContabil[0];
 						Integer idContaContabilCredito = (Integer) dadosContaContabil[1];
 						String descricaoHistoricoDebito = (String) dadosContaContabil[2];
 						String descricaoHistoricoCredito = (String) dadosContaContabil[3];
 						
-						//cria os indicadores de débito e crédito.
+						//cria os indicadores de dï¿½bito e crï¿½dito.
 						Short indicadorDebito = new Short("2"); 
 						Short indicadorCredito = new Short("1");
 						
 						Date ultimaAlteracao = new Date();
 						
-						//cria as contas contábeis de crédito e débito.
+						//cria as contas contï¿½beis de crï¿½dito e dï¿½bito.
 						ContaContabil contaContabilCredito = new ContaContabil();
 						contaContabilCredito.setId(idContaContabilCredito);
 						
 						ContaContabil contaContabilDebito = new ContaContabil();
 						contaContabilDebito.setId(idContaContabilDebito);
 						
-						/**  Item de crédito */
+						/**  Item de crï¿½dito */
 						LancamentoContabilItem lancamentoContabilItemCredito = new LancamentoContabilItem(indicadorCredito, 
 								valorLancamento, 
 								descricaoHistoricoCredito, 
@@ -594,7 +594,7 @@ public class ControladorFinanceiro implements SessionBean {
 						
 						colecaoLancamentoContabilItem.add(lancamentoContabilItemCredito);
 						
-						/** Item de débito */
+						/** Item de dï¿½bito */
 						LancamentoContabilItem lancamentoContabilItemDebito = new LancamentoContabilItem(indicadorDebito, 
 								valorLancamento, 
 								descricaoHistoricoDebito, 
@@ -606,7 +606,7 @@ public class ControladorFinanceiro implements SessionBean {
 						
 					}
 				}
-				//inserios itens de lançamento contábeis. 
+				//inserios itens de lanï¿½amento contï¿½beis. 
 				getControladorBatch().inserirColecaoObjetoParaBatch(colecaoLancamentoContabilItem); 
 			}
 	
@@ -635,9 +635,9 @@ public class ControladorFinanceiro implements SessionBean {
 			case LancamentoTipo.AGUA_INT:
 				
 				/*
-				* ETAPA Nº 01
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 01
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				if (etapa == 1){
@@ -648,7 +648,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 								
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -656,9 +656,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else if (etapa == 2){
@@ -669,7 +669,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, valorTotalPublico, ConstantesSistema.INDICADOR_DEBITO);
 					
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil, 
@@ -677,9 +677,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* Razão Contábil = 31 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 03
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = RESIDENCIAL 
 				*/
 				else if (etapa == 3){
@@ -690,7 +690,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, null, ConstantesSistema.INDICADOR_CREDITO);				
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 4, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -698,9 +698,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 04
-				* Razão Contábil = 31 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 04
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = COMERCIAL 
 				*/
 				else if (etapa == 4){
@@ -711,7 +711,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 5, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -719,9 +719,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 05
-				* Razão Contábil = 31 e Conta Contábil = 113
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 05
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 113
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = INDUSTRIAL 
 				*/
 				else if (etapa == 5){
@@ -732,7 +732,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 6, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -740,9 +740,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 06
-				* Razão Contábil = 31 e Conta Contábil = 114
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 06
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 114
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else {
@@ -760,9 +760,9 @@ public class ControladorFinanceiro implements SessionBean {
 
 				
 				/*
-				* ETAPA Nº 01
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 01
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				if (etapa == 1){
@@ -773,7 +773,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_DEBITO);					
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -781,9 +781,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else if (etapa == 2){
@@ -794,7 +794,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, valorTotalPublico, ConstantesSistema.INDICADOR_DEBITO);					
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -802,9 +802,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* Razão Contábil = 31 e Conta Contábil = 211
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 03
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 211
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = RESIDENCIAL 
 				*/
 				else if (etapa == 3){
@@ -815,7 +815,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, null, ConstantesSistema.INDICADOR_CREDITO);					
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 4, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -823,9 +823,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 04
-				* Razão Contábil = 31 e Conta Contábil = 212
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 04
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 212
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = COMERCIAL 
 				*/
 				else if (etapa == 4){
@@ -836,7 +836,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 5, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -844,9 +844,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 05
-				* Razão Contábil = 31 e Conta Contábil = 213
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 05
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 213
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = INDUSTRIAL 
 				*/
 				else if (etapa == 5){
@@ -857,7 +857,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_CREDITO);					
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 6, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -865,9 +865,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 06
-				* Razão Contábil = 31 e Conta Contábil = 214
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 06
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 214
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else {
@@ -886,9 +886,9 @@ public class ControladorFinanceiro implements SessionBean {
 				
 				
 				/*
-				* ETAPA Nº 01
-				* Razão Contábil = 12 e Conta Contábil = 151
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 01
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 151
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				if (etapa == 1){
@@ -899,7 +899,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -907,9 +907,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 12 e Conta Contábil = 152
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 152
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else if (etapa == 2){
@@ -920,7 +920,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, valorTotalPublico, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -928,10 +928,10 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ítem de lançamento contábil
-				* Indicador Débito/Crédito = Crédito (1)
-				* ValorItemFaturamento = Valor acumulado para cada ítem de lançamento contábil  
+				* ETAPA Nï¿½ 03
+				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ï¿½tem de lanï¿½amento contï¿½bil
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
+				* ValorItemFaturamento = Valor acumulado para cada ï¿½tem de lanï¿½amento contï¿½bil  
 				*/
 				else {
 					
@@ -948,9 +948,9 @@ public class ControladorFinanceiro implements SessionBean {
 				
 				
 				/*
-				* ETAPA Nº 01
-				* Razão Contábil = 13 e Conta Contábil = 151
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 01
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 151
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				if (etapa == 1){
@@ -961,7 +961,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -969,9 +969,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 13 e Conta Contábil = 152
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 152
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else if (etapa == 2){
@@ -982,7 +982,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, valorTotalPublico, ConstantesSistema.INDICADOR_DEBITO);
 				
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -990,10 +990,10 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ítem de lançamento contábil
-				* Indicador Débito/Crédito = Crédito (1)
-				* ValorItemFaturamento = Valor acumulado para cada ítem de lançamento contábil  
+				* ETAPA Nï¿½ 03
+				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ï¿½tem de lanï¿½amento contï¿½bil
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
+				* ValorItemFaturamento = Valor acumulado para cada ï¿½tem de lanï¿½amento contï¿½bil  
 				*/
 				else {
 					
@@ -1009,9 +1009,9 @@ public class ControladorFinanceiro implements SessionBean {
 			case LancamentoTipo.FATURAMENTO_ADICIONAL_GUIA_PAGAMENTO_INT:
 				
 				/*
-				* ETAPA Nº 01
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 01
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				if (etapa == 1){
@@ -1022,7 +1022,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1030,9 +1030,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else if (etapa == 2){
@@ -1043,7 +1043,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, valorTotalPublico, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1051,10 +1051,10 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ítem de lançamento contábil
-				* Indicador Débito/Crédito = Crédito (1)
-				* ValorItemFaturamento = Valor acumulado para cada ítem de lançamento contábil  
+				* ETAPA Nï¿½ 03
+				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ï¿½tem de lanï¿½amento contï¿½bil
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
+				* ValorItemFaturamento = Valor acumulado para cada ï¿½tem de lanï¿½amento contï¿½bil  
 				*/
 				else {
 					
@@ -1070,10 +1070,10 @@ public class ControladorFinanceiro implements SessionBean {
 			case LancamentoTipo.FINANCIAMENTOS_CANCELADOS_CURTO_PRAZO_INT:
 				
 				/*
-				* ETAPA Nº 01
-				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ítem de lançamento contábil
-				* Indicador Débito/Crédito = Débito (2)
-				* ValorItemFaturamento = Valor acumulado para cada ítem de lançamento contábil  
+				* ETAPA Nï¿½ 01
+				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ï¿½tem de lanï¿½amento contï¿½bil
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
+				* ValorItemFaturamento = Valor acumulado para cada ï¿½tem de lanï¿½amento contï¿½bil  
 				*/
 				if (etapa == 1){
 					
@@ -1082,7 +1082,7 @@ public class ControladorFinanceiro implements SessionBean {
 					colecaoAcumularValoresPorLancamentoItemContabil, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1090,9 +1090,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 12 e Conta Contábil = 151
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 151
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 2){
@@ -1103,7 +1103,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1111,9 +1111,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* Razão Contábil = 12 e Conta Contábil = 152
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 03
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 152
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else {
@@ -1132,10 +1132,10 @@ public class ControladorFinanceiro implements SessionBean {
 			case LancamentoTipo.FINANCIAMENTOS_CANCELADOS_LONGO_PRAZO_INT:
 				
 				/*
-				* ETAPA Nº 01
-				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ítem de lançamento contábil
-				* Indicador Débito/Crédito = Débito (2)
-				* ValorItemFaturamento = Valor acumulado para cada ítem de lançamento contábil  
+				* ETAPA Nï¿½ 01
+				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ï¿½tem de lanï¿½amento contï¿½bil
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
+				* ValorItemFaturamento = Valor acumulado para cada ï¿½tem de lanï¿½amento contï¿½bil  
 				*/
 				if (etapa == 1){
 					
@@ -1144,7 +1144,7 @@ public class ControladorFinanceiro implements SessionBean {
 					colecaoAcumularValoresPorLancamentoItemContabil, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1152,9 +1152,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 13 e Conta Contábil = 151
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 151
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 2){
@@ -1165,7 +1165,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1173,9 +1173,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* Razão Contábil = 13 e Conta Contábil = 152
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 03
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 152
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else {
@@ -1194,9 +1194,9 @@ public class ControladorFinanceiro implements SessionBean {
 			case LancamentoTipo.CANCELAMENTOS_POR_REFATURAMENTO_INT:
 				
 				/*
-				* ETAPA Nº 01
-				* Razão Contábil = 31 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Débito (1)
+				* ETAPA Nï¿½ 01
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + RESIDENCIAL 
 				*/
 				if (etapa == 1){
@@ -1210,7 +1210,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1218,9 +1218,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 31 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + COMERCIAL 
 				*/
 				else if (etapa == 2){
@@ -1234,7 +1234,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1242,9 +1242,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* Razão Contábil = 31 e Conta Contábil = 113
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 03
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 113
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + INDUSTRIAL 
 				*/
 				else if (etapa == 3){
@@ -1258,7 +1258,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 4, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1266,9 +1266,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 04
-				* Razão Contábil = 31 e Conta Contábil = 114
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 04
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 114
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + PUBLICO 
 				*/
 				else if (etapa == 4){
@@ -1282,7 +1282,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 5, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1290,9 +1290,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 05
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 05
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 5){
@@ -1315,7 +1315,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 6, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1323,9 +1323,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 06
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 06
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + PUBLICO 
 				*/
 				else if (etapa == 6){
@@ -1339,7 +1339,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 7, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1347,9 +1347,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 07
-				* Razão Contábil = 31 e Conta Contábil = 211
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 07
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 211
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + RESIDENCIAL 
 				*/
 				else if (etapa == 7){
@@ -1363,7 +1363,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 8, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1371,9 +1371,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 08
-				* Razão Contábil = 31 e Conta Contábil = 212
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 08
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 212
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + COMERCIAL 
 				*/
 				else if (etapa == 8){
@@ -1387,7 +1387,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 9, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1395,9 +1395,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 09
-				* Razão Contábil = 31 e Conta Contábil = 213
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 09
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 213
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + INDUSTRIAL 
 				*/
 				else if (etapa == 9){
@@ -1411,7 +1411,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 10, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1419,9 +1419,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 10
-				* Razão Contábil = 31 e Conta Contábil = 214
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 10
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 214
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + PUBLICO 
 				*/
 				else if (etapa == 10){
@@ -1435,7 +1435,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 11, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1443,9 +1443,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 11
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 11
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 11){
@@ -1468,7 +1468,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 12, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1476,9 +1476,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 12
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 12
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + PUBLICO 
 				*/
 				else if (etapa == 12){
@@ -1492,7 +1492,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 13, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1500,10 +1500,10 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 13
-				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ítem de lançamento contábil
-				* Indicador Débito/Crédito = Débito (2)
-				* ValorItemFaturamento = Valor acumulado para cada ítem de lançamento contábil  
+				* ETAPA Nï¿½ 13
+				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ï¿½tem de lanï¿½amento contï¿½bil
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
+				* ValorItemFaturamento = Valor acumulado para cada ï¿½tem de lanï¿½amento contï¿½bil  
 				*/
 				else if (etapa == 13){
 					
@@ -1512,7 +1512,7 @@ public class ControladorFinanceiro implements SessionBean {
 					colecaoAcumularValoresPorLancamentoItemContabil, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 14, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1520,9 +1520,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 14
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 14
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 14){
@@ -1533,7 +1533,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 15, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1541,9 +1541,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 15
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 15
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else {
@@ -1560,9 +1560,9 @@ public class ControladorFinanceiro implements SessionBean {
 			case LancamentoTipo.PARCELAMENTOS_COBRADOS_SUP_CANCELAMENTOS_POR_REFATURAMENTO_INT:
 				
 				/*
-				* ETAPA Nº 01
-				* Razão Contábil = 31 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 01
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + RESIDENCIAL 
 				*/
 				if (etapa == 1){
@@ -1576,7 +1576,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1584,9 +1584,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 31 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + COMERCIAL 
 				*/
 				else if (etapa == 2){
@@ -1600,7 +1600,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1608,9 +1608,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* Razão Contábil = 31 e Conta Contábil = 113
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 03
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 113
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + INDUSTRIAL 
 				*/
 				else if (etapa == 3){
@@ -1624,7 +1624,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 4, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1632,9 +1632,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 04
-				* Razão Contábil = 31 e Conta Contábil = 114
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 04
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 114
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + PUBLICO 
 				*/
 				else if (etapa == 4){
@@ -1648,7 +1648,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 5, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1656,9 +1656,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 05
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 05
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 5){
@@ -1681,7 +1681,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 6, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1689,9 +1689,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 06
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 06
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + PUBLICO 
 				*/
 				else if (etapa == 6){
@@ -1705,7 +1705,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 7, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1713,9 +1713,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 07
-				* Razão Contábil = 31 e Conta Contábil = 211
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 07
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 211
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + RESIDENCIAL 
 				*/
 				else if (etapa == 7){
@@ -1729,7 +1729,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 8, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1737,9 +1737,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 08
-				* Razão Contábil = 31 e Conta Contábil = 212
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 08
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 212
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + COMERCIAL 
 				*/
 				else if (etapa == 8){
@@ -1753,7 +1753,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 9, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1761,9 +1761,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 10
-				* Razão Contábil = 31 e Conta Contábil = 214
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 10
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 214
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + PUBLICO 
 				*/
 				else if (etapa == 10){
@@ -1777,7 +1777,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 11, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1785,9 +1785,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 11
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 11
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 11){
@@ -1810,7 +1810,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 12, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1818,9 +1818,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 12
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 12
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + PUBLICO 
 				*/
 				else if (etapa == 12){
@@ -1834,7 +1834,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 13, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1842,10 +1842,10 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 13
-				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ítem de lançamento contábil
-				* Indicador Débito/Crédito = Débito (2)
-				* ValorItemFaturamento = Valor acumulado para cada ítem de lançamento contábil  
+				* ETAPA Nï¿½ 13
+				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ï¿½tem de lanï¿½amento contï¿½bil
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
+				* ValorItemFaturamento = Valor acumulado para cada ï¿½tem de lanï¿½amento contï¿½bil  
 				*/
 				else if (etapa == 13){
 					
@@ -1854,7 +1854,7 @@ public class ControladorFinanceiro implements SessionBean {
 					colecaoAcumularValoresPorLancamentoItemContabil, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 14, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1862,9 +1862,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 14
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 14
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 14){
@@ -1875,7 +1875,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 15, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1883,9 +1883,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 15
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 15
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else if (etapa == 15){
@@ -1896,7 +1896,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, valorTotalPublico, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 16, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1904,9 +1904,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 16
-				* Razão Contábil = 31 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 16
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS) 
 				*/
 				else if (etapa == 16){
@@ -1919,7 +1919,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        lancamentoItem, ConstantesSistema.INDICADOR_DEBITO);
 					
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 17, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1927,9 +1927,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 17
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 17
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS) + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 17){
@@ -1952,7 +1952,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 18, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -1960,9 +1960,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 18
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 18
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS) + PUBLICO 
 				*/
 				else {
@@ -1983,9 +1983,9 @@ public class ControladorFinanceiro implements SessionBean {
 			case LancamentoTipo.INCLUSOES_POR_REFATURAMENTO_INT:
 				
 				/*
-				* ETAPA Nº 01
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 01
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				if (etapa == 1){
@@ -2008,7 +2008,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2016,9 +2016,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + PUBLICO 
 				*/
 				else if (etapa == 2){
@@ -2032,7 +2032,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2040,9 +2040,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* Razão Contábil = 31 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 03
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + RESIDENCIAL 
 				*/
 				else if (etapa == 3){
@@ -2056,7 +2056,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 4, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2064,9 +2064,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 04
-				* Razão Contábil = 31 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 04
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + COMERCIAL 
 				*/
 				else if (etapa == 4){
@@ -2080,7 +2080,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 5, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2088,9 +2088,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 05
-				* Razão Contábil = 31 e Conta Contábil = 113
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 05
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 113
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + INDUSTRIAL 
 				*/
 				else if (etapa == 5){
@@ -2104,7 +2104,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 6, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2112,9 +2112,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 06
-				* Razão Contábil = 31 e Conta Contábil = 114
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 06
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 114
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + PUBLICO 
 				*/
 				else if (etapa == 6){
@@ -2128,7 +2128,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 7, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2136,9 +2136,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 07
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 07
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 7){
@@ -2161,7 +2161,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 8, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2169,9 +2169,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 08
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 08
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + PUBLICO 
 				*/
 				else if (etapa == 8){
@@ -2185,7 +2185,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 9, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2193,9 +2193,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 09
-				* Razão Contábil = 31 e Conta Contábil = 211
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 09
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 211
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + RESIDENCIAL 
 				*/
 				else if (etapa == 9){
@@ -2209,7 +2209,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 10, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2217,9 +2217,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 10
-				* Razão Contábil = 31 e Conta Contábil = 212
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 10
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 212
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + COMERCIAL 
 				*/
 				else if (etapa == 10){
@@ -2233,7 +2233,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 11, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2241,9 +2241,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 11
-				* Razão Contábil = 31 e Conta Contábil = 213
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 11
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 213
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + INDUSTRIAL 
 				*/
 				else if (etapa == 11){
@@ -2257,7 +2257,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 12, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2265,9 +2265,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 12
-				* Razão Contábil = 31 e Conta Contábil = 214
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 12
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 214
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + PUBLICO 
 				*/
 				else if (etapa == 12){
@@ -2281,7 +2281,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 13, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2289,9 +2289,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 13
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 13
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 13){
@@ -2302,7 +2302,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 14, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2310,9 +2310,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 14
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 14
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else if (etapa == 14){
@@ -2323,7 +2323,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, valorTotalPublico, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 15, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2331,10 +2331,10 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 15
-				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ítem de lançamento contábil
-				* Indicador Débito/Crédito = Crédito (1)
-				* ValorItemFaturamento = Valor acumulado para cada ítem de lançamento contábil  
+				* ETAPA Nï¿½ 15
+				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ï¿½tem de lanï¿½amento contï¿½bil
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
+				* ValorItemFaturamento = Valor acumulado para cada ï¿½tem de lanï¿½amento contï¿½bil  
 				*/
 				else {
 					
@@ -2350,9 +2350,9 @@ public class ControladorFinanceiro implements SessionBean {
 			case LancamentoTipo.FINANCIAMENTOS_COBRADOS_INT:
 				
 				/*
-				* ETAPA Nº 01
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 01
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				if (etapa == 1){
@@ -2363,7 +2363,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2371,9 +2371,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else if (etapa == 2){
@@ -2384,7 +2384,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, valorTotalPublico, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2392,9 +2392,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* Razão Contábil = 12 e Conta Contábil = 151
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 03
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 151
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 3){
@@ -2405,7 +2405,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 4, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2413,9 +2413,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 04
-				* Razão Contábil = 12 e Conta Contábil = 152
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 04
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 152
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else {
@@ -2433,9 +2433,9 @@ public class ControladorFinanceiro implements SessionBean {
 			case LancamentoTipo.FINANCIAMENTOS_TRANSFERIDOS_CURTO_PRAZO_INT:
 				
 				/*
-				* ETAPA Nº 01
-				* Razão Contábil = 12 e Conta Contábil = 151
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 01
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 151
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				if (etapa == 1){
@@ -2446,7 +2446,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2454,9 +2454,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 12 e Conta Contábil = 152
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 152
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else if (etapa == 2){
@@ -2467,7 +2467,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, valorTotalPublico, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2475,9 +2475,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* Razão Contábil = 13 e Conta Contábil = 151
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 03
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 151
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 3){
@@ -2488,7 +2488,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 4, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2496,9 +2496,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 04
-				* Razão Contábil = 13 e Conta Contábil = 152
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 04
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 152
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else {
@@ -2516,9 +2516,9 @@ public class ControladorFinanceiro implements SessionBean {
 			case LancamentoTipo.PARCELAMENTOS_REALIZADOS_CURTO_PRAZO_INT:
 				
 				/*
-				* ETAPA Nº 01
-				* Razão Contábil = 12 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 01
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(DOCUMENTOS_EMITIDOS) + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				if (etapa == 1){
@@ -2541,7 +2541,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2549,9 +2549,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 12 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(DOCUMENTOS_EMITIDOS) + PUBLICO 
 				*/
 				else if (etapa == 2){
@@ -2565,7 +2565,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2573,9 +2573,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 03
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(DOCUMENTOS_EMITIDOS) + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 3){
@@ -2598,7 +2598,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 4, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2606,9 +2606,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 04
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 04
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(DOCUMENTOS_EMITIDOS) + PUBLICO 
 				*/
 				else if (etapa == 4){
@@ -2622,7 +2622,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 5, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2630,9 +2630,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 05
-				* Razão Contábil = 12 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 05
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(FINANCIAMENTOS_A_COBRAR_CURTO_PRAZO)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -2656,7 +2656,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 6, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2664,9 +2664,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 06
-				* Razão Contábil = 12 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 06
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(FINANCIAMENTOS_A_COBRAR_CURTO_PRAZO) + PUBLICO 
 				*/
 				else if (etapa == 6){
@@ -2680,7 +2680,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 7, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2688,9 +2688,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 07
-				* Razão Contábil = 12 e Conta Contábil = 151
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 07
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 151
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(FINANCIAMENTOS_A_COBRAR_CURTO_PRAZO)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -2714,7 +2714,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 8, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2722,9 +2722,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 08
-				* Razão Contábil = 12 e Conta Contábil = 152
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 08
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 152
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(FINANCIAMENTOS_A_COBRAR_CURTO_PRAZO) + PUBLICO 
 				*/
 				else if (etapa == 8){
@@ -2738,7 +2738,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 9, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2746,9 +2746,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 09
-				* Razão Contábil = 12 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 09
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(FINANCIAMENTOS_A_COBRAR_LONGO_PRAZO)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -2772,7 +2772,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 10, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2780,9 +2780,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 10
-				* Razão Contábil = 12 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 10
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(FINANCIAMENTOS_A_COBRAR_LONGO_PRAZO) + PUBLICO 
 				*/
 				else if (etapa == 10){
@@ -2796,7 +2796,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 11, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2804,9 +2804,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 11
-				* Razão Contábil = 13 e Conta Contábil = 151
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 11
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 151
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(FINANCIAMENTOS_A_COBRAR_LONGO_PRAZO)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -2830,7 +2830,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 12, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2838,9 +2838,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 12
-				* Razão Contábil = 13 e Conta Contábil = 152
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 12
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 152
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(FINANCIAMENTOS_A_COBRAR_LONGO_PRAZO) + PUBLICO 
 				*/
 				else if (etapa == 12){
@@ -2854,7 +2854,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 13, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2862,9 +2862,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 13
-				* Razão Contábil = 12 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 13
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(PARCELAMENTO_A_COBRAR_LONGO_PRAZO)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -2888,7 +2888,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 14, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2896,9 +2896,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 14
-				* Razão Contábil = 12 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 14
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(PARCELAMENTO_A_COBRAR_LONGO_PRAZO) + PUBLICO 
 				*/
 				else if (etapa == 14){
@@ -2912,7 +2912,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 15, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2920,9 +2920,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 15
-				* Razão Contábil = 13 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 15
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(PARCELAMENTO_A_COBRAR_LONGO_PRAZO)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -2946,7 +2946,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 16, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2954,9 +2954,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 16
-				* Razão Contábil = 13 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 16
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(PARCELAMENTO_A_COBRAR_LONGO_PRAZO) + PUBLICO 
 				*/
 				else if (etapa == 16){
@@ -2970,7 +2970,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 17, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -2978,9 +2978,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 17
-				* Razão Contábil = 12 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 17
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS_COBRADOS)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -3004,7 +3004,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 18, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3012,9 +3012,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 18
-				* Razão Contábil = 12 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 18
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS_COBRADOS) + PUBLICO 
 				*/
 				else if (etapa == 18){
@@ -3028,7 +3028,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 19, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3036,9 +3036,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 19
-				* Razão Contábil = 31 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 19
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS_COBRADOS) 
 				*/
 				else if (etapa == 19){
@@ -3051,7 +3051,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        lancamentoItem, ConstantesSistema.INDICADOR_CREDITO);
 					
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 20, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3059,9 +3059,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 20
-				* Razão Contábil = 31 e Conta Contábil = 122
-				* Indicador Débito/Crédito =  Débito (2)
+				* ETAPA Nï¿½ 20
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito =  Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS_CANCELADOS) 
 				*/
 				else if (etapa == 20){
@@ -3074,7 +3074,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        lancamentoItem, ConstantesSistema.INDICADOR_DEBITO);
 					
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 21, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3082,9 +3082,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 21
-				* Razão Contábil = 12 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 21
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS_CANCELADOS)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -3108,7 +3108,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 22, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3116,9 +3116,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 23
-				* Razão Contábil = 12 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 23
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS_CANCELADOS) + PUBLICO 
 				*/
 				else if (etapa == 22){
@@ -3132,7 +3132,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 23, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3140,9 +3140,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 23
-				* Razão Contábil = 12 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 23
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(DEBITOS_ANTERIORES_PARA_RECOBRANCA)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -3166,7 +3166,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 24, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3174,9 +3174,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 24
-				* Razão Contábil = 12 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 24
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(DEBITOS_ANTERIORES_PARA_RECOBRANCA) + PUBLICO 
 				*/
 				else if (etapa == 24){
@@ -3190,7 +3190,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 25, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3198,9 +3198,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 25
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 25
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(DEBITOS_ANTERIORES_PARA_RECOBRANCA)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -3224,7 +3224,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 26, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3232,9 +3232,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 26
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 26
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(DEBITOS_ANTERIORES_PARA_RECOBRANCA) + PUBLICO 
 				*/
 				else {
@@ -3255,9 +3255,9 @@ public class ControladorFinanceiro implements SessionBean {
 			case LancamentoTipo.PARCELAMENTOS_REALIZADOS_LONGO_PRAZO_INT:
 				
 				/*
-				* ETAPA Nº 01
-				* Razão Contábil = 13 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 01
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(DOCUMENTOS_EMITIDOS)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -3281,7 +3281,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3289,9 +3289,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 13 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(DOCUMENTOS_EMITIDOS) + PUBLICO 
 				*/
 				else if (etapa == 2){
@@ -3305,7 +3305,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3313,9 +3313,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 03
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(DOCUMENTOS_EMITIDOS)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -3339,7 +3339,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 4, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3347,9 +3347,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 04
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 04
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(DOCUMENTOS_EMITIDOS) + PUBLICO 
 				*/
 				else if (etapa == 4){
@@ -3363,7 +3363,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 5, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3371,9 +3371,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 05
-				* Razão Contábil = 13 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 05
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(FINANCIAMENTOS_A_COBRAR_CURTO_PRAZO)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -3397,7 +3397,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 6, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3405,9 +3405,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 06
-				* Razão Contábil = 13 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 06
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(FINANCIAMENTOS_A_COBRAR_CURTO_PRAZO) + PUBLICO 
 				*/
 				else if (etapa == 6){
@@ -3421,7 +3421,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 7, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3429,9 +3429,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 07
-				* Razão Contábil = 12 e Conta Contábil = 151
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 07
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 151
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(FINANCIAMENTOS_A_COBRAR_CURTO_PRAZO)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -3455,7 +3455,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 8, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3463,9 +3463,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 08
-				* Razão Contábil = 12 e Conta Contábil = 152
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 08
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 152
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(FINANCIAMENTOS_A_COBRAR_CURTO_PRAZO) + PUBLICO 
 				*/
 				else if (etapa == 8){
@@ -3479,7 +3479,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 9, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3487,9 +3487,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 09
-				* Razão Contábil = 13 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 09
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(FINANCIAMENTOS_A_COBRAR_LONGO_PRAZO)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -3513,7 +3513,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 10, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3521,9 +3521,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 10
-				* Razão Contábil = 13 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 10
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(FINANCIAMENTOS_A_COBRAR_LONGO_PRAZO) + PUBLICO 
 				*/
 				else if (etapa == 10){
@@ -3537,7 +3537,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 11, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3545,9 +3545,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 11
-				* Razão Contábil = 13 e Conta Contábil = 151
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 11
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 151
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(FINANCIAMENTOS_A_COBRAR_LONGO_PRAZO)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -3571,7 +3571,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 12, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3579,9 +3579,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 12
-				* Razão Contábil = 13 e Conta Contábil = 152
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 12
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 152
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(FINANCIAMENTOS_A_COBRAR_LONGO_PRAZO) + PUBLICO 
 				*/
 				else if (etapa == 12){
@@ -3595,7 +3595,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 13, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3603,9 +3603,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 13
-				* Razão Contábil = 13 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 13
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(PARCELAMENTO_A_COBRAR_CURTO_PRAZO)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -3629,7 +3629,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 14, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3637,9 +3637,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 14
-				* Razão Contábil = 13 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 14
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(PARCELAMENTO_A_COBRAR_LONGO_PRAZO) + PUBLICO 
 				*/
 				else if (etapa == 14){
@@ -3653,7 +3653,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 15, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3661,9 +3661,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 15
-				* Razão Contábil = 12 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 15
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(PARCELAMENTO_A_COBRAR_CURTO_PRAZO)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -3687,7 +3687,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 16, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3695,9 +3695,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 16
-				* Razão Contábil = 12 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 16
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(PARCELAMENTO_A_COBRAR_LONGO_PRAZO) + PUBLICO 
 				*/
 				else if (etapa == 16){
@@ -3711,7 +3711,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 17, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3719,9 +3719,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 17
-				* Razão Contábil = 13 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 17
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS_COBRADOS)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -3745,7 +3745,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 18, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3753,9 +3753,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 18
-				* Razão Contábil = 13 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 18
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS_COBRADOS) + PUBLICO 
 				*/
 				else if (etapa == 18){
@@ -3769,7 +3769,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 19, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3777,9 +3777,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 19
-				* Razão Contábil = 31 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 19
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS_COBRADOS) 
 				*/
 				else if (etapa == 19){
@@ -3792,7 +3792,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        lancamentoItem, ConstantesSistema.INDICADOR_DEBITO);
 					
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 20, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3800,9 +3800,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 20
-				* Razão Contábil = 31 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 20
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS_CANCELADOS) 
 				*/
 				else if (etapa == 20){
@@ -3815,7 +3815,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        lancamentoItem, ConstantesSistema.INDICADOR_DEBITO);
 					
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 21, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3823,9 +3823,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 21
-				* Razão Contábil = 13 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 21
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS_CANCELADOS)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -3849,7 +3849,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 22, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3857,9 +3857,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 22
-				* Razão Contábil = 13 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 22
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS_CANCELADOS) + PUBLICO 
 				*/
 				else {
@@ -3880,9 +3880,9 @@ public class ControladorFinanceiro implements SessionBean {
 			case LancamentoTipo.PARCELAMENTOS_CANCELADOS_CURTO_PRAZO_INT:
 				
 				/*
-				* ETAPA Nº 01
-				* Razão Contábil = 31 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 01
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + RESIDENCIAL 
 				*/
 				if (etapa == 1){
@@ -3896,7 +3896,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3904,9 +3904,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 31 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + COMERCIAL 
 				*/
 				else if (etapa == 2){
@@ -3920,7 +3920,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3928,9 +3928,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* Razão Contábil = 31 e Conta Contábil = 113
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 03
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 113
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + INDUSTRIAL 
 				*/
 				else if (etapa == 3){
@@ -3944,7 +3944,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 4, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3952,9 +3952,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 04
-				* Razão Contábil = 31 e Conta Contábil = 114
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 04
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 114
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + PUBLICO 
 				*/
 				else if (etapa == 4){
@@ -3968,7 +3968,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 5, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -3976,9 +3976,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 05
-				* Razão Contábil = 12 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 05
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -4002,7 +4002,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 6, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4010,9 +4010,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 06
-				* Razão Contábil = 12 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 06
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + PUBLICO 
 				*/
 				else if (etapa == 6){
@@ -4026,7 +4026,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 7, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4034,9 +4034,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 07
-				* Razão Contábil = 31 e Conta Contábil = 211
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 07
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 211
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + RESIDENCIAL 
 				*/
 				else if (etapa == 7){
@@ -4050,7 +4050,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 8, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4058,9 +4058,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 08
-				* Razão Contábil = 31 e Conta Contábil = 212
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 08
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 212
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + COMERCIAL 
 				*/
 				else if (etapa == 8){
@@ -4074,7 +4074,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 9, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4082,9 +4082,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 09
-				* Razão Contábil = 31 e Conta Contábil = 213
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 09
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 213
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + INDUSTRIAL 
 				*/
 				else if (etapa == 9){
@@ -4098,7 +4098,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 10, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4106,9 +4106,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 10
-				* Razão Contábil = 31 e Conta Contábil = 214
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 10
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 214
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + PUBLICO 
 				*/
 				else if (etapa == 10){
@@ -4122,7 +4122,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 11, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4130,9 +4130,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 11
-				* Razão Contábil = 12 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 11
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -4156,7 +4156,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 12, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4164,9 +4164,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 12
-				* Razão Contábil = 12 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 12
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + PUBLICO 
 				*/
 				else if (etapa == 12){
@@ -4180,7 +4180,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 13, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4188,10 +4188,10 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 13
-				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ítem de lançamento contábil
-				* Indicador Débito/Crédito = Débito (2)
-				* ValorItemFaturamento = Valor acumulado para cada ítem de lançamento contábil  
+				* ETAPA Nï¿½ 13
+				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ï¿½tem de lanï¿½amento contï¿½bil
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
+				* ValorItemFaturamento = Valor acumulado para cada ï¿½tem de lanï¿½amento contï¿½bil  
 				*/
 				else if (etapa == 13){
 					
@@ -4200,7 +4200,7 @@ public class ControladorFinanceiro implements SessionBean {
 					colecaoAcumularValoresPorLancamentoItemContabil, ConstantesSistema.INDICADOR_DEBITO);
 					
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 14, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4209,9 +4209,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 14
-				* Razão Contábil = 12 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 14
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 14){
@@ -4222,7 +4222,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 15, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4230,9 +4230,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 15
-				* Razão Contábil = 12 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 15
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else if (etapa == 15){
@@ -4243,7 +4243,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, valorTotalPublico, ConstantesSistema.INDICADOR_CREDITO);
 					
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 16, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil, 
@@ -4251,9 +4251,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 16
-				* Razão Contábil = 31 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 16
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS) 
 				*/
 				else if (etapa == 16){
@@ -4266,7 +4266,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        lancamentoItem, ConstantesSistema.INDICADOR_DEBITO);
 					
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 17, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4274,9 +4274,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 17
-				* Razão Contábil = 12 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 17
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -4300,7 +4300,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 18, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4308,9 +4308,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 18
-				* Razão Contábil = 12 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 18
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS) + PUBLICO 
 				*/
 				else {
@@ -4332,9 +4332,9 @@ public class ControladorFinanceiro implements SessionBean {
 			case LancamentoTipo.PARCELAMENTOS_CANCELADOS_LONGO_PRAZO_INT:
 				
 				/*
-				* ETAPA Nº 01
-				* Razão Contábil = 31 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 01
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + RESIDENCIAL 
 				*/
 				if (etapa == 1) {
@@ -4348,7 +4348,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 				
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4356,9 +4356,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 31 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + COMERCIAL 
 				*/
 				else if (etapa == 2) {
@@ -4372,7 +4372,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 				
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4380,9 +4380,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* Razão Contábil = 31 e Conta Contábil = 113
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 03
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 113
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + INSDUSTRIAL 
 				*/
 				else if (etapa == 3) {
@@ -4396,7 +4396,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 				
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 4, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4404,9 +4404,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 04
-				* Razão Contábil = 31 e Conta Contábil = 114
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 04
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 114
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + PUBLICO 
 				*/
 				else if (etapa == 4) {
@@ -4420,7 +4420,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 				
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 5, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4428,9 +4428,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 05
-				* Razão Contábil = 13 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 05
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -4454,7 +4454,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 6, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4462,9 +4462,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 06
-				* Razão Contábil = 13 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 06
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(AGUA) + PUBLICO 
 				*/
 				else if (etapa == 6) {
@@ -4478,7 +4478,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 				
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 7, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4486,9 +4486,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 07
-				* Razão Contábil = 31 e Conta Contábil = 211
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 07
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 211
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + RESIDENCIAL 
 				*/
 				else if (etapa == 7) {
@@ -4502,7 +4502,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 				
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 8, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4510,9 +4510,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 08
-				* Razão Contábil = 31 e Conta Contábil = 212
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 08
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 212
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + COMERCIAL 
 				*/
 				else if (etapa == 8) {
@@ -4526,7 +4526,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 				
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 9, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4534,9 +4534,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 09
-				* Razão Contábil = 31 e Conta Contábil = 213
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 09
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 213
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + INDUSTRIAL 
 				*/
 				else if (etapa == 9) {
@@ -4550,7 +4550,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 				
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 10, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4558,9 +4558,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 10
-				* Razão Contábil = 31 e Conta Contábil = 214
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 10
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 214
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + PUBLICO 
 				*/
 				else if (etapa == 10) {
@@ -4574,7 +4574,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_DEBITO);
 				
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 11, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4582,9 +4582,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 11
-				* Razão Contábil = 13 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 11
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -4608,7 +4608,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 12, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4616,9 +4616,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 12
-				* Razão Contábil = 13 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 12
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(ESGOTO) + PUBLICO 
 				*/
 				else if (etapa == 12) {
@@ -4632,7 +4632,7 @@ public class ControladorFinanceiro implements SessionBean {
 					lancamentoItem, categoria, null, null, ConstantesSistema.INDICADOR_CREDITO);
 				
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 13, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4640,10 +4640,10 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 13
-				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ítem de lançamento contábil
-				* Indicador Débito/Crédito = Débito (2)
-				* ValorItemFaturamento = Valor acumulado para cada ítem de lançamento contábil  
+				* ETAPA Nï¿½ 13
+				* contaContabil = CNCT_ID da tabela LANCAMENTO_ITEM_CONTABIL com LICT_ID = id do ï¿½tem de lanï¿½amento contï¿½bil
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
+				* ValorItemFaturamento = Valor acumulado para cada ï¿½tem de lanï¿½amento contï¿½bil  
 				*/
 				else if (etapa == 13){
 					
@@ -4652,7 +4652,7 @@ public class ControladorFinanceiro implements SessionBean {
 					colecaoAcumularValoresPorLancamentoItemContabil, ConstantesSistema.INDICADOR_DEBITO);
 					
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 14, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4661,9 +4661,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 14
-				* Razão Contábil = 13 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 14
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 14){
@@ -4674,7 +4674,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 15, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4682,9 +4682,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 15
-				* Razão Contábil = 12 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 15
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else if (etapa == 15){
@@ -4695,7 +4695,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, valorTotalPublico, ConstantesSistema.INDICADOR_CREDITO);
 					
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 16, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil, 
@@ -4703,9 +4703,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 16
-				* Razão Contábil = 31 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 16
+				* Razï¿½o Contï¿½bil = 31 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS) 
 				*/
 				else if (etapa == 16){
@@ -4718,7 +4718,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        lancamentoItem, ConstantesSistema.INDICADOR_DEBITO);
 					
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 17, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4726,9 +4726,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 17
-				* Razão Contábil = 13 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 17
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS)
 				*  + RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
@@ -4752,7 +4752,7 @@ public class ControladorFinanceiro implements SessionBean {
 					ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 18, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4760,9 +4760,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 18
-				* Razão Contábil = 13 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 18
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = LANCAMENTO_ITEM(JUROS) + PUBLICO 
 				*/
 				else {
@@ -4784,9 +4784,9 @@ public class ControladorFinanceiro implements SessionBean {
 			case LancamentoTipo.PARCELAMENTOS_COBRADOS_INT:
 				
 				/*
-				* ETAPA Nº 01
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 01
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				if (etapa == 1){
@@ -4797,7 +4797,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4805,9 +4805,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else if (etapa == 2){
@@ -4818,7 +4818,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, valorTotalPublico, ConstantesSistema.INDICADOR_DEBITO);
 					
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil, 
@@ -4826,9 +4826,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* Razão Contábil = 12 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 03
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 3){
@@ -4839,7 +4839,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 4, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4847,9 +4847,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 04
-				* Razão Contábil = 12 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 04
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else {
@@ -4867,9 +4867,9 @@ public class ControladorFinanceiro implements SessionBean {
 			case LancamentoTipo.PARCELAMENTOS_TRASFERIDOS_PARA_CURTO_PRAZO_INT:
 				
 				/*
-				* ETAPA Nº 01
-				* Razão Contábil = 12 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 01
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				if (etapa == 1){
@@ -4880,7 +4880,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4888,9 +4888,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 12 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else if (etapa == 2){
@@ -4901,7 +4901,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, valorTotalPublico, ConstantesSistema.INDICADOR_DEBITO);
 					
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil, 
@@ -4909,9 +4909,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* Razão Contábil = 13 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 03
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 3){
@@ -4922,7 +4922,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 4, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4930,9 +4930,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 04
-				* Razão Contábil = 13 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 04
+				* Razï¿½o Contï¿½bil = 13 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else {
@@ -4950,9 +4950,9 @@ public class ControladorFinanceiro implements SessionBean {
 			case LancamentoTipo.DEBITOS_ANTERIORES_COBRADOS_INT:
 				
 				/*
-				* ETAPA Nº 01
-				* Razão Contábil = 12 e Conta Contábil = 111
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 01
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 111
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				if (etapa == 1){
@@ -4963,7 +4963,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_DEBITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 2, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -4971,9 +4971,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 02
-				* Razão Contábil = 12 e Conta Contábil = 112
-				* Indicador Débito/Crédito = Débito (2)
+				* ETAPA Nï¿½ 02
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 112
+				* Indicador Dï¿½bito/Crï¿½dito = Dï¿½bito (2)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else if (etapa == 2){
@@ -4984,7 +4984,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        null, valorTotalPublico, ConstantesSistema.INDICADOR_DEBITO);
 					
 					
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 3, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil, 
@@ -4992,9 +4992,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 03
-				* Razão Contábil = 12 e Conta Contábil = 121
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 03
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 121
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = RESIDENCIAL + COMERCIAL + INDUSTRIAL 
 				*/
 				else if (etapa == 3){
@@ -5005,7 +5005,7 @@ public class ControladorFinanceiro implements SessionBean {
 			        valorTotalIndustrial, null, ConstantesSistema.INDICADOR_CREDITO);
 					
 						
-					//Direciona para próxima ETAPA
+					//Direciona para prï¿½xima ETAPA
 					this.inserirLancamentoContabilItem(lancamentoContabil, 4, valorTotalResidencial,
 					valorTotalComercial, valorTotalIndustrial, valorTotalPublico, 
 					colecaoAcumularValoresPorLancamentoItemContabil,
@@ -5013,9 +5013,9 @@ public class ControladorFinanceiro implements SessionBean {
 				}
 				
 				/*
-				* ETAPA Nº 04
-				* Razão Contábil = 12 e Conta Contábil = 122
-				* Indicador Débito/Crédito = Crédito (1)
+				* ETAPA Nï¿½ 04
+				* Razï¿½o Contï¿½bil = 12 e Conta Contï¿½bil = 122
+				* Indicador Dï¿½bito/Crï¿½dito = Crï¿½dito (1)
 				* ValorItemFaturamento = PUBLICO 
 				*/
 				else {
@@ -5039,11 +5039,11 @@ public class ControladorFinanceiro implements SessionBean {
 	
 	
 	/**
-	 * [UC00175] - Gerar Lançamentos Contábeis
+	 * [UC00175] - Gerar Lanï¿½amentos Contï¿½beis
 	 * Author: Raphael Rossiter
 	 * Data: 17/01/2006
 	 * 
-	 * Auxilia no cadastramento de um objeto do tipo LANCAMENTO_CONTABIL_ITEM quando a situação
+	 * Auxilia no cadastramento de um objeto do tipo LANCAMENTO_CONTABIL_ITEM quando a situaï¿½ï¿½o
 	 * exige que o valor do faturamento seja acumulado por CATEGORIA.
 	 *
 	 * @param lancamentoContabil
@@ -5105,11 +5105,11 @@ public class ControladorFinanceiro implements SessionBean {
 	
 	
 	/**
-	 * [UC00175] - Gerar Lançamentos Contábeis
+	 * [UC00175] - Gerar Lanï¿½amentos Contï¿½beis
 	 * Author: Raphael Rossiter
 	 * Data: 17/01/2006
 	 * 
-	 * Auxilia no cadastramento de um ou vários objetos do tipo LANCAMENTO_CONTABIL_ITEM quando a situação
+	 * Auxilia no cadastramento de um ou vï¿½rios objetos do tipo LANCAMENTO_CONTABIL_ITEM quando a situaï¿½ï¿½o
 	 * exige que o valor do faturamento seja acumulado por LANCAMENTO_ITEM_CONTABIL.
 	 * 
 	 * @param lancamentoContabil
@@ -5213,7 +5213,7 @@ public class ControladorFinanceiro implements SessionBean {
 			colecaoAcumularValoresPorLancamentoItemContabilCategoriaIt.next();
 				
 			
-			//Para acumular com três categorias
+			//Para acumular com trï¿½s categorias
 			if (categoria2 != null && categoria3 != null){
 
 				if (acumularValoresPorLancamentoItemContabilCategoria.getIdLancamentoItem().equals(
@@ -5323,28 +5323,28 @@ public class ControladorFinanceiro implements SessionBean {
 	}
 
 	/**
-	 * Pesquisa uma coleção de lançamento de item contábil
+	 * Pesquisa uma coleï¿½ï¿½o de lanï¿½amento de item contï¿½bil
 	 * 	 
-	 * @return Coleção de Lançamentos de Item Contábil 
+	 * @return Coleï¿½ï¿½o de Lanï¿½amentos de Item Contï¿½bil 
 	 * @exception ErroRepositorioException   Erro no hibernate
 	 */
 	public Collection<LancamentoItemContabil> pesquisarLancamentoItemContabil() throws ControladorException{
 		try{
-			//pesquisa os lançamentos de item contábil existentes no sisitema
+			//pesquisa os lanï¿½amentos de item contï¿½bil existentes no sisitema
 			return repositorioLancamentoItemContabil.pesquisarLancamentoItemContabil();
 			
 				//erro no hibernate
 			} catch (ErroRepositorioException ex) {
 				
-				//levanta a exceção para a próxima camada
+				//levanta a exceï¿½ï¿½o para a prï¿½xima camada
 				throw new ControladorException("erro.sistema", ex);
 			}		
 	}
 	
 	/**
-	 * Gera Lançamentos Contábeis do Faturamento
+	 * Gera Lanï¿½amentos Contï¿½beis do Faturamento
 	 *
-	 * [UC000348] - Gerar Lançamento Contábeis da Arrecadação
+	 * [UC000348] - Gerar Lanï¿½amento Contï¿½beis da Arrecadaï¿½ï¿½o
 	 *
 	 * @author Rafael Santos, Pedro Alexandre
 	 * @date 22/05/2006, 25/05/2007
@@ -5359,7 +5359,7 @@ public class ControladorFinanceiro implements SessionBean {
 		int idUnidadeIniciada = 0;
 
 		/*
-		 * Registrar o início do processamento da Unidade de
+		 * Registrar o inï¿½cio do processamento da Unidade de
 		 * Processamento do Batch
 		 * 
 		*/
@@ -5368,28 +5368,28 @@ public class ControladorFinanceiro implements SessionBean {
 		try {
 			Integer anoMesArrecadacaoAtual =  getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao();
 			if(anoMesReferenciaArrecadacao.intValue() >anoMesArrecadacaoAtual.intValue()){
-				//levanta a exceção para a próxima camada
+				//levanta a exceï¿½ï¿½o para a prï¿½xima camada
 				throw new ControladorException("atencao.mes_ano.arrecadacao.inferior",null,Util.formatarAnoMesParaMesAno(anoMesArrecadacaoAtual.toString()));
 			}
 			
 			/*
-			 *  Pesquisa os dados do resumo da arrecadação para o ano/mês de referência atual e 
+			 *  Pesquisa os dados do resumo da arrecadaï¿½ï¿½o para o ano/mï¿½s de referï¿½ncia atual e 
 			 *  para a localidade informada.
 			 *  
 			 *  0 - id da localidade
 			 *  1 - id do tipo de recebimento
-			 *  2 - id do tipo de lançamento
-			 *  3 - id do item de lançamento
-			 *  4 - id do item de lançamento contábil
+			 *  2 - id do tipo de lanï¿½amento
+			 *  3 - id do item de lanï¿½amento
+			 *  4 - id do item de lanï¿½amento contï¿½bil
 			 *  5 - id da categoria
-			 *  6 - soma do valor do resumo da arrecadação 
+			 *  6 - soma do valor do resumo da arrecadaï¿½ï¿½o 
 			 */
 			Collection<Object[]> colecaoDadosResumoArrecadacao = repositorioFinanceiro.obterDadosResumoArrecadacao(anoMesReferenciaArrecadacao, idLocalidade);
 		
 			/*
-			 * Caso exista resumo da arrecadação para a localidade e o ano/mês 
-			 * cria o lançamento contábil junto com seus items 
-			 * para cada conjunto de mesmo tipo de lançamento
+			 * Caso exista resumo da arrecadaï¿½ï¿½o para a localidade e o ano/mï¿½s 
+			 * cria o lanï¿½amento contï¿½bil junto com seus items 
+			 * para cada conjunto de mesmo tipo de lanï¿½amento
 			 */
 			if (colecaoDadosResumoArrecadacao != null && !colecaoDadosResumoArrecadacao.isEmpty()){
 				
@@ -5398,34 +5398,34 @@ public class ControladorFinanceiro implements SessionBean {
 				int idTipoLancamentoTemp = -1;
 				Collection<Object[]> colecaoDadosResumoPorTipoLancamento = new ArrayList();
 				
-				// definição da origem do lançamento
+				// definiï¿½ï¿½o da origem do lanï¿½amento
 				LancamentoOrigem lancamentoOrigem = new LancamentoOrigem();
 				lancamentoOrigem.setId(LancamentoOrigem.ARRECADACAO);
 				
-				//Cria a variável que vai armazenar o lançamento contábil
+				//Cria a variï¿½vel que vai armazenar o lanï¿½amento contï¿½bil
 				LancamentoContabil lancamentoContabilInsert = null;
 				
-				//laço para gerar os lançamentos por grupo de tipo de lançamento
+				//laï¿½o para gerar os lanï¿½amentos por grupo de tipo de lanï¿½amento
 				for(Object[] dadosResumoArrecadacao : colecaoDadosResumoArrecadacao){
 					
 					//recupera o id do tipo de recebimento
 					Integer idRecebimentoTipo = (Integer) dadosResumoArrecadacao[1];
 					
-					//recupera o tipo de lançamento atual 
+					//recupera o tipo de lanï¿½amento atual 
 					Integer idTipoLancamento = (Integer) dadosResumoArrecadacao[2];
 					
 					/*
 					 * Caso seja a primeira entrada do "for"
-					 * adiciona os dados a coleção e atualiza o item temporario
-					 * criando também o lançamento contabil que ira ser inserindo
+					 * adiciona os dados a coleï¿½ï¿½o e atualiza o item temporario
+					 * criando tambï¿½m o lanï¿½amento contabil que ira ser inserindo
 					 * junto com seus items.
 					 * 
-					 *  Caso contrário (não seja a primeira entrada do laço "for")
-					 *  verifica se o item de lançamento mudou, caso não tenha mudado 
+					 *  Caso contrï¿½rio (nï¿½o seja a primeira entrada do laï¿½o "for")
+					 *  verifica se o item de lanï¿½amento mudou, caso nï¿½o tenha mudado 
 					 *  adiciona os dados ao conjunto do mesmo item
-					 *  caso contrário, se mudou o item de lançamento o conjunto está fechado
-					 *  para o lançamento contábil e chama o método para inserir o
-					 *  lançamento contábil junto com seus itens. 
+					 *  caso contrï¿½rio, se mudou o item de lanï¿½amento o conjunto estï¿½ fechado
+					 *  para o lanï¿½amento contï¿½bil e chama o mï¿½todo para inserir o
+					 *  lanï¿½amento contï¿½bil junto com seus itens. 
 					 */
 					if(flagPrimeiraVez){
 						colecaoDadosResumoPorTipoLancamento.add(dadosResumoArrecadacao);
@@ -5441,7 +5441,7 @@ public class ControladorFinanceiro implements SessionBean {
 						Localidade localidade = new Localidade();
 						localidade.setId(idLocalidade);
 						
-						//cri o lançamento contábil que vai ser inserido
+						//cri o lanï¿½amento contï¿½bil que vai ser inserido
 						lancamentoContabilInsert = new LancamentoContabil();
 						lancamentoContabilInsert.setAnoMes(anoMesReferenciaArrecadacao);
 						lancamentoContabilInsert.setLancamentoOrigem(lancamentoOrigem);
@@ -5452,16 +5452,16 @@ public class ControladorFinanceiro implements SessionBean {
 					}else{
 						/*
 						 * Caso ainda seja o mesmo item adicona os dados para 
-						 * ser gerado os itens do lançamento para o mesmo lançamento.
-						 * Caso contrário chama o metódo para inseri os itens e o lançamento contábil.
+						 * ser gerado os itens do lanï¿½amento para o mesmo lanï¿½amento.
+						 * Caso contrï¿½rio chama o metï¿½do para inseri os itens e o lanï¿½amento contï¿½bil.
 						 */
 						if(idTipoLancamento == idTipoLancamentoTemp){
 							colecaoDadosResumoPorTipoLancamento.add(dadosResumoArrecadacao);
 						}else{
-							/* metódo para inserir o lançamento contábil assim como seus itens */
+							/* metï¿½do para inserir o lanï¿½amento contï¿½bil assim como seus itens */
 							this.inserirLancamentoContabilItemArrecadacao(lancamentoContabilInsert, colecaoDadosResumoPorTipoLancamento);
 							
-							//limpaa coleção e adiciona os dados do resumo atual
+							//limpaa coleï¿½ï¿½o e adiciona os dados do resumo atual
 							colecaoDadosResumoPorTipoLancamento.clear();
 							colecaoDadosResumoPorTipoLancamento.add(dadosResumoArrecadacao);
 							
@@ -5474,7 +5474,7 @@ public class ControladorFinanceiro implements SessionBean {
 							Localidade localidade = new Localidade();
 							localidade.setId(idLocalidade);
 							
-							//cria o lançamento contábil que vai ser inserido
+							//cria o lanï¿½amento contï¿½bil que vai ser inserido
 							lancamentoContabilInsert = new LancamentoContabil();
 							lancamentoContabilInsert.setAnoMes(anoMesReferenciaArrecadacao);
 							lancamentoContabilInsert.setLancamentoOrigem(lancamentoOrigem);
@@ -5483,16 +5483,16 @@ public class ControladorFinanceiro implements SessionBean {
 							lancamentoContabilInsert.setRecebimentoTipo(recebimentoTipo);
 							lancamentoContabilInsert.setUltimaAlteracao(new Date());
 							
-							//atualiza o tipo de lançamento temporário com o novo valor
+							//atualiza o tipo de lanï¿½amento temporï¿½rio com o novo valor
 							idTipoLancamentoTemp = idTipoLancamento;
 						}
 					}
 				}
 				
 				/*
-				 * Último registro
-				 * Esse "if" é para verificar se ainda existe um último registro na coleção
-				 * caso exista algum item, adiciona o lançamento contábil junto com o item. 
+				 * ï¿½ltimo registro
+				 * Esse "if" ï¿½ para verificar se ainda existe um ï¿½ltimo registro na coleï¿½ï¿½o
+				 * caso exista algum item, adiciona o lanï¿½amento contï¿½bil junto com o item. 
 				 */
 				if(colecaoDadosResumoPorTipoLancamento != null && colecaoDadosResumoPorTipoLancamento.size() > 0 ){
 					this.inserirLancamentoContabilItemArrecadacao(lancamentoContabilInsert, colecaoDadosResumoPorTipoLancamento);
@@ -5511,10 +5511,10 @@ public class ControladorFinanceiro implements SessionBean {
 	
 	
 	/**
-	 * Este metodo é utilizado para pesquisar os registros q serão
-	 * usados para contrução do txt do caso de uso
+	 * Este metodo ï¿½ utilizado para pesquisar os registros q serï¿½o
+	 * usados para contruï¿½ï¿½o do txt do caso de uso
 	 *
-	 * [UC0469] Gerar Integração para a Contabilidade
+	 * [UC0469] Gerar Integraï¿½ï¿½o para a Contabilidade
 	 *
 	 * @author Pedro Alexandre
 	 * @date 28/05/2007
@@ -5629,9 +5629,9 @@ public class ControladorFinanceiro implements SessionBean {
 	}
 	
 	/**
-	 * este caso de uso gera a integração para a contabilidade
+	 * este caso de uso gera a integraï¿½ï¿½o para a contabilidade
 	 *
-	 * [UC0469] Gerar Integração para a Contabilidade
+	 * [UC0469] Gerar Integraï¿½ï¿½o para a Contabilidade
 	 *
 	 * @author Pedro Alexandre
 	 * @date 28/05/2007
@@ -5685,7 +5685,7 @@ public class ControladorFinanceiro implements SessionBean {
             BigDecimal valorCredito = null;
             String moeda = "BRL";
            
-            // Laço para gerar o txt
+            // Laï¿½o para gerar o txt
             for(Object[] dadosGerarIntegracao : colecaoDadosGerarIntegracao){
                 numeroConta = (String) dadosGerarIntegracao[0];                           
                 centroCusto = (String) dadosGerarIntegracao[1];                           
@@ -5693,7 +5693,7 @@ public class ControladorFinanceiro implements SessionBean {
                 valorCredito = (BigDecimal) dadosGerarIntegracao[3];                           
                
                 /*
-                 * Inicio da geração do txt
+                 * Inicio da geraï¿½ï¿½o do txt
                  */
                
                 // SEQ = 1
@@ -5884,7 +5884,7 @@ public class ControladorFinanceiro implements SessionBean {
             if (idLancamentoOrigem.equals(LancamentoOrigem.FATURAMENTO + "")) {
                 throw new ControladorException("atencao.pesquisa.nenhum_registro_tabela", null, "Resumo Faturamento");
             } else if (idLancamentoOrigem.equals(LancamentoOrigem.ARRECADACAO + "")) {
-                throw new ControladorException("atencao.pesquisa.nenhum_registro_tabela", null,"Resumo Arrecadação");
+                throw new ControladorException("atencao.pesquisa.nenhum_registro_tabela", null,"Resumo Arrecadaï¿½ï¿½o");
             } else if (idLancamentoOrigem.equals(LancamentoOrigem.DEVEDORES_DUVIDOSOS + "")) {
                 throw new ControladorException("atencao.pesquisa.nenhum_registro_tabela", null,"Resumo Devedores Duvidosos");
             }
@@ -5908,18 +5908,18 @@ public class ControladorFinanceiro implements SessionBean {
 		int idUnidadeIniciada = 0;
 
 		/*
-		 * Registrar o início do processamento da Unidade de
+		 * Registrar o inï¿½cio do processamento da Unidade de
 		 * Processamento do Batch
 		*/
 		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,UnidadeProcessamento.LOCALIDADE,(idLocalidade));
 		
 		try {
 			
-			//Recupera os parâmetros dos devedores duvidosos.
+			//Recupera os parï¿½metros dos devedores duvidosos.
 			ParametrosDevedoresDuvidosos parametrosDevedoresDuvidosos = this.repositorioFinanceiro.pesquisarParametrosDevedoresDuvidosos(anoMesReferenciaContabil);
 			
 			
-			//[FS0001] - Verificar existência dos parâmetros
+			//[FS0001] - Verificar existï¿½ncia dos parï¿½metros
 			if(parametrosDevedoresDuvidosos == null){
 				throw new ControladorException("atencao.naocadastrado.referencia_contabil");
 			}
@@ -5934,14 +5934,14 @@ public class ControladorFinanceiro implements SessionBean {
 					Iterator iteratorIdsQuadra = colecaoQuadraId.iterator();
 					while ( iteratorIdsQuadra.hasNext() ) {
 						Integer idQuadra = (Integer) iteratorIdsQuadra.next();
-						//o sistema atualiza com o valor nulo o ano/mês referência contábil das contas baixadas
-						//contabilmente no ano/mês referência contábil
+						//o sistema atualiza com o valor nulo o ano/mï¿½s referï¿½ncia contï¿½bil das contas baixadas
+						//contabilmente no ano/mï¿½s referï¿½ncia contï¿½bil
 						this.repositorioFinanceiro.atualizaContaAnoMesReferenciaContabil(anoMesReferenciaContabil, idLocalidade, idQuadra);
 					}
 				}
 				
 		
-				//exclui o resumo dos devedores duvidosos,referente ao ano/mês referência contábil
+				//exclui o resumo dos devedores duvidosos,referente ao ano/mï¿½s referï¿½ncia contï¿½bil
 				this.repositorioFinanceiro.removeResumoDevedoresDuvidososPorAnoMesReferenciaContabil(anoMesReferenciaContabil,idLocalidade);
 				parametrosDevedoresDuvidosos.setValorBaixado(BigDecimal.ZERO);
 				getControladorUtil().atualizar(parametrosDevedoresDuvidosos);
@@ -6445,7 +6445,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		int idUnidadeIniciada = 0;
 
 		/*
-		 * Registrar o início do processamento da Unidade de
+		 * Registrar o inï¿½cio do processamento da Unidade de
 		 * Processamento do Batch
 		*/
 		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,UnidadeProcessamento.RELATORIO,(0));
@@ -6456,7 +6456,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			Object[] parametrosARemover = new Object[2];
 			boolean primeiraVez = true;
 			
-//			Recupera os parâmetros dos devedores duvidosos.
+//			Recupera os parï¿½metros dos devedores duvidosos.
 			ParametrosDevedoresDuvidosos parametrosDevedoresDuvidosos = this.repositorioFinanceiro.pesquisarParametrosDevedoresDuvidosos(anoMesReferenciaContabil);
 			
 			if ( parametrosDevedoresDuvidosos.getValorBaixado().compareTo(parametrosDevedoresDuvidosos.getValorABaixar()) == 1 ) {
@@ -6485,7 +6485,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				}
 				
 				
-				//exclui o resumo dos devedores duvidosos,referente ao ano/mês referência contábil
+				//exclui o resumo dos devedores duvidosos,referente ao ano/mï¿½s referï¿½ncia contï¿½bil
 				BigDecimal valorBaixadoARemover = (BigDecimal) parametrosARemover[0];
 				Integer idLocalidade = (Integer) parametrosARemover[1];
 				this.repositorioFinanceiro.removeResumoDevedoresDuvidososPorAnoMesReferenciaContabil(anoMesReferenciaContabil, idLocalidade);
@@ -6507,7 +6507,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	
 	
 	/**
-	 * [UC0345] - Gerar Relatorio de Resumo da Arrecadação
+	 * [UC0345] - Gerar Relatorio de Resumo da Arrecadaï¿½ï¿½o
 	 *
 	 * @author Vivianne Sousa
 	 * @date 10/04/2007
@@ -6529,9 +6529,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	
 	/**
 	 * Pesquisa as localidades que tem resumo de faturamento 
-	 * para o ano/mês de faturamento informado.
+	 * para o ano/mï¿½s de faturamento informado.
 	 *
-	 * [UC00175] Gerar Lançamentos Contábeis do Faturamento
+	 * [UC00175] Gerar Lanï¿½amentos Contï¿½beis do Faturamento
 	 *
 	 * @author Pedro Alexandre
 	 * @date 25/05/2007
@@ -6542,22 +6542,22 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 */
 	public Collection<Integer> pesquisarIdsLocalidadesParaGerarLancamentosContabeisFaturamento(Integer anoMesFaturamento) throws ControladorException{
 		try{
-			//pesquisa os lançamentos de item contábil existentes no sisitema
+			//pesquisa os lanï¿½amentos de item contï¿½bil existentes no sisitema
 			return 
 				this.repositorioFinanceiro.pesquisarIdsLocalidadesParaGerarLancamentosContabeisFaturamento(
 						anoMesFaturamento);
 			
 				//erro no hibernate
 			} catch (ErroRepositorioException ex) {
-				//levanta a exceção para a próxima camada
+				//levanta a exceï¿½ï¿½o para a prï¿½xima camada
 				throw new ControladorException("erro.sistema", ex);
 			}		
 	}
 	
 	/**
-	 * Gera o lançamento contábil junto com seus itens. 
+	 * Gera o lanï¿½amento contï¿½bil junto com seus itens. 
 	 *
-	 * [UC0348] - Gerar Lançamentos Contábeis da Arrecadação
+	 * [UC0348] - Gerar Lanï¿½amentos Contï¿½beis da Arrecadaï¿½ï¿½o
 	 *
 	 * @author Pedro Alexandre
 	 * @date 31/05/2007
@@ -6570,26 +6570,26 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	protected void inserirLancamentoContabilItemArrecadacao(LancamentoContabil lancamentoContabil,Collection<Object[]> colecaoDadosResumoPorTipoLancamento) throws ControladorException {
 		try{
 			/*
-			 * Caso exista dados para os itens do resumo da arrecadação
-			 * inseri os itens do lançamento contábil.  
+			 * Caso exista dados para os itens do resumo da arrecadaï¿½ï¿½o
+			 * inseri os itens do lanï¿½amento contï¿½bil.  
 			 */
 			if(colecaoDadosResumoPorTipoLancamento != null && !colecaoDadosResumoPorTipoLancamento.isEmpty()){
 				
 				Collection colecaoLancamentoContabilItem = new ArrayList();
 				
-				//flaq que indica se o lançamento contábil já foi inserido
+				//flaq que indica se o lanï¿½amento contï¿½bil jï¿½ foi inserido
 				boolean flagInseridoLancamentoContabil = false;
 				
 				/*
-				 * Dados do resumo da arrecadação
+				 * Dados do resumo da arrecadaï¿½ï¿½o
 				 * 
 				 *  0 - id da localidade
 				 *  1 - id do tipo de recebimento
-				 *  2 - id do tipo de lançamento
-				 *  3 - id do item de lançamento
-				 *  4 - id do item de lançamento contábil
+				 *  2 - id do tipo de lanï¿½amento
+				 *  3 - id do item de lanï¿½amento
+				 *  4 - id do item de lanï¿½amento contï¿½bil
 				 *  5 - id da categoria
-				 *  6 - soma do valor do resumo da arrecadação 
+				 *  6 - soma do valor do resumo da arrecadaï¿½ï¿½o 
 				 */
 				for(Object[] dadosResumoFaturamento : colecaoDadosResumoPorTipoLancamento){
 					
@@ -6602,21 +6602,21 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					BigDecimal valorLancamento =       (BigDecimal) dadosResumoFaturamento[6]; 
 					
 					/* 
-					 * Verifica se existe conta contábil para o item que vai ser inserido 
+					 * Verifica se existe conta contï¿½bil para o item que vai ser inserido 
 					 * 
-					 * 0 - id conta contábil do débito
-					 * 1 - id conta contábil crédito 
-					 * 2 - descrição do histórico do débito
-					 * 3 - descrição do histórico do crédito
+					 * 0 - id conta contï¿½bil do dï¿½bito
+					 * 1 - id conta contï¿½bil crï¿½dito 
+					 * 2 - descriï¿½ï¿½o do histï¿½rico do dï¿½bito
+					 * 3 - descriï¿½ï¿½o do histï¿½rico do crï¿½dito
 					 */
 					Object[] dadosContaContabil = this.repositorioFinanceiro.obterParametrosContabilArrecadacao(idTipoRecebimento, idCategoria, idLancamentoItemContabil, idLancamentoItem, idLancamentoTipo);
 					
 					if(dadosContaContabil != null){
 						Integer idLancamentoContabil = null;
 						/*
-						 * Caso exista dados para a conta contábil do item do resumo da arrecadação
-						 * e o lançamento contábil não foi inserido ainda 
-						 * inseri o lançamento contábil na base.
+						 * Caso exista dados para a conta contï¿½bil do item do resumo da arrecadaï¿½ï¿½o
+						 * e o lanï¿½amento contï¿½bil nï¿½o foi inserido ainda 
+						 * inseri o lanï¿½amento contï¿½bil na base.
 						 */
 						if(!flagInseridoLancamentoContabil){
 							idLancamentoContabil = (Integer)getControladorUtil().inserir(lancamentoContabil);
@@ -6624,26 +6624,26 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 							flagInseridoLancamentoContabil = true;
 						}
 						
-						//recupera os dados da conta contábil.
+						//recupera os dados da conta contï¿½bil.
 						Integer idContaContabilDebito = (Integer) dadosContaContabil[0];
 						Integer idContaContabilCredito = (Integer) dadosContaContabil[1];
 						String descricaoHistoricoDebito = (String) dadosContaContabil[2];
 						String descricaoHistoricoCredito = (String) dadosContaContabil[3];
 						
-						//cria os indicadores de débito e crédito.
+						//cria os indicadores de dï¿½bito e crï¿½dito.
 						Short indicadorDebito = new Short("2"); 
 						Short indicadorCredito = new Short("1");
 						
 						Date ultimaAlteracao = new Date();
 						
-						//cria as contas de débito e crédito.
+						//cria as contas de dï¿½bito e crï¿½dito.
 						ContaContabil contaContabilCredito = new ContaContabil();
 						contaContabilCredito.setId(idContaContabilCredito);
 						
 						ContaContabil contaContabilDebito = new ContaContabil();
 						contaContabilDebito.setId(idContaContabilDebito);
 						
-						/**  Item de crédito */
+						/**  Item de crï¿½dito */
 						LancamentoContabilItem lancamentoContabilItemCredito = new LancamentoContabilItem(indicadorCredito, 
 								valorLancamento, 
 								descricaoHistoricoCredito, 
@@ -6653,7 +6653,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 						
 						colecaoLancamentoContabilItem.add(lancamentoContabilItemCredito);
 						
-						/** Item de débito */
+						/** Item de dï¿½bito */
 						LancamentoContabilItem lancamentoContabilItemDebito = new LancamentoContabilItem(indicadorDebito, 
 								valorLancamento, 
 								descricaoHistoricoDebito, 
@@ -6675,10 +6675,10 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	}
 	
 	/**
-	 * Pesquisa as localidades que tem resumo de arrecadação 
-	 * para o ano/mês de arrecadação informado.
+	 * Pesquisa as localidades que tem resumo de arrecadaï¿½ï¿½o 
+	 * para o ano/mï¿½s de arrecadaï¿½ï¿½o informado.
 	 *
-	 * [UC00348] Gerar Lançamentos Contábeis da arrecadação
+	 * [UC00348] Gerar Lanï¿½amentos Contï¿½beis da arrecadaï¿½ï¿½o
 	 *
 	 * @author Pedro Alexandre
 	 * @date 31/05/2007
@@ -6693,14 +6693,14 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			
 				//erro no hibernate
 			} catch (ErroRepositorioException ex) {
-				//levanta a exceção para a próxima camada
+				//levanta a exceï¿½ï¿½o para a prï¿½xima camada
 				throw new ControladorException("erro.sistema", ex);
 			}		
 	}
 	
 	
 	/**
-	 * Pesquisa a coleção de ids das localidades para processar o resumo 
+	 * Pesquisa a coleï¿½ï¿½o de ids das localidades para processar o resumo 
 	 * dos devedores duvidosos.
 	 *
 	 * [UC0485] Gerar Resumo dos Devedores Duvidosos
@@ -6718,7 +6718,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			
 				//erro no hibernate
 			} catch (ErroRepositorioException ex) {
-				//levanta a exceção para a próxima camada
+				//levanta a exceï¿½ï¿½o para a prï¿½xima camada
 				throw new ControladorException("erro.sistema", ex);
 			}		
 	}
@@ -6728,12 +6728,12 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		
 
 		/**
-		 * Este metodo é utilizado para pesquisar os registros q serão
-		 * usados para contrução do txt do caso de uso
+		 * Este metodo ï¿½ utilizado para pesquisar os registros q serï¿½o
+		 * usados para contruï¿½ï¿½o do txt do caso de uso
 		 *
-		 * [UC0469] Gerar Integração para a Contabilidade
+		 * [UC0469] Gerar Integraï¿½ï¿½o para a Contabilidade
 		 *
-		 * @author Flávio Leonardo
+		 * @author Flï¿½vio Leonardo
 		 * @date 28/05/2007
 		 *
 		 * @param idLancamentoOrigem
@@ -6876,9 +6876,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		}
 		*/
 		/**
-		 * este caso de uso gera a integração para a contabilidade
+		 * este caso de uso gera a integraï¿½ï¿½o para a contabilidade
 		 *
-		 * [UC0469] Gerar Integração para a Contabilidade
+		 * [UC0469] Gerar Integraï¿½ï¿½o para a Contabilidade
 		 *
 		 * @author Pedro Alexandre
 		 * @date 28/05/2007
@@ -6892,35 +6892,35 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		public void gerarIntegracaoContabilidadeCaern(String idLancamentoOrigem, String anoMes, String data) throws ControladorException{
 			
 			/*
-			 * Pesquisa os dados para gerar a integração para a contabilidade.
+			 * Pesquisa os dados para gerar a integraï¿½ï¿½o para a contabilidade.
 			 * 
-			 * 0 - número do cartão
-			 * 1 - código tipo
-			 * 2 - número folha
+			 * 0 - nï¿½mero do cartï¿½o
+			 * 1 - cï¿½digo tipo
+			 * 2 - nï¿½mero folha
 			 * 3 - indicador linha
-			 * 4 - prefixo contábil
-			 * 5 - número conta
-			 * 6 - número dígito
-			 * 7 - número terceiros
-			 * 8 - código referência
-			 * 9 - valor lançamento
-			 * 10 - indicador débito crédito
-			 * 11 - número cartão 2
-			 * 12 - número versão
+			 * 4 - prefixo contï¿½bil
+			 * 5 - nï¿½mero conta
+			 * 6 - nï¿½mero dï¿½gito
+			 * 7 - nï¿½mero terceiros
+			 * 8 - cï¿½digo referï¿½ncia
+			 * 9 - valor lanï¿½amento
+			 * 10 - indicador dï¿½bito crï¿½dito
+			 * 11 - nï¿½mero cartï¿½o 2
+			 * 12 - nï¿½mero versï¿½o
 			 * 13 - id da localidade
-			 * 14 - código centro custo
+			 * 14 - cï¿½digo centro custo
 			 * 
 			 */
 			Collection<Object[]> colecaoDadosGerarIntegracao = null;
 
 			colecaoDadosGerarIntegracao = this.pesquisarGerarIntegracaoContabilidade(idLancamentoOrigem, anoMes);
 			
-			/** definição das variáveis */
+			/** definiï¿½ï¿½o das variï¿½veis */
 			StringBuilder gerarIntegracaoTxt = new StringBuilder();
 			String dataFormatada = data.replace("/","");
 			
 			/*
-			 * Caso a coleção dos dados não esteja vazia
+			 * Caso a coleï¿½ï¿½o dos dados nï¿½o esteja vazia
 			 */
 			if(colecaoDadosGerarIntegracao != null && !colecaoDadosGerarIntegracao.isEmpty()){
 				
@@ -6930,24 +6930,24 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				BigDecimal valorLancamento = null;
 				
 				/*
-				 * Laço para gerar o txt 
+				 * Laï¿½o para gerar o txt 
 				 */
 				Iterator iterator = colecaoDadosGerarIntegracao.iterator();
 				while (iterator.hasNext()){
 					GerarIntegracaoContabilidadeHelper gerarIntegracaoContabilidadeHelper = (GerarIntegracaoContabilidadeHelper)iterator.next();
-					//número do cartão 
+					//nï¿½mero do cartï¿½o 
 					numeroCartao = gerarIntegracaoContabilidadeHelper.getNumeroCartao();
 						
 					//CreditoDebito
 					creditoDebito = gerarIntegracaoContabilidadeHelper.getCreditoDebito();
 					
 			
-					//valor do lançamento
+					//valor do lanï¿½amento
 					valorLancamento = (BigDecimal) gerarIntegracaoContabilidadeHelper.getValorLancamento();
 					
 					
 					/*
-					 * Inicio da geração do txt
+					 * Inicio da geraï¿½ï¿½o do txt
 					 */
 					//Cartao
 					gerarIntegracaoTxt.append(Util.adicionarZerosEsquedaNumero(3,numeroCartao + ""));
@@ -7000,7 +7000,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 				}
 				/*
-				 * Determina se o arquivo é de faturamento ou arrecadação 
+				 * Determina se o arquivo ï¿½ de faturamento ou arrecadaï¿½ï¿½o 
 				 * para concatenar no nome do arquivo .zip
 				 */
 				String descricaoLancamento = "";
@@ -7020,7 +7020,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				File leituraTipo = new File(nomeZip + ".txt");
 
 				/*
-				 * Caso oarquivo txt não esteja vazio 
+				 * Caso oarquivo txt nï¿½o esteja vazio 
 				 * adiciona o txt ao arquivo zip.
 				 */
 				if (gerarIntegracaoTxt != null && gerarIntegracaoTxt.length() != 0) {
@@ -7045,7 +7045,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					}
 					
 				}
-				//caso não exista informação para os dados informados
+				//caso nï¿½o exista informaï¿½ï¿½o para os dados informados
 			}else{
 				if(idLancamentoOrigem.equals(LancamentoOrigem.FATURAMENTO + "")){
 					throw new ControladorException("atencao.pesquisa.nenhum_registro_tabela", null,"Resumo Faturamento");
@@ -7072,13 +7072,13 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @throws ControladorException
 	 */
 	public Integer gerarResumoDevedoresDuvidosos(ProcessoIniciado processoIniciado,Map<String, Object> dadosProcessamento)	throws ControladorException {
-		//Recupera o ano/mês de referência contábil.
+		//Recupera o ano/mï¿½s de referï¿½ncia contï¿½bil.
 		Integer anoMesReferenciaContabil = new Integer((String) dadosProcessamento.get("anoMesReferenciaContabil"));
 		
 		ParametrosDevedoresDuvidosos parametrosDevedoresDuvidosos;
 		try {
 
-			//[FS0001] - Verificar existência dos parâmetros
+			//[FS0001] - Verificar existï¿½ncia dos parï¿½metros
 			parametrosDevedoresDuvidosos = this.repositorioFinanceiro.pesquisarParametrosDevedoresDuvidosos(anoMesReferenciaContabil);
 			if(parametrosDevedoresDuvidosos == null){
 				throw new ControladorException("atencao.naocadastrado.referencia_contabil");
@@ -7094,16 +7094,16 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}	
-		//chama o metódo para inserir o processo de gerar resumo devedores duvidosos
+		//chama o metï¿½do para inserir o processo de gerar resumo devedores duvidosos
 		return this.getControladorBatch().inserirProcessoIniciado(processoIniciado,dadosProcessamento);
 	}
 	
 	 /**
-     * [UC0714] Gerar Contas a Receber Contábil
+     * [UC0714] Gerar Contas a Receber Contï¿½bil
      *
-     * Método responsável pela geração de contas a receber contábil
+     * Mï¿½todo responsï¿½vel pela geraï¿½ï¿½o de contas a receber contï¿½bil
      *
-     * @author Rafael Corrêa
+     * @author Rafael Corrï¿½a
      * @date 08/11/2007
      *
      * @param idLocalidade
@@ -7131,25 +7131,25 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 			Collection colecaoContasAReceberContabil = new ArrayList();
 
-			// exclui os dados do saldo de contas a receber contábil do mês de referência do faturamento já encerrado
+			// exclui os dados do saldo de contas a receber contï¿½bil do mï¿½s de referï¿½ncia do faturamento jï¿½ encerrado
 			repositorioFinanceiro.removerContasAReceberContabil(anoMesAnteriorFaturamento, idLocalidade);
 
-			// Valores de Água e Esgoto
+			// Valores de ï¿½gua e Esgoto
 			adicionarContaAReceberContabilAguaEsgotoImpostos(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-			// Débitos Cobrados
+			// Dï¿½bitos Cobrados
 			adicionarContaAReceberContabilDebitosCobrados(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
 			// Guias de Pagamento
 			adicionarContaAReceberContabilGuiasPagamento(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-			// Créditos Realizados
+			// Crï¿½ditos Realizados
 			adicionarContaAReceberContabilCreditosRealizados(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-			// Débitos a Cobrar
+			// Dï¿½bitos a Cobrar
 			adicionarContaAReceberContabilDebitosACobrar(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
-			// Créditos a Realizar
+			// Crï¿½ditos a Realizar
 			adicionarContaAReceberContabilCreditosARealizar(idLocalidade, anoMesAnteriorFaturamento, colecaoContasAReceberContabil);
 
 			// adicionado por Vivianne Sousa 14/08/2009 - Aryed Lins
@@ -7165,7 +7165,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 
-			System.out.println("fim da geração " + "Localidade " + idLocalidade);
+			System.out.println("fim da geraï¿½ï¿½o " + "Localidade " + idLocalidade);
 
 		} catch (Exception e) {
 
@@ -7175,12 +7175,12 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	}
 
     /**
-     * [UC0714] Gerar Contas a Receber Contábil
+     * [UC0714] Gerar Contas a Receber Contï¿½bil
      *
-     * Cria o objeto de ContaAReceberContabil de acordo com os parâmetros
+     * Cria o objeto de ContaAReceberContabil de acordo com os parï¿½metros
      * passados
      *
-     * @author Rafael Corrêa
+     * @author Rafael Corrï¿½a
      * @date 08/11/2007
      *
      */
@@ -7196,12 +7196,12 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
         retorno.setAnoMesReferencia(anoMesReferencia);
 
-        // Gerência Regional
+        // Gerï¿½ncia Regional
         GerenciaRegional gerenciaRegional = new GerenciaRegional();
         gerenciaRegional.setId(idGerenciaRegional);
         retorno.setGerenciaRegional(gerenciaRegional);
 
-        // Unidade Negócio
+        // Unidade Negï¿½cio
         UnidadeNegocio unidadeNegocio = new UnidadeNegocio();
         unidadeNegocio.setId(idUnidadeNegocio);
         retorno.setUnidadeNegocio(unidadeNegocio);
@@ -7219,23 +7219,23 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
         // Valor Acumulado
         retorno.setValorItemLancamento(valorItem);
 
-        // Lançamento Tipo
+        // Lanï¿½amento Tipo
         LancamentoTipo lancamentoTipo = new LancamentoTipo();
         lancamentoTipo.setId(idLancamentoTipo);
         retorno.setLancamentoTipo(lancamentoTipo);
 
-        // Seqüência do Lançamento Tipo
+        // Seqï¿½ï¿½ncia do Lanï¿½amento Tipo
         retorno.setNumeroSequenciaTipoLancamento(sequenciaLancamentoTipo);
 
-        // Lançamento Item
+        // Lanï¿½amento Item
         LancamentoItem lancamentoItem = new LancamentoItem();
         lancamentoItem.setId(idLancamentoItem);
         retorno.setLancamentoItem(lancamentoItem);
 
-        // Seqüência do Lançamento Item
+        // Seqï¿½ï¿½ncia do Lanï¿½amento Item
         retorno.setNumeroSequenciaItemTipoLancamento(sequenciaLancamentoItem);
        
-        // Lançamento Item Contábil
+        // Lanï¿½amento Item Contï¿½bil
         if (idLancamentoItemContabil != null) {
             LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil();
             lancamentoItemContabil.setId(idLancamentoItemContabil);
@@ -7251,11 +7251,11 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     }
 
     /**
-     * [UC0714] Gerar Contas a Receber Contábil
+     * [UC0714] Gerar Contas a Receber Contï¿½bil
      *
-     * Adiciona os dados de água e esgoto
+     * Adiciona os dados de ï¿½gua e esgoto
      *
-     * @author Rafael Corrêa
+     * @author Rafael Corrï¿½a
      * @date 08/11/2007
      *
      */
@@ -7289,7 +7289,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
                 BigDecimal valorEsgoto = (BigDecimal) dadosValorAguaEsgoto[5];
 
-                // Água
+                // ï¿½gua
                 if (valorAgua != null
                         && valorAgua.compareTo(new BigDecimal("0.00")) > 0) {
 
@@ -7376,11 +7376,11 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     }
 
     /**
-	 * [UC0714] Gerar Contas a Receber Contábil
+	 * [UC0714] Gerar Contas a Receber Contï¿½bil
 	 * 
-	 * Adiciona os dados de débitos cobrados
+	 * Adiciona os dados de dï¿½bitos cobrados
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 08/11/2007
 	 * 
 	 */
@@ -7390,7 +7390,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
             Collection colecaoContasAReceberContabil)
             throws ErroRepositorioException {
 
-        // Serviço
+        // Serviï¿½o
         Collection colecaoDadosDebitosCobradosServico = repositorioFinanceiro
                 .pesquisarDadosDebitosCobradosCategoriaServico(
                         anoMesAnteriorFaturamento, idLocalidade);
@@ -7481,11 +7481,11 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     }
 
     /**
-     * [UC0714] Gerar Contas a Receber Contábil
+     * [UC0714] Gerar Contas a Receber Contï¿½bil
      *
      * Adiciona os dados das guias de pagamento
      *
-     * @author Rafael Corrêa
+     * @author Rafael Corrï¿½a
      * @date 08/11/2007
      *
      */
@@ -7539,7 +7539,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
         }
 
-        // Serviço
+        // Serviï¿½o
         Collection colecaoDadosGuiaPagamentoServico = repositorioFinanceiro
                 .pesquisarDadosGuiasPagamentoCategoriaServico(
                         anoMesAnteriorFaturamento, idLocalidade);
@@ -7586,9 +7586,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     }
 
     /**
-     * [UC0714] Gerar Contas a Receber Contábil
+     * [UC0714] Gerar Contas a Receber Contï¿½bil
      *
-     * Adiciona os dados de créditos realizados
+     * Adiciona os dados de crï¿½ditos realizados
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	private void adicionarContaAReceberContabilCreditosRealizados(Integer idLocalidade, int anoMesAnteriorFaturamento, Collection colecaoContasAReceberContabil) throws ErroRepositorioException {
@@ -7622,7 +7622,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA), 
 				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, 90);
 
-		// Devoluções
+		// Devoluï¿½ï¿½es
 		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
 				repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaDevolucao(anoMesAnteriorFaturamento, idLocalidade), 
 				anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.VALORES_COBRADOS_INDEVIDAMENTE, 95);
@@ -7636,7 +7636,12 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil, colecaoCurtoELongo, anoMesAnteriorFaturamento, 
 				LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.DESCONTOS_CREDITOS_ANTERIORES, 100);
 		
-		// Descontos concedidos na Recuperacao de crédito 
+		// Descontos concedidos subsidio Agua Para
+		distribuirCreditosRelizadosContaAReceberContabil(colecaoContasAReceberContabil,
+		       repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, CreditoOrigem.BOLSA_AGUA), 
+		       anoMesAnteriorFaturamento, LancamentoTipo.DOCUMENTOS_EMITIDOS, 100, LancamentoItem.SUBSIDIO_AGUA_PARA, 97);
+		
+		// Descontos concedidos na Recuperacao de crï¿½dito 
 		Collection colecaoRecuperacao = repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, 
 				CreditoOrigem.RECUPERACAO_CREDITO_CONTA_CANCELADA);
 		colecaoRecuperacao.addAll(repositorioFinanceiro.pesquisarDadosCreditosRealizadosCategoriaPorCreditoOrigem(anoMesAnteriorFaturamento, idLocalidade, 
@@ -7688,11 +7693,11 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     }
     
     /**
-     * [UC0714] Gerar Contas a Receber Contábil
+     * [UC0714] Gerar Contas a Receber Contï¿½bil
      *
-     * Adiciona os dados de débitos a cobrar
+     * Adiciona os dados de dï¿½bitos a cobrar
      *
-     * @author Rafael Corrêa
+     * @author Rafael Corrï¿½a
      * @date 08/11/2007
      *
      */
@@ -7702,7 +7707,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
             Collection colecaoContasAReceberContabil)
             throws ErroRepositorioException {
 
-        // Serviço
+        // Serviï¿½o
         Collection colecaoDadosDebitosACobrarServico = repositorioFinanceiro
                 .pesquisarDadosDebitoACobrarCategoriaServico(
                         anoMesAnteriorFaturamento, idLocalidade);
@@ -8216,11 +8221,11 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     }
 
     /**
-     * [UC0714] Gerar Contas a Receber Contábil
+     * [UC0714] Gerar Contas a Receber Contï¿½bil
      *
-     * Adiciona os dados de créditos a realizar
+     * Adiciona os dados de crï¿½ditos a realizar
      *
-     * @author Rafael Corrêa, Ivan Sergio
+     * @author Rafael Corrï¿½a, Ivan Sergio
      * @date 08/11/2007, 30/12/2010
      *
      */
@@ -8335,7 +8340,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	      colecaoContasAReceberContabil.addAll(contasContabeisServicosIndiretos);
 	    }
 	    
-	    // RECUPERACAO DE CRÉDITO 
+	    // RECUPERACAO DE CRï¿½DITO 
  		Collection contasRecuperacoCredito = obterContaContabilCreditoARealizarRecperacaoCredito(anoMesAnteriorFaturamento, idLocalidade);
  		
  		if (contasRecuperacoCredito != null && !contasRecuperacoCredito.isEmpty()) {
@@ -8433,7 +8438,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
         }
         
-        // Verifica se restou algum dado que não estava presente na colecaoDadosCreditosARealizarDescontoParcelamento
+        // Verifica se restou algum dado que nï¿½o estava presente na colecaoDadosCreditosARealizarDescontoParcelamento
         if (colecaoCreditosARealizarValorResidual != null && !colecaoCreditosARealizarValorResidual.isEmpty()) {
         	for (Object[] dadosCreditosARealizarValorDescontoParcelamento : colecaoCreditosARealizarValorResidual) {
         		
@@ -8473,7 +8478,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                 .pesquisarDadosCreditosARealizarCategoriaDevolucao(
                         anoMesAnteriorFaturamento, idLocalidade);
         
-        // Valor Residual Devolução
+        // Valor Residual Devoluï¿½ï¿½o
         Collection<Object[]> colecaoValorResidualDevolucoes = repositorioFinanceiro
                 .pesquisarDadosCreditosARealizarCategoriaValorResidualDevolucao(
                         anoMesAnteriorFaturamento, idLocalidade);
@@ -8801,11 +8806,11 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	}
 	
 	/**
-	 * [UC0751] Gerar Valor Referente a Volumes Consumidos e Não Faturados
+	 * [UC0751] Gerar Valor Referente a Volumes Consumidos e Nï¿½o Faturados
 	 * 
-	 * Método responsável pela geração de valor dos volumes consumidos e não faturados
+	 * Mï¿½todo responsï¿½vel pela geraï¿½ï¿½o de valor dos volumes consumidos e nï¿½o faturados
 	 * 
-	 * @author Rafael Corrêa, Pedro Alexandre
+	 * @author Rafael Corrï¿½a, Pedro Alexandre
 	 * @date 19/02/2008, 08/07/2008
 	 * 
 	 * @param idLocalidade
@@ -8819,7 +8824,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 		// -------------------------
 		//
-		// Registrar o início do processamento da Unidade de
+		// Registrar o inï¿½cio do processamento da Unidade de
 		// Processamento
 		// do Batch
 		//
@@ -8830,9 +8835,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 
 		try {
-			//Sistema verifica se todos os grupos já foram faturados
+			//Sistema verifica se todos os grupos jï¿½ foram faturados
 			Collection<FaturamentoGrupo> colecaoFaturamentoGrupoNaoFaturados = repositorioFaturamento.pesquisarFaturamentoGrupoNaoFaturados(sistemaParametro.getAnoMesFaturamento());
-			//[FS0002] - Verificar existência de grupo não faturado
+			//[FS0002] - Verificar existï¿½ncia de grupo nï¿½o faturado
 			if (colecaoFaturamentoGrupoNaoFaturados != null	&& !colecaoFaturamentoGrupoNaoFaturados.isEmpty()) {
 				throw new ControladorException("atencao.existe.grupo.nao.faturado");
 			}
@@ -8840,8 +8845,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			Collection colecaoValorVolumesConsumidosNaoFaturados = new ArrayList();
 
 			// item 2
-			// exclui os dados referentes ao valor dos volumes consumidos e não
-			// faturados do mês de referência do faturamento corrente
+			// exclui os dados referentes ao valor dos volumes consumidos e nï¿½o
+			// faturados do mï¿½s de referï¿½ncia do faturamento corrente
 			repositorioFinanceiro.removerValorVolumesConsumidosNaoFaturados(sistemaParametro.getAnoMesFaturamento(), idLocalidade);
 
 			Integer idGerenciaRegional = this.getControladorLocalidade().pesquisarIdGerenciaParaLocalidade(idLocalidade);
@@ -8850,7 +8855,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			Integer idUnidadeNegocio = this.getControladorLocalidade().pesquisarIdUnidadeNegocioParaLocalidade(idLocalidade);
 			
 			System.out.println("Pesquisando");
-			// Valores de Água e Esgoto
+			// Valores de ï¿½gua e Esgoto
 			this.adicionarValorVolumesConsumidosNaoFaturadosAguaEsgoto(idLocalidade,sistemaParametro.getAnoMesFaturamento(), colecaoValorVolumesConsumidosNaoFaturados,idGerenciaRegional,idUnidadeNegocio);
 			System.out.println("Fim Pesquisando");
 			
@@ -8860,7 +8865,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
 
-			System.out.println("fim da geração " + "Localidade " + idLocalidade);
+			System.out.println("fim da geraï¿½ï¿½o " + "Localidade " + idLocalidade);
 
 		} catch (Exception e) {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e,idUnidadeIniciada, true);
@@ -8869,12 +8874,12 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	}
 	
 	/**
-	 * [UC0714] Gerar Contas a Receber Contábil
+	 * [UC0714] Gerar Contas a Receber Contï¿½bil
 	 * 
-	 * Cria o objeto de ContaAReceberContabil de acordo com os parâmetros
+	 * Cria o objeto de ContaAReceberContabil de acordo com os parï¿½metros
 	 * passados
 	 * 
-	 * @author Rafael Corrêa
+	 * @author Rafael Corrï¿½a
 	 * @date 08/11/2007
 	 * 
 	 */
@@ -8889,12 +8894,12 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 		retorno.setAnoMesReferencia(anoMesReferencia);
 
-		// Gerência Regional
+		// Gerï¿½ncia Regional
 		GerenciaRegional gerenciaRegional = new GerenciaRegional();
 		gerenciaRegional.setId(idGerenciaRegional);
 		retorno.setGerenciaRegional(gerenciaRegional);
 
-		// Unidade Negócio
+		// Unidade Negï¿½cio
 		UnidadeNegocio unidadeNegocio = new UnidadeNegocio();
 		unidadeNegocio.setId(idUnidadeNegocio);
 		retorno.setUnidadeNegocio(unidadeNegocio);
@@ -8912,20 +8917,20 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		// Valor Acumulado
 		retorno.setValorItemLancamento(valorItem);
 
-		// Lançamento Tipo
+		// Lanï¿½amento Tipo
 		LancamentoTipo lancamentoTipo = new LancamentoTipo();
 		lancamentoTipo.setId(idLancamentoTipo);
 		retorno.setLancamentoTipo(lancamentoTipo);
 
-		// Seqüência do Lançamento Tipo
+		// Seqï¿½ï¿½ncia do Lanï¿½amento Tipo
 		retorno.setNumeroSequenciaTipoLancamento(sequenciaLancamentoTipo);
 
-		// Lançamento Item
+		// Lanï¿½amento Item
 		LancamentoItem lancamentoItem = new LancamentoItem();
 		lancamentoItem.setId(idLancamentoItem);
 		retorno.setLancamentoItem(lancamentoItem);
 
-		// Seqüência do Lançamento Item
+		// Seqï¿½ï¿½ncia do Lanï¿½amento Item
 		retorno.setNumeroSequenciaItemTipoLancamento(sequenciaLancamentoItem);
 
 		return retorno;
@@ -8933,11 +8938,11 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	}
 	
 	/**
-	 * [UC0751] Gerar Valor Referente a Volumes Consumidos e Não Faturados
+	 * [UC0751] Gerar Valor Referente a Volumes Consumidos e Nï¿½o Faturados
 	 * 
-	 * Adiciona os dados de água e esgoto
+	 * Adiciona os dados de ï¿½gua e esgoto
 	 * 
-	 * @author Rafael Corrêa, Pedro Alexandre
+	 * @author Rafael Corrï¿½a, Pedro Alexandre
 	 * @date 08/11/2007, 08/06/2008
 	 * 
 	 */
@@ -8972,7 +8977,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 				BigDecimal valorEsgoto = (BigDecimal) dadosValorAguaEsgoto[2];
 
-				// Água
+				// ï¿½gua
 				if (valorAgua != null && valorAgua.compareTo(BigDecimal.ZERO) != 0) {
 
 					// Cria o objeto com os valores passados
@@ -9018,7 +9023,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 	
 	/**
-	 * <Breve descrição sobre o caso de uso>
+	 * <Breve descriï¿½ï¿½o sobre o caso de uso>
 	 * 
 	 * <Identificador e nome do caso de uso>
 	 * 
@@ -9042,9 +9047,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	
 	
 	/**
-	 * Gera os lançamentos dos devedores duvidosos.
+	 * Gera os lanï¿½amentos dos devedores duvidosos.
 	 *
-	 * [UC0486] Gerar Lançamentos Contábeis dos Devedores Duvidosos
+	 * [UC0486] Gerar Lanï¿½amentos Contï¿½beis dos Devedores Duvidosos
 	 *
 	 * @author Pedro Alexandre
 	 * @date 21/06/2007
@@ -9063,41 +9068,41 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		int idUnidadeIniciada = 0;
 
 		/*
-		 * Registrar o início do processamento da Unidade de
+		 * Registrar o inï¿½cio do processamento da Unidade de
 		 * Processamento do Batch
 		*/
 		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,UnidadeProcessamento.LOCALIDADE,(idLocalidade));
 
 		
-		//[FS0001 - Validar Referência Contábil]
+		//[FS0001 - Validar Referï¿½ncia Contï¿½bil]
 		Integer anoMesArrecadacaoAtual =  getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao();
 		if(anoMesReferenciaContabil.intValue() >anoMesArrecadacaoAtual.intValue()){
-			//levanta a exceção para a próxima camada
+			//levanta a exceï¿½ï¿½o para a prï¿½xima camada
 			throw new ControladorException("atencao.mes_ano.contabil.superior",null,Util.formatarAnoMesParaMesAno(anoMesArrecadacaoAtual.toString()));
 		}
 
-		//remove os lançamentos contábeis já gerados
+		//remove os lanï¿½amentos contï¿½beis jï¿½ gerados
 		this.removerLancamentoContabil(anoMesReferenciaContabil,idLocalidade,LancamentoOrigem.DEVEDORES_DUVIDOSOS);
 		
 		try {
 			
 			/*
 			 *  Pesquisa os dados do resumo dos devedores duvidosos 
-			 *  para o ano/mês de referência atual e para a localidade informada.
+			 *  para o ano/mï¿½s de referï¿½ncia atual e para a localidade informada.
 			 *  
 			 *  0 - id da localidade
-			 *  1 - id do tipo de lançamento
-			 *  2 - id do item de lançamento
-			 *  3 - id do item de lançamento contábil
+			 *  1 - id do tipo de lanï¿½amento
+			 *  2 - id do item de lanï¿½amento
+			 *  3 - id do item de lanï¿½amento contï¿½bil
 			 *  4 - id da categoria
 			 *  5 - soma do valor do resumo dos devedores duvidosos 
 			 */
 			Collection<Object[]> colecaoDadosResumoDevedoresDuvidosos = repositorioFinanceiro.obterDadosResumoDevedoresDuvidosos(anoMesReferenciaContabil, idLocalidade);
 		
 			/*
-			 * Caso exista resumo de devedores duvidosos para a localidade e o ano/mês 
-			 * cria o lancamento contábil junto com seus items 
-			 * para cada conjunto de mesmo tipo de lançamento
+			 * Caso exista resumo de devedores duvidosos para a localidade e o ano/mï¿½s 
+			 * cria o lancamento contï¿½bil junto com seus items 
+			 * para cada conjunto de mesmo tipo de lanï¿½amento
 			 */
 			if (colecaoDadosResumoDevedoresDuvidosos != null && !colecaoDadosResumoDevedoresDuvidosos.isEmpty()){
 				
@@ -9106,31 +9111,31 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				int idTipoLancamentoTemp = -1;
 				Collection<Object[]> colecaoDadosResumoPorTipoLancamento = new ArrayList();
 				
-				// definição da origem do lançamento
+				// definiï¿½ï¿½o da origem do lanï¿½amento
 				LancamentoOrigem lancamentoOrigem = new LancamentoOrigem();
 				lancamentoOrigem.setId(LancamentoOrigem.DEVEDORES_DUVIDOSOS);
 				
-				//Cria a variável que vai armazenar o lançamento contábil
+				//Cria a variï¿½vel que vai armazenar o lanï¿½amento contï¿½bil
 				LancamentoContabil lancamentoContabilInsert = null;
 				
-				//laço para gerar os lançamentos por grupo de tipo de lançamento
+				//laï¿½o para gerar os lanï¿½amentos por grupo de tipo de lanï¿½amento
 				for(Object[] dadosResumoDevedoresDuvidosos : colecaoDadosResumoDevedoresDuvidosos){
 					
-					//recupera o tipo de lançamento atual 
+					//recupera o tipo de lanï¿½amento atual 
 					Integer idTipoLancamento = (Integer) dadosResumoDevedoresDuvidosos[1];
 					
 					/*
 					 * Caso seja a primeira entrada do "for"
-					 * adiciona os dados a coleção e atualiza o item temporario
-					 * criando também o lançamento contabil que ira ser inserido
+					 * adiciona os dados a coleï¿½ï¿½o e atualiza o item temporario
+					 * criando tambï¿½m o lanï¿½amento contabil que ira ser inserido
 					 * junto com seus items.
 					 * 
-					 *  Caso contrário (não seja a primeira entrada do laço "for")
-					 *  verifica se o item de lançamento mudou, caso não tenha mudado 
+					 *  Caso contrï¿½rio (nï¿½o seja a primeira entrada do laï¿½o "for")
+					 *  verifica se o item de lanï¿½amento mudou, caso nï¿½o tenha mudado 
 					 *  adiciona os dados ao conjunto do mesmo item
-					 *  caso contrário, se mudou o item de lançamento o conjunto está fechado
-					 *  para o lançamento contábil e chama o método para inserir o
-					 *  lançamento contábil junto com seus itens. 
+					 *  caso contrï¿½rio, se mudou o item de lanï¿½amento o conjunto estï¿½ fechado
+					 *  para o lanï¿½amento contï¿½bil e chama o mï¿½todo para inserir o
+					 *  lanï¿½amento contï¿½bil junto com seus itens. 
 					 */
 					if(flagPrimeiraVez){
 						colecaoDadosResumoPorTipoLancamento.add(dadosResumoDevedoresDuvidosos);
@@ -9143,7 +9148,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 						Localidade localidade = new Localidade();
 						localidade.setId(idLocalidade);
 						
-						//cria o lançamento contábil para ser inserido 
+						//cria o lanï¿½amento contï¿½bil para ser inserido 
 						lancamentoContabilInsert = new LancamentoContabil();
 						lancamentoContabilInsert.setAnoMes(anoMesReferenciaContabil);
 						lancamentoContabilInsert.setLancamentoOrigem(lancamentoOrigem);
@@ -9154,16 +9159,16 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					}else{
 						/*
 						 * Caso ainda seja o mesmo item adicona os dados para 
-						 * ser gerado os itens do lançamento para o mesmo lançamento.
-						 * Caso contrário chama o metódo para inseri os itens e o lançamento contábil.
+						 * ser gerado os itens do lanï¿½amento para o mesmo lanï¿½amento.
+						 * Caso contrï¿½rio chama o metï¿½do para inseri os itens e o lanï¿½amento contï¿½bil.
 						 */
 						if(idTipoLancamento == idTipoLancamentoTemp){
 							colecaoDadosResumoPorTipoLancamento.add(dadosResumoDevedoresDuvidosos);
 						}else{
-							/* metódo para inserir o lançamento contábil assim como seus itens */
+							/* metï¿½do para inserir o lanï¿½amento contï¿½bil assim como seus itens */
 							this.inserirLancamentoContabilItemDevedoresDuvidosos(lancamentoContabilInsert, colecaoDadosResumoPorTipoLancamento);
 							
-							//limpa coleção e adiciona os dados do resumo atual
+							//limpa coleï¿½ï¿½o e adiciona os dados do resumo atual
 							colecaoDadosResumoPorTipoLancamento.clear();
 							colecaoDadosResumoPorTipoLancamento.add(dadosResumoDevedoresDuvidosos);
 							
@@ -9173,7 +9178,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 							Localidade localidade = new Localidade();
 							localidade.setId(idLocalidade);
 							
-							//cria o lançamento contábil que vai ser inserido
+							//cria o lanï¿½amento contï¿½bil que vai ser inserido
 							lancamentoContabilInsert = new LancamentoContabil();
 							lancamentoContabilInsert.setAnoMes(anoMesReferenciaContabil);
 							lancamentoContabilInsert.setLancamentoOrigem(lancamentoOrigem);
@@ -9182,16 +9187,16 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 							lancamentoContabilInsert.setRecebimentoTipo(null);
 							lancamentoContabilInsert.setUltimaAlteracao(new Date());
 							
-							//atualiza o tipo de lançamento temporário com o novo valor
+							//atualiza o tipo de lanï¿½amento temporï¿½rio com o novo valor
 							idTipoLancamentoTemp = idTipoLancamento;
 						}
 					}
 				}
 				
 				/*
-				 * Último registro
-				 * Esse "if" é para verificar se ainda existe um último registro na coleção
-				 * caso exista algum item, adiciona o lançamento contábil junto com o item. 
+				 * ï¿½ltimo registro
+				 * Esse "if" ï¿½ para verificar se ainda existe um ï¿½ltimo registro na coleï¿½ï¿½o
+				 * caso exista algum item, adiciona o lanï¿½amento contï¿½bil junto com o item. 
 				 */
 				if(colecaoDadosResumoPorTipoLancamento != null && colecaoDadosResumoPorTipoLancamento.size() > 0 ){
 					this.inserirLancamentoContabilItemDevedoresDuvidosos(lancamentoContabilInsert, colecaoDadosResumoPorTipoLancamento);
@@ -9210,9 +9215,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	
 	
 	/**
-	 * Gera o lançamento contábil junto com seus itens. 
+	 * Gera o lanï¿½amento contï¿½bil junto com seus itens. 
 	 *
-	 * [UC0486] - Gerar Lançamentos Contábeis dos Devedores Duvidosos 
+	 * [UC0486] - Gerar Lanï¿½amentos Contï¿½beis dos Devedores Duvidosos 
 	 *
 	 * @author Pedro Alexandre
 	 * @date 21/06/2007
@@ -9231,15 +9236,15 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				
 				Collection colecaoLancamentoContabilItem = new ArrayList();
 				
-				//flag que indica se o lançamento contábil já foi inserido ou não. 
+				//flag que indica se o lanï¿½amento contï¿½bil jï¿½ foi inserido ou nï¿½o. 
 				boolean flagInseridoLancamentoContabil = false;
 				
 				/*
 				 * Dados do resumo dos devedores duvidosos
 				 *  0 - id da localidade
-				 *  1 - id do tipo de lançamento
-				 *  2 - id do item de lançamento
-				 *  3 - id do item de lançamento contábil
+				 *  1 - id do tipo de lanï¿½amento
+				 *  2 - id do item de lanï¿½amento
+				 *  3 - id do item de lanï¿½amento contï¿½bil
 				 *  4 - id da categoria
 				 *  5 - soma do valor do resumo dos devedores duvidosos
 				 */
@@ -9253,21 +9258,21 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					BigDecimal valorLancamento =       (BigDecimal) dadosResumoDevedoresDuvidosos[5]; 
 					
 					/* 
-					 * Verifica se existe conta contábil para o item que vai ser inserido 
+					 * Verifica se existe conta contï¿½bil para o item que vai ser inserido 
 					 * 
-					 * 0 - id conta contábil do débito
-					 * 1 - id conta contábil crédito 
-					 * 2 - descrição do histórico do débito
-					 * 3 - descrição do histórico do crédito
+					 * 0 - id conta contï¿½bil do dï¿½bito
+					 * 1 - id conta contï¿½bil crï¿½dito 
+					 * 2 - descriï¿½ï¿½o do histï¿½rico do dï¿½bito
+					 * 3 - descriï¿½ï¿½o do histï¿½rico do crï¿½dito
 					 */
 					Object[] dadosContaContabil = this.repositorioFinanceiro.obterParametrosContabilDevedoresDuvidosos(idCategoria, idLancamentoItemContabil, idLancamentoItem, idLancamentoTipo);
 					
 					if(dadosContaContabil != null){
 						Integer idLancamentoContabil = null;
 						/*
-						 * Caso exista dados para a conta contábil e o item contábil 
-						 * ainda não foi inserido 
-						 * inseri o item contábil na base.
+						 * Caso exista dados para a conta contï¿½bil e o item contï¿½bil 
+						 * ainda nï¿½o foi inserido 
+						 * inseri o item contï¿½bil na base.
 						 */
 						if(!flagInseridoLancamentoContabil){
 							idLancamentoContabil = (Integer)getControladorUtil().inserir(lancamentoContabil);
@@ -9275,27 +9280,27 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 							flagInseridoLancamentoContabil = true;
 						}
 						
-						//recupera os dados da conta contábil para o item 
+						//recupera os dados da conta contï¿½bil para o item 
 						//do resumo dos devedores duvidosos.
 						Integer idContaContabilDebito = (Integer) dadosContaContabil[0];
 						Integer idContaContabilCredito = (Integer) dadosContaContabil[1];
 						String descricaoHistoricoDebito = (String) dadosContaContabil[2];
 						String descricaoHistoricoCredito = (String) dadosContaContabil[3];
 						
-						//cria os indicadores de débito e crédito.
+						//cria os indicadores de dï¿½bito e crï¿½dito.
 						Short indicadorDebito = new Short("2"); 
 						Short indicadorCredito = new Short("1");
 						
 						Date ultimaAlteracao = new Date();
 						
-						//cria as contas contábeis de crédito e débito.
+						//cria as contas contï¿½beis de crï¿½dito e dï¿½bito.
 						ContaContabil contaContabilCredito = new ContaContabil();
 						contaContabilCredito.setId(idContaContabilCredito);
 						
 						ContaContabil contaContabilDebito = new ContaContabil();
 						contaContabilDebito.setId(idContaContabilDebito);
 						
-						/**  Item de crédito */
+						/**  Item de crï¿½dito */
 						LancamentoContabilItem lancamentoContabilItemCredito = new LancamentoContabilItem(indicadorCredito, 
 								valorLancamento, 
 								descricaoHistoricoCredito, 
@@ -9305,7 +9310,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 						
 						colecaoLancamentoContabilItem.add(lancamentoContabilItemCredito);
 						
-						/** Item de débito */
+						/** Item de dï¿½bito */
 						LancamentoContabilItem lancamentoContabilItemDebito = new LancamentoContabilItem(indicadorDebito, 
 								valorLancamento, 
 								descricaoHistoricoDebito, 
@@ -9317,7 +9322,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 						
 					}
 				}
-				//inseri os itens de lançamento contábeis. 
+				//inseri os itens de lanï¿½amento contï¿½beis. 
 				getControladorBatch().inserirColecaoObjetoParaBatch(colecaoLancamentoContabilItem); 
 			}
 	
@@ -9327,10 +9332,10 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	}
 	
 	/**
-	 * Pesquisa a coleção de ids das localidades para processar o lançamentos  
-	 * contábeis dos devedores duvidosos.
+	 * Pesquisa a coleï¿½ï¿½o de ids das localidades para processar o lanï¿½amentos  
+	 * contï¿½beis dos devedores duvidosos.
 	 *
-	 * [UC0485] Gerar Lançamentos Contábeis dos Devedores Duvidosos
+	 * [UC0485] Gerar Lanï¿½amentos Contï¿½beis dos Devedores Duvidosos
 	 *
 	 * @author Pedro Alexandre
 	 * @date 25/06/2007
@@ -9345,14 +9350,14 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			
 				//erro no hibernate
 			} catch (ErroRepositorioException ex) {
-				//levanta a exceção para a próxima camada
+				//levanta a exceï¿½ï¿½o para a prï¿½xima camada
 				throw new ControladorException("erro.sistema", ex);
 			}		
 	}
 
 	/**
-	 * Remove os lançamentos contábeis e seus respectivos itens 
-	 * de acordo com os parâmetros informados. 
+	 * Remove os lanï¿½amentos contï¿½beis e seus respectivos itens 
+	 * de acordo com os parï¿½metros informados. 
 	 *
 	 * @author Pedro Alexandre
 	 * @date 26/06/2007
@@ -9376,7 +9381,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			}
 				//erro no hibernate
 			} catch (ErroRepositorioException ex) {
-				//levanta a exceção para a próxima camada
+				//levanta a exceï¿½ï¿½o para a prï¿½xima camada
 				throw new ControladorException("erro.sistema", ex);
 			}		
 	}
@@ -9384,9 +9389,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	//////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Consulta ResumoDevedoresDuvidosos para a geração do relatório 
-	 * [UC0487] Gerar Relatório de Resumo de Devedores Duvidosos
-	 * de acordo com a opção de totalização.
+	 * Consulta ResumoDevedoresDuvidosos para a geraï¿½ï¿½o do relatï¿½rio 
+	 * [UC0487] Gerar Relatï¿½rio de Resumo de Devedores Duvidosos
+	 * de acordo com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 20/07/2007
@@ -9454,7 +9459,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				
 				Iterator iterator = colecaoResumoDevedoresDuvidososRelatorio.iterator();
 
-				// Prepara cada linha do relatório
+				// Prepara cada linha do relatï¿½rio
 
 				String tipoLancamento = null;
 				String itemLancamento = null;
@@ -9508,8 +9513,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 					boolean condicaoIgual = true;
 					// compara se o registro atual eh do
-					// mesmo tipo de Recebimento, mesmo tipo de lançamento
-					// e mesmo item de lançamento do registro anterior
+					// mesmo tipo de Recebimento, mesmo tipo de lanï¿½amento
+					// e mesmo item de lanï¿½amento do registro anterior
 					if (tipoLancamento.equals(tempTipoLancamento) && itemLancamento.equals(tempItemLancamento)) {
 
 						// se o registro possuir item contabel
@@ -9607,9 +9612,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 					
 
-					// identifica pelo que vai ser "quebrado" o relátorio
+					// identifica pelo que vai ser "quebrado" o relï¿½torio
 					if (agrupaPorGerencia) { 
-						// quebra página por Gerência Regional e não mostra a Localidade
+						// quebra pï¿½gina por Gerï¿½ncia Regional e nï¿½o mostra a Localidade
 						descGerenciaRegionalAnterior = "" + element[9];
 						idGerenciaRegionalAnterior = "" + element[10];
 					}
@@ -9617,14 +9622,14 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 						if (opcaoTotalizacao.equalsIgnoreCase("estadoLocalidade")
 								|| opcaoTotalizacao
 										.equalsIgnoreCase("gerenciaRegionalLocalidade")) {
-							// quebra a página por Localidade e mostra a Gerência
+							// quebra a pï¿½gina por Localidade e mostra a Gerï¿½ncia
 							// Regional
 							descGerenciaRegionalAnterior = "" + element[9];
 							idGerenciaRegionalAnterior = "" + element[10];
 							descLocalidadeAnterior = "" + element[11];
 							idLocalidadeAnterior = "" + element[12];
 						} else {
-							// quebra a página por Localidade e não mostra a Gerência
+							// quebra a pï¿½gina por Localidade e nï¿½o mostra a Gerï¿½ncia
 							// Regional
 							descLocalidadeAnterior = "" + element[9];
 							idLocalidadeAnterior = "" + element[10];
@@ -9676,9 +9681,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	}
 
 	/**
-	 * Consulta ResumoDevedoresDuvidosos para a geração do relatório 
-	 * [UC0487] Gerar Relatório de Resumo de Devedores Duvidosos
-	 * de acordo com a opção de totalização.
+	 * Consulta ResumoDevedoresDuvidosos para a geraï¿½ï¿½o do relatï¿½rio 
+	 * [UC0487] Gerar Relatï¿½rio de Resumo de Devedores Duvidosos
+	 * de acordo com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 20/07/2007
@@ -9704,7 +9709,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		
 		Iterator iterator = colecaoResumoDevedoresDuvidososRelatorioEstadoPorUnidadeNegocio.iterator();
 
-		// Prepara cada linha do relatório
+		// Prepara cada linha do relatï¿½rio
 		String tipoLancamento = null;
 		String itemLancamento = null;
 		String itemContabel = null;
@@ -9741,8 +9746,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 			boolean condicaoIgual = true;
 			// compara se o registro atual eh do
-			// mesmo tipo de Recebimento, mesmo tipo de lançamento
-			// e mesmo item de lançamento do registro anterior
+			// mesmo tipo de Recebimento, mesmo tipo de lanï¿½amento
+			// e mesmo item de lanï¿½amento do registro anterior
 			if (tipoLancamento.equals(tempTipoLancamento) && itemLancamento.equals(tempItemLancamento)) {
 
 				// se o registro possuir item contabel
@@ -9880,9 +9885,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	
 	
 	/**
-	 * Consulta ResumoDevedoresDuvidosos para a geração do relatório 
-	 * [UC0487] Gerar Relatório de Resumo de Devedores Duvidosos
-	 * de acordo com a opção de totalização.
+	 * Consulta ResumoDevedoresDuvidosos para a geraï¿½ï¿½o do relatï¿½rio 
+	 * [UC0487] Gerar Relatï¿½rio de Resumo de Devedores Duvidosos
+	 * de acordo com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 20/07/2007
@@ -9908,7 +9913,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		
 		Iterator iteratorResumoDevedoresDuvidososRelatorioPorGerenciaRegional = colecaoResumoDevedoresDuvidososRelatorioPorGerenciaRegional.iterator();
 
-		// Prepara cada linha do relatório
+		// Prepara cada linha do relatï¿½rio
 		String tipoLancamento = null;
 		String itemLancamento = null;
 		String itemContabel = null;
@@ -9947,8 +9952,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 			boolean condicaoIgual = true;
 			// compara se o registro atual eh do
-			// mesmo tipo de Recebimento, mesmo tipo de lançamento
-			// e mesmo item de lançamento do registro anterior
+			// mesmo tipo de Recebimento, mesmo tipo de lanï¿½amento
+			// e mesmo item de lanï¿½amento do registro anterior
 			if (tipoLancamento.equals(tempTipoLancamento) && itemLancamento.equals(tempItemLancamento)) {
 
 				// se o registro possuir item contabel
@@ -10078,9 +10083,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	}
 	
 	/**
-	 * Consulta ResumoDevedoresDuvidosos para a geração do relatório 
-	 * [UC0487] Gerar Relatório de Resumo de Devedores Duvidosos
-	 * de acordo com a opção de totalização.
+	 * Consulta ResumoDevedoresDuvidosos para a geraï¿½ï¿½o do relatï¿½rio 
+	 * [UC0487] Gerar Relatï¿½rio de Resumo de Devedores Duvidosos
+	 * de acordo com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 20/07/2007
@@ -10104,7 +10109,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				
 				Iterator iterator = colecaoResumoDevedoresDuvidososRelatorioEstadoPorLocalidade.iterator();
 
-				// Prepara cada linha do relatório
+				// Prepara cada linha do relatï¿½rio
 
 				String tipoLancamento = null;
 				String itemLancamento = null;
@@ -10143,8 +10148,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 					boolean condicaoIgual = true;
 					// compara se o registro atual eh do
-					// mesmo tipo de Recebimento, mesmo tipo de lançamento
-					// e mesmo item de lançamento do registro anterior
+					// mesmo tipo de Recebimento, mesmo tipo de lanï¿½amento
+					// e mesmo item de lanï¿½amento do registro anterior
 					if (tipoLancamento.equals(tempTipoLancamento) && itemLancamento.equals(tempItemLancamento)) {
 
 						// se o registro possuir item contabel
@@ -10299,9 +10304,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	
 	
 	/**
-	 * Consulta ResumoDevedoresDuvidosos para a geração do relatório 
-	 * [UC0487] Gerar Relatório de Resumo de Devedores Duvidosos
-	 * de acordo com a opção de totalização.
+	 * Consulta ResumoDevedoresDuvidosos para a geraï¿½ï¿½o do relatï¿½rio 
+	 * [UC0487] Gerar Relatï¿½rio de Resumo de Devedores Duvidosos
+	 * de acordo com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 20/07/2007
@@ -10363,8 +10368,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 			boolean condicaoIgual = true;
 			// compara se o registro atual eh do
-			// mesmo tipo de Recebimento, mesmo tipo de lançamento
-			// e mesmo item de lançamento do registro anterior
+			// mesmo tipo de Recebimento, mesmo tipo de lanï¿½amento
+			// e mesmo item de lanï¿½amento do registro anterior
 			if (tipoLancamento.equals(tempTipoLancamento) && itemLancamento.equals(tempItemLancamento)) {
 
 				// se o registro possuir item contabel
@@ -10487,9 +10492,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	
 	
 	/**
-	 * Consulta ResumoDevedoresDuvidosos para a geração do relatório 
-	 * [UC0487] Gerar Relatório de Resumo de Devedores Duvidosos
-	 * de acordo com a opção de totalização.
+	 * Consulta ResumoDevedoresDuvidosos para a geraï¿½ï¿½o do relatï¿½rio 
+	 * [UC0487] Gerar Relatï¿½rio de Resumo de Devedores Duvidosos
+	 * de acordo com a opï¿½ï¿½o de totalizaï¿½ï¿½o.
 	 * 
 	 * @author Vivianne Sousa
 	 * @created 20/07/2007
@@ -10551,8 +10556,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 			boolean condicaoIgual = true;
 			// compara se o registro atual eh do
-			// mesmo tipo de Recebimento, mesmo tipo de lançamento
-			// e mesmo item de lançamento do registro anterior
+			// mesmo tipo de Recebimento, mesmo tipo de lanï¿½amento
+			// e mesmo item de lanï¿½amento do registro anterior
 			if (tipoLancamento.equals(tempTipoLancamento) && itemLancamento.equals(tempItemLancamento)) {
 
 				// se o registro possuir item contabel
@@ -10670,7 +10675,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 	
 	/**
-	 * [UC0718] Gerar Relatório de Evolucao do Contas a Receber Contabil
+	 * [UC0718] Gerar Relatï¿½rio de Evolucao do Contas a Receber Contabil
 	 * 
 	 * @author Francisco Junior, Ivan Sergio
 	 * @date 02/01/08, 20/07/2010
@@ -10692,12 +10697,12 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		consultarDadosEvolucaoContasAReceberContabilRelatorio(String opcaoTotalizacao,
 		int mesAno, Integer codigoGerencia, Integer codigoLocalidade, Integer codigoMunicipio, Integer unidadeNegocio) throws ControladorException {
 		
-		// este mapeamento é composto de uma descrição do grupo como chave (localidade, gerencia ou unidade de negocio)
-		// e a coleção de valores associado a esta chave
+		// este mapeamento ï¿½ composto de uma descriï¿½ï¿½o do grupo como chave (localidade, gerencia ou unidade de negocio)
+		// e a coleï¿½ï¿½o de valores associado a esta chave
 		HashMap<Integer, BigDecimal[][]> dadosAgrupados = new HashMap<Integer, BigDecimal[][]>();  
 		HashMap<Integer, String> labelChaves = new HashMap<Integer, String>();
 		int anoMes = Util.formatarMesAnoParaAnoMes(mesAno);
-		// As linhas de detalhes são fixas e nesta ordem 
+		// As linhas de detalhes sï¿½o fixas e nesta ordem 
 		String descricoes[] = {
 			"S A L D O    A N T E R I O R", 		// linha 1 
 			"(+) FATURAMENTO AGUA",					// linha 2
@@ -10710,16 +10715,16 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			"(-) FINANCIAMENTOS CANCELADOS",		// linha 9	
 			"(-) PARCELAMENTOS CANCELADOS",			// linha 10
 			"(-) CANCELAMENTOS POR REFATURAMENTO",	// linha 11
-			"(-) CRÉDITOS A REALIZAR POR COBRANÇA INDEVIDA", // linha 12
-			"(-) DESCONTOS INCONDICIONAIS INCLUÍDOS", // linha 13
-			"(-) GUIAS DE DEVOLUÇÃO DE VALORES COBRADOS INDEVIDAMENTE INCLUÍDAS", // linha 14
-			"(=) FATURAMENTO LÍQUIDO DO MES",		// linha 12 -> 15
+			"(-) CRï¿½DITOS A REALIZAR POR COBRANï¿½A INDEVIDA", // linha 12
+			"(-) DESCONTOS INCONDICIONAIS INCLUï¿½DOS", // linha 13
+			"(-) GUIAS DE DEVOLUï¿½ï¿½O DE VALORES COBRADOS INDEVIDAMENTE INCLUï¿½DAS", // linha 14
+			"(=) FATURAMENTO Lï¿½QUIDO DO MES",		// linha 12 -> 15
 			"(-) DESCONTOS CONCEDIDOS NO PARCELAMENTO",	// linha 13 -> 16
-			"(-) OUTROS CRÉDITOS INCLUÍDOS",	// linha 14 -> 17
+			"(-) OUTROS CRï¿½DITOS INCLUï¿½DOS",	// linha 14 -> 17
 //			"(+) IMPOSTOS CANCELADOS POR REFATURAMENTO",// linha 16 -> 18
-//			"(-) IMPOSTOS INCLUÍDOS POR REFATURAMENTO",	// linha 17 -> 19
-			"(+) OUTROS CRÉDITOS CANCELADOS POR REFATURAMENTO",	// linha 18 -> 20 - > 18
-			"(-) OUTROS CRÉDITOS CONCEDIDOS POR REFATURAMENTO",	// linha 19 -> 21 - > 19
+//			"(-) IMPOSTOS INCLUï¿½DOS POR REFATURAMENTO",	// linha 17 -> 19
+			"(+) OUTROS CRï¿½DITOS CANCELADOS POR REFATURAMENTO",	// linha 18 -> 20 - > 18
+			"(-) OUTROS CRï¿½DITOS CONCEDIDOS POR REFATURAMENTO",	// linha 19 -> 21 - > 19
 			"(-) RECEBIMENTOS CLASSIFICADOS",		// linha 20 -> 22 -> 20
 			"(-) IMPOSTOS DEDUZIDOS NA ARRECADACAO",	// linha 15 -> 23 -> 21
 			"(-) RECEBIMENTOS DE MESES ANTERIORES CLASSIFICADOS NO MES", // linha 21 -> 24 ->22
@@ -10735,8 +10740,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		try {
 
 			if (opcaoTotalizacao.equals("estado")) {
-				// quando os parametros gerencia, unidade de negocio e localidade são passados nulos, 
-				// a pesquisa é feita sem restrição, trazendo os dados referentes a todo o estado.
+				// quando os parametros gerencia, unidade de negocio e localidade sï¿½o passados nulos, 
+				// a pesquisa ï¿½ feita sem restriï¿½ï¿½o, trazendo os dados referentes a todo o estado.
 				pesquisaSaldo = 
 					repositorioFinanceiro.consultarSaldoEvolucaoContasAReceberContabilRelatorioPorEstado(
 						anoMesAnterior, null, null, null, null);
@@ -10887,7 +10892,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				Integer codigo = (Integer) element[3];
 				// recupera o conjunto de valores atual para a chave 'desc'
 				BigDecimal[][] valoresItem = dadosAgrupados.get(idDesc);
-				// quando a descrição atual for diferente da anterior é pq é hora de criar um novo grupo de valoresItem
+				// quando a descriï¿½ï¿½o atual for diferente da anterior ï¿½ pq ï¿½ hora de criar um novo grupo de valoresItem
 				if (idDesc.intValue() != idDescAnterior.intValue()){				
 					valoresItem = new BigDecimal[descricoes.length][2];
 					for (int i = 0; i < valoresItem.length; i++) {
@@ -10910,9 +10915,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				idDescAnterior = idDesc;				
 			}
 			
-			// conjunto de valores: cada linha é um item diretamente associado ao array descricoes
+			// conjunto de valores: cada linha ï¿½ um item diretamente associado ao array descricoes
 			// e na primeira coluna o valor de particular, na segunda, o valor de privado
-			// na definição do bean do relatório, o valor total é definido como a soma destes dois em cada linha
+			// na definiï¿½ï¿½o do bean do relatï¿½rio, o valor total ï¿½ definido como a soma destes dois em cada linha
 			BigDecimal[][] valoresItem = null; 
 			idDescAnterior = -1;
 			
@@ -10943,8 +10948,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				} 
 				idDescAnterior = idDesc;
 				
-				// o indice diz respeito a posicao deste item na exibição, que é também 
-				// a posição no array valoresItem
+				// o indice diz respeito a posicao deste item na exibiï¿½ï¿½o, que ï¿½ tambï¿½m 
+				// a posiï¿½ï¿½o no array valoresItem
 				short indiceTipoLancamento = -1;
 				switch (sequenciaTipoLancamento.shortValue()) {				
 				case ResumoFaturamento.FATURAMENTO_AGUA_SEQUENCIA_TIPO_LANCAMENTO:
@@ -11183,7 +11188,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				if (opcaoTotalizacao.equals("estado")){
 					bean.setTipoGrupo("TOTAL DO ESTADO");
 				} else if (opcaoTotalizacao.equals("estadoGerencia")) {					
-					bean.setTipoGrupo("Gerência Regional");					
+					bean.setTipoGrupo("Gerï¿½ncia Regional");					
 				
 				} else if (opcaoTotalizacao.equals("estadoLocalidade") 					
 					|| opcaoTotalizacao.equals("gerenciaRegionalLocalidade")
@@ -11191,9 +11196,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					bean.setTipoGrupo("Localidade");					
 				} else if (opcaoTotalizacao.equals("estadoUnidadeNegocio") 
 						|| opcaoTotalizacao.equals("gerenciaRegionalUnidadeNegocio")) {
-					bean.setTipoGrupo("Unidade de Negócio");					
+					bean.setTipoGrupo("Unidade de Negï¿½cio");					
 				} else if (opcaoTotalizacao.equalsIgnoreCase("estadoMunicipio")){
-					bean.setTipoGrupo("Município");
+					bean.setTipoGrupo("Municï¿½pio");
 				}
 				
 				bean.setDescricaoGrupo(labelChaves.get(chave));				
@@ -11217,17 +11222,17 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			
 			String tipoGrupo = "";
 			if(opcaoTotalizacao.equalsIgnoreCase("estadoGerencia")){
-				tipoGrupo = "Gerência";
+				tipoGrupo = "Gerï¿½ncia";
 			} else if(opcaoTotalizacao.equalsIgnoreCase("estadoLocalidade") ||
 					opcaoTotalizacao.equalsIgnoreCase("gerenciaRegionalLocalidade") ||
 					opcaoTotalizacao.equalsIgnoreCase("unidadeNegocioLocalidade")){
 				tipoGrupo = "Localidade";
 			} else if(opcaoTotalizacao.equalsIgnoreCase("estadoUnidadeNegocio") ||
 					opcaoTotalizacao.equalsIgnoreCase("gerenciaRegionalUnidadeNegocio")){
-				tipoGrupo = "Unidade de Negócio";
+				tipoGrupo = "Unidade de Negï¿½cio";
 			} else if(opcaoTotalizacao.equalsIgnoreCase("municipio") ||
 					opcaoTotalizacao.equalsIgnoreCase("estadoMunicipio")){
-				tipoGrupo = "Município";
+				tipoGrupo = "Municï¿½pio";
 			}
 			
 			// nomeItemGrupo, idItemGrupo, descricaoLancamentoTipo, descricaoLancamentoItem, numeroConta, soma(valor)
@@ -11665,7 +11670,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
         
         try {
         /*
-         * Registrar o início do processamento da Unidade de
+         * Registrar o inï¿½cio do processamento da Unidade de
          * Processamento do Batch
         */
                     
@@ -11822,7 +11827,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                     referenciaBaixaContabil = Util.formatarAnoMesParaMesAno((Integer) arrayDados[0]);
                 }
                 
-                //matricula e endereço do imovel 
+                //matricula e endereï¿½o do imovel 
                 String matriculaImovel = "";
                 String endereco = "";
                 if (arrayDados[1] != null) {
@@ -11880,13 +11885,13 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                     nomeUsuario = (String) arrayDados[9];
                 }
                 
-                //situação de ligacao agua
+                //situaï¿½ï¿½o de ligacao agua
                 String situacaoAgua = "";
                 if (arrayDados[10] != null) {
                     situacaoAgua = (String) arrayDados[10];
                 }
                 
-                //situação de ligação esgoto
+                //situaï¿½ï¿½o de ligaï¿½ï¿½o esgoto
                 String situacaoEsgoto = "";
                 if (arrayDados[11] != null) {
                     situacaoEsgoto = (String) arrayDados[11];
@@ -12033,7 +12038,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
         BigDecimal somatorioValor = BigDecimal.ZERO;
         BigDecimal somatorioValorTotal = BigDecimal.ZERO;
         
-        String cabecalho = "RELAÇÃO DAS CONTAS BAIXADAS CONTABILMENTE EM " 
+        String cabecalho = "RELAï¿½ï¿½O DAS CONTAS BAIXADAS CONTABILMENTE EM " 
             + Util.formatarAnoMesParaMesAno(referenciaFinal);
         somatorioValorContasBaixadasContabilmenteTXT.append(Util.completaStringComEspacoAEsquerda("",10));
         somatorioValorContasBaixadasContabilmenteTXT.append(cabecalho);
@@ -12089,7 +12094,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     }
     
 	/**
-	 * [UC0824] Gerar Relatório dos Parâmetros Contábeis
+	 * [UC0824] Gerar Relatï¿½rio dos Parï¿½metros Contï¿½beis
 	 * 
 	 * @author Bruno Barros
 	 * @date 08/07/2008
@@ -12140,7 +12145,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	}
     
     /**
-     * [UC0824] Gerar Relatório dos Parâmetros Contábeis
+     * [UC0824] Gerar Relatï¿½rio dos Parï¿½metros Contï¿½beis
      * 
      * @author Bruno Barros
      * @date 08/07/2008
@@ -12176,7 +12181,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                         (String) objetos[2], // Descricao do Item de lancamento
                         (String) objetos[3], // Descricao do Item de lancamento contabil
                         (String) objetos[4], // Descricao da categoria
-                        (String) objetos[5], // Numero da conta para crédito
+                        (String) objetos[5], // Numero da conta para crï¿½dito
                         (String) objetos[6], // Numero da conta para debito
                         ( objetos.length > 7 ? (BigDecimal) objetos[7] : null ) // So informamos o valor caso esse tenha sido calculado                 
                 );
@@ -12193,7 +12198,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     
 
 	/**
- 	 * [UC0822] Gerar Relatório do Valor Referente a Volumes Consumidos e Não Faturados
+ 	 * [UC0822] Gerar Relatï¿½rio do Valor Referente a Volumes Consumidos e Nï¿½o Faturados
  	 * 
  	 * @author Victor Cisneiros
  	 * @date 15/07/2008
@@ -12208,7 +12213,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      }
      
      /**
- 	 * [UC0714] Gerar Contas a Receber Contábil
+ 	 * [UC0714] Gerar Contas a Receber Contï¿½bil
  	 * Adiciona os Valores Contabilizados como Perdas  
  	 * @author Vivianne Sousa
  	 * @date 14/08/2009
@@ -12338,7 +12343,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		 }    	 
 			 
 		 if(mapValoresContabilizadosComoPerdas != null){
-			 //Pesquisa a coleção de categorias no sistema
+			 //Pesquisa a coleï¿½ï¿½o de categorias no sistema
 			 Collection<Integer> colecaoIdsCategorias = this.repositorioArrecadacao.pesquisarIdsCategorias();
 			 
 			 for (Integer idCategoria : colecaoIdsCategorias) {
@@ -12365,11 +12370,11 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
      }
      
      /**
-  	 * [UC0714] Gerar Contas a Receber Contábil
-  	 * Adiciona os Recebimentos Não Identificados
+  	 * [UC0714] Gerar Contas a Receber Contï¿½bil
+  	 * Adiciona os Recebimentos Nï¿½o Identificados
   	 * @author Vivianne Sousa, Ivan Sergio
   	 * @date 17/08/2009, 08/11/2010
-  	 * @alteracao: 08/11/2010 - RM2477 - Alteração no Relatório de Saldo de contas contábil (Item 4)
+  	 * @alteracao: 08/11/2010 - RM2477 - Alteraï¿½ï¿½o no Relatï¿½rio de Saldo de contas contï¿½bil (Item 4)
   	 */
       private void adicionarContaAReceberContabilRecebimentosNaoIdentificados(
               Integer idLocalidade, int anoMesAnteriorFaturamento,
@@ -12437,7 +12442,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				} 
 			}				
 				
-			 //Pesquisa a coleção de categorias no sistema
+			 //Pesquisa a coleï¿½ï¿½o de categorias no sistema
 			 Collection<Integer> colecaoIdsCategorias = this.repositorioArrecadacao.pesquisarIdsCategorias();
 			 
 			 for (Integer idCategoria : colecaoIdsCategorias) {
@@ -12469,15 +12474,15 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		try {
 
 			/*
-			 * Seleciona, a partir da tabela AVISO_BANCARIO com ano/mês de referência da arrecadação (AVBC_AMREFERENCIAARRECADACAO) menor ou igual ao ano/mês da
-			 * arrecadação recebido e com valor contabilizado (AVBC_VLCONTABILIZADO) diferente do valor realizado (AVBC_VLREALIZADO) e com valor realizado maior
-			 * que zero ordenando pelo arrecadador (ARRC_ID) e pela data de realização (AVBC_DTREALIZADA)
+			 * Seleciona, a partir da tabela AVISO_BANCARIO com ano/mï¿½s de referï¿½ncia da arrecadaï¿½ï¿½o (AVBC_AMREFERENCIAARRECADACAO) menor ou igual ao ano/mï¿½s da
+			 * arrecadaï¿½ï¿½o recebido e com valor contabilizado (AVBC_VLCONTABILIZADO) diferente do valor realizado (AVBC_VLREALIZADO) e com valor realizado maior
+			 * que zero ordenando pelo arrecadador (ARRC_ID) e pela data de realizaï¿½ï¿½o (AVBC_DTREALIZADA)
 			 */
 			Collection colecaoAvisosBancarios = this.pesquisarAvisosBancariosParaGerarLancamentosContabeis(anoMesArrecadacao);
 
 			if (colecaoAvisosBancarios != null && !colecaoAvisosBancarios.isEmpty()) {
 
-				// Gera os lançamentos contábeis na tabela LANCAMENTO_CONTABIL para o mês e ano da arrecadação (LCNB_AMLANCAMENTO) e origem com o valor correspondente a aviso bancário (LCOR_ID)
+				// Gera os lanï¿½amentos contï¿½beis na tabela LANCAMENTO_CONTABIL para o mï¿½s e ano da arrecadaï¿½ï¿½o (LCNB_AMLANCAMENTO) e origem com o valor correspondente a aviso bancï¿½rio (LCOR_ID)
 				LancamentoContabil lancamentoContabil = this.gerarLancamentoContabilParaAvisoBancario(anoMesArrecadacao);
 
 				Iterator iterator = colecaoAvisosBancarios.iterator();
@@ -12489,16 +12494,16 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					BigDecimal valorASerContabilizado = avisoBancario.getValorRealizado().subtract(avisoBancario.getValorContabilizado());
 
 					/*
-					 * Para os avisos bancários de crédito (AVBC_ICCREDITODEBITO=1) e com o valor a ser contabilizado positivo
+					 * Para os avisos bancï¿½rios de crï¿½dito (AVBC_ICCREDITODEBITO=1) e com o valor a ser contabilizado positivo
 					 * OU
-					 * Para os avisos bancários de débito (AVBC_ICCREDITODEBITO=2) e com valor a ser contabilizado negativo:
+					 * Para os avisos bancï¿½rios de dï¿½bito (AVBC_ICCREDITODEBITO=2) e com valor a ser contabilizado negativo:
 					 */
 					if ((avisoBancario.getIndicadorCreditoDebito().equals(AvisoBancario.INDICADOR_CREDITO) && valorASerContabilizado.compareTo(new BigDecimal("0.00")) > 0)
 							|| (avisoBancario.getIndicadorCreditoDebito().equals(AvisoBancario.INDICADOR_DEBITO) && valorASerContabilizado.compareTo(new BigDecimal("0.00")) < 0)) {
 
 						/*
-						 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta (CNCT_NMCONTA) correspondente a BANCO
-						 * CÓDIGO TERCEIRO = (CTBC_NNCONTACONTABIL da tabela CONTA_BANCARIA com CTBC_ID igual a CTBC_ID da tabela AVISO_BANCARIO)
+						 * CONTA CONTï¿½BIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta (CNCT_NMCONTA) correspondente a BANCO
+						 * Cï¿½DIGO TERCEIRO = (CTBC_NNCONTACONTABIL da tabela CONTA_BANCARIA com CTBC_ID igual a CTBC_ID da tabela AVISO_BANCARIO)
 						 */
 						ContaContabil contaContabilDebito = this.pesquisarContaContabilPorNomeConta("BANCO");
 
@@ -12506,8 +12511,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 								avisoBancario.getContaBancaria().getNumeroContaContabil());
 
 						/*
-						 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta (CNCT_NMCONTA) correspondente a ARRECADACAO A DISCRIMINAR
-						 * CÓDIGO TERCEIRO = NULL
+						 * CONTA CONTï¿½BIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta (CNCT_NMCONTA) correspondente a ARRECADACAO A DISCRIMINAR
+						 * Cï¿½DIGO TERCEIRO = NULL
 						 */
 						ContaContabil contaContabilCredito = this.pesquisarContaContabilPorNomeConta("ARRECADACAO A DISCRIMINAR");
 
@@ -12516,23 +12521,23 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					}
 
 					/*
-					 * Para os avisos bancários de débito (AVBC_ICCREDITODEBITO=2) e com o valor a ser contabilizado positivo
+					 * Para os avisos bancï¿½rios de dï¿½bito (AVBC_ICCREDITODEBITO=2) e com o valor a ser contabilizado positivo
 					 * OU
-					 * Para os avisos bancários de crédito (AVBC_ICCREDITODEBITO=1) e com valor a ser contabilizado negativo
+					 * Para os avisos bancï¿½rios de crï¿½dito (AVBC_ICCREDITODEBITO=1) e com valor a ser contabilizado negativo
 					 */
 					else {
 
 						/*
-						 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta (CNCT_NMCONTA) correspondente a ARRECADACAO A DISCRIMINAR
-						 * CÓDIGO TERCEIRO = NULL
+						 * CONTA CONTï¿½BIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta (CNCT_NMCONTA) correspondente a ARRECADACAO A DISCRIMINAR
+						 * Cï¿½DIGO TERCEIRO = NULL
 						 */
 						ContaContabil contaContabilDebito = this.pesquisarContaContabilPorNomeConta("ARRECADACAO A DISCRIMINAR");
 
 						this.gerarLancamentoContabilItem(anoMesArrecadacao, lancamentoContabil, AvisoBancario.INDICADOR_DEBITO, avisoBancario, contaContabilDebito, valorASerContabilizado.abs(), null);
 
 						/*
-						 * CONTA CONTÁBIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta (CNCT_NMCONTA) correspondente a BANCO
-						 * CÓDIGO TERCEIRO = (CTBC_NNCONTACONTABIL da tabela CONTA_BANCARIA com CTBC_ID igual a CTBC_ID da tabela  AVISO_BANCARIO)
+						 * CONTA CONTï¿½BIL = CNCT_IDDEBITO da tabela CONTA_CONTABIL com o nome da conta (CNCT_NMCONTA) correspondente a BANCO
+						 * Cï¿½DIGO TERCEIRO = (CTBC_NNCONTACONTABIL da tabela CONTA_BANCARIA com CTBC_ID igual a CTBC_ID da tabela  AVISO_BANCARIO)
 						 */
 						ContaContabil contaContabilCredito = this.pesquisarContaContabilPorNomeConta("BANCO");
 
@@ -12569,7 +12574,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     
     
     /**
-     * [UC0992] Gerar Lançamentos Contábeis dos Avisos Bancários 
+     * [UC0992] Gerar Lanï¿½amentos Contï¿½beis dos Avisos Bancï¿½rios 
      *
      * @author Raphael Rossiter
      * @date 22/02/2010
@@ -12582,17 +12587,17 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     	
     	LancamentoContabil lancamentoContabil = new LancamentoContabil();
     	
-    	//ANO MÊS LANÇAMENTO = Ano/mês de referência da arrecadação recebido
+    	//ANO Mï¿½S LANï¿½AMENTO = Ano/mï¿½s de referï¿½ncia da arrecadaï¿½ï¿½o recebido
     	lancamentoContabil.setAnoMes(anoMesReferenciaArrecadacao.intValue());
     	
-    	//ORIGEM DO LANÇAMENTO = Valor correspondente a aviso bancário da tabela LANCAMENTO_ORIGEM
+    	//ORIGEM DO LANï¿½AMENTO = Valor correspondente a aviso bancï¿½rio da tabela LANCAMENTO_ORIGEM
     	LancamentoOrigem lancamentoOrigem = new LancamentoOrigem();
     	lancamentoOrigem.setId(LancamentoOrigem.AVISO_BANCARIO);
     	lancamentoContabil.setLancamentoOrigem(lancamentoOrigem);
     	
     	/*
-    	 * TIPO DO LANCAMENTO = Tipo de Lançamento (LCTP_ID da tabela LANCAMENTO_TIPO com o 
-    	 * valor correspondente a aviso bancário)
+    	 * TIPO DO LANCAMENTO = Tipo de Lanï¿½amento (LCTP_ID da tabela LANCAMENTO_TIPO com o 
+    	 * valor correspondente a aviso bancï¿½rio)
     	 */
     	LancamentoTipo lancamentoTipo = new LancamentoTipo();
     	lancamentoTipo.setId(LancamentoTipo.AVISO_BANCARIO);
@@ -12602,10 +12607,10 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		Localidade localidadeSede = this.getControladorCobranca().pesquisarLocalidadeSede();
 		lancamentoContabil.setLocalidade(localidadeSede);
     	
-    	//ÚLTIMA ALTERAÇÃO
+    	//ï¿½LTIMA ALTERAï¿½ï¿½O
     	lancamentoContabil.setUltimaAlteracao(new Date());
     	
-    	//INSERINDO O LANÇAMENTO CONTÁBIL
+    	//INSERINDO O LANï¿½AMENTO CONTï¿½BIL
     	Integer idLancamentoContabil = (Integer) this.getControladorUtil().inserir(lancamentoContabil);
     	lancamentoContabil.setId(idLancamentoContabil);
     	
@@ -12614,7 +12619,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     
     
     /**
-     * [UC0992] Gerar Lançamentos Contábeis dos Avisos Bancários 
+     * [UC0992] Gerar Lanï¿½amentos Contï¿½beis dos Avisos Bancï¿½rios 
      */
     protected LancamentoContabilItem gerarLancamentoContabilItem(Integer anoMesReferenciaArrecadacao, LancamentoContabil lancamentoContabil, Short indicadorCreditoDebito,
     		AvisoBancario avisoBancario, ContaContabil contaContabil, BigDecimal valorLancamento, Integer codigoTerceiro) throws ControladorException {
@@ -12626,12 +12631,12 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		lancamentoContabilItem.setContaContabil(contaContabil);
 
 		/*
-		 * DESCRIÇÃO HISTÓRICO = Descrição da forma de arrecadação
+		 * DESCRIï¿½ï¿½O HISTï¿½RICO = Descriï¿½ï¿½o da forma de arrecadaï¿½ï¿½o
 		 * (ARFM_DSARRECADACAOFORMA da tabela ARRECADACAO_FORMA com ARFM_ID da
-		 * tabela AVISO_BANCARIO) concatenado com a data de realização do aviso
-		 * bancário (AVBC_DTREALIZADA) no formato DD/MM/AAAA e com a data de
-		 * lançamento do aviso bancário (AVBC_DTLANCAMENTO) no formato
-		 * DD/MM/AAAA. Separar os campos com ponto e vírgula.
+		 * tabela AVISO_BANCARIO) concatenado com a data de realizaï¿½ï¿½o do aviso
+		 * bancï¿½rio (AVBC_DTREALIZADA) no formato DD/MM/AAAA e com a data de
+		 * lanï¿½amento do aviso bancï¿½rio (AVBC_DTLANCAMENTO) no formato
+		 * DD/MM/AAAA. Separar os campos com ponto e vï¿½rgula.
 		 */
 		String descricaoArrecadacaoForma = "";
 		if (avisoBancario.getDataRealizada() != null) {
@@ -12648,12 +12653,12 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		lancamentoContabilItem.setCodigoTerceiro(codigoTerceiro);
 
 		/*
-		 * Caso o ano/mês de referência da arrecadação recebido seja igual ao
-		 * ano/mês da data de realização do aviso bancário (AVBC_DTREALIZADA),
-		 * atribuir a data de realização do aviso bancário;
+		 * Caso o ano/mï¿½s de referï¿½ncia da arrecadaï¿½ï¿½o recebido seja igual ao
+		 * ano/mï¿½s da data de realizaï¿½ï¿½o do aviso bancï¿½rio (AVBC_DTREALIZADA),
+		 * atribuir a data de realizaï¿½ï¿½o do aviso bancï¿½rio;
 		 * 
-		 * Caso contrário atribuir a data do último dia do ano/mês de referência
-		 * da arrecadação recebido.
+		 * Caso contrï¿½rio atribuir a data do ï¿½ltimo dia do ano/mï¿½s de referï¿½ncia
+		 * da arrecadaï¿½ï¿½o recebido.
 		 */
 		if (avisoBancario.getDataRealizada() != null && anoMesReferenciaArrecadacao.equals(Util.getAnoMesComoInteger(avisoBancario.getDataRealizada()))) {
 			lancamentoContabilItem.setDataLancamento(avisoBancario.getDataRealizada());
@@ -12673,7 +12678,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	}
     
     /**
-	 * [UC0992] Gerar Lançamentos Contábeis dos Avisos Bancários 
+	 * [UC0992] Gerar Lanï¿½amentos Contï¿½beis dos Avisos Bancï¿½rios 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 22/02/2010
@@ -12702,7 +12707,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	
 	
 	/**
-	 * [UC0992] Gerar Lançamentos Contábeis dos Avisos Bancários 
+	 * [UC0992] Gerar Lanï¿½amentos Contï¿½beis dos Avisos Bancï¿½rios 
 	 *
 	 * @author Raphael Rossiter
 	 * @date 22/02/2010
@@ -12736,7 +12741,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		ControladorCobrancaLocalHome localHome = null;
 		ControladorCobrancaLocal local = null;
 
-		// pega a instância do ServiceLocator.
+		// pega a instï¿½ncia do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -12745,7 +12750,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 			localHome = (ControladorCobrancaLocalHome) locator
 					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
+			// guarda a referencia de um objeto capaz de fazer chamadas ï¿½
 			// objetos remotamente
 			local = localHome.create();
 
@@ -12777,7 +12782,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
         // -------------------------
         //
-        // Registrar o início do processamento da Unidade de
+        // Registrar o inï¿½cio do processamento da Unidade de
         // Processamento
         // do Batch
         //
@@ -12792,9 +12797,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
         	Collection colecaoDocumentosAReceberResumo = new ArrayList();
         	
         	/*
-        	 * O sistema verifica se o resumo já foi gerado para o último faturamento encerrado;
-        	 * Caso existam, o sistema exclui os dados de referência igual à última referência de 
-        	 * faturamento gerada (ocorrências da tabela DOCUMENTOS_A_RECEBER_RESUMO com 
+        	 * O sistema verifica se o resumo jï¿½ foi gerado para o ï¿½ltimo faturamento encerrado;
+        	 * Caso existam, o sistema exclui os dados de referï¿½ncia igual ï¿½ ï¿½ltima referï¿½ncia de 
+        	 * faturamento gerada (ocorrï¿½ncias da tabela DOCUMENTOS_A_RECEBER_RESUMO com 
         	 * DRRS_AMREFERENCIADOCUMENTOS=PARM_AMREFERENCIAFATURAMENTO -1 da tabela SISTEMA_PARAMETROS);
         	 */
         	SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
@@ -12805,19 +12810,19 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
         	this.removerDocumentosAReceberFaixaResumo(anoMesReferenciaFaturamentoMenosUm, idLocalidade, session);
         	this.removerDocumentosAReceberResumo(anoMesReferenciaFaturamentoMenosUm, idLocalidade, session);
         	
-        	//[SB0001 – Gerar resumo a partir de contas];
+        	//[SB0001 ï¿½ Gerar resumo a partir de contas];
             this.gerarResumoAPartirConta(anoMesReferenciaFaturamentoMenosUm, idLocalidade, 
             		colecaoDocumentosAReceberResumo, session);
             
-            //[SB0002 – Gerar resumo a partir de guias de pagamento]
+            //[SB0002 ï¿½ Gerar resumo a partir de guias de pagamento]
             this.gerarResumoAPartirGuiaPagamento(anoMesReferenciaFaturamentoMenosUm, idLocalidade, 
             		colecaoDocumentosAReceberResumo, session);
             
-            //[SB0003 – Gerar resumo a partir de débitos a cobrar]
+            //[SB0003 ï¿½ Gerar resumo a partir de dï¿½bitos a cobrar]
             this.gerarResumoAPartirDebitoACobrar(anoMesReferenciaFaturamentoMenosUm, idLocalidade, 
             		colecaoDocumentosAReceberResumo, session);
             
-            //[SB0004 – Gerar resumo a partir de créditos a realizar]
+            //[SB0004 ï¿½ Gerar resumo a partir de crï¿½ditos a realizar]
             this.gerarResumoAPartirCreditoARealizar(anoMesReferenciaFaturamentoMenosUm, idLocalidade, 
             		colecaoDocumentosAReceberResumo, session);
 
@@ -12825,7 +12830,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
             getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
             idUnidadeIniciada, false);
 
-            System.out.println("FIM DA GERAÇÃO - Localidade " + idLocalidade);
+            System.out.println("FIM DA GERAï¿½ï¿½O - Localidade " + idLocalidade);
 
         } catch (Exception e) {
             getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
@@ -12864,7 +12869,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	/**
 	 * [UC0989] Gerar Resumo de Documentos a Receber
 	 * 
-	 * [SB0001 – Gerar resumo a partir de contas]
+	 * [SB0001 ï¿½ Gerar resumo a partir de contas]
 	 *
 	 * @author Raphael Rossiter
 	 * @date 10/03/2010
@@ -12896,7 +12901,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	/**
 	 * [UC0989] Gerar Resumo de Documentos a Receber
 	 * 
-	 * [SB0002 – Gerar resumo a partir de guias de pagamento]
+	 * [SB0002 ï¿½ Gerar resumo a partir de guias de pagamento]
 	 *
 	 * @author Raphael Rossiter
 	 * @date 10/03/2010
@@ -12928,7 +12933,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	/**
 	 * [UC0989] Gerar Resumo de Documentos a Receber
 	 * 
-	 * [SB0003 – Gerar resumo a partir de débitos a cobrar]
+	 * [SB0003 ï¿½ Gerar resumo a partir de dï¿½bitos a cobrar]
 	 *
 	 * @author Raphael Rossiter
 	 * @date 10/03/2010
@@ -12960,7 +12965,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	/**
 	 * [UC0989] Gerar Resumo de Documentos a Receber
 	 * 
-	 * [SB0004 – Gerar resumo a partir de créditos a realizar]
+	 * [SB0004 ï¿½ Gerar resumo a partir de crï¿½ditos a realizar]
 	 *
 	 * @author Raphael Rossiter
 	 * @date 10/03/2010
@@ -13050,11 +13055,11 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					 * 
 					 * Para os documentos do tipo CONTA E GUIA DE PAGAMENTO:
 					 * Calcular a quantidade de dias vencidos a partir da data de vencimento do documento em 
-					 * relação ao último dia do mês de referência do faturamento (data referente ao último dia 
+					 * relaï¿½ï¿½o ao ï¿½ltimo dia do mï¿½s de referï¿½ncia do faturamento (data referente ao ï¿½ltimo dia 
 					 * de PARM_AMREFERENCIAFATURAMENTO da tabela SISTEMA_PARAMETROS menos a data de 
 					 * vencimento do documento);
 					 * 
-					 * Caso contrário atribuir 0 (zero) a quantidade de dias de vencimento
+					 * Caso contrï¿½rio atribuir 0 (zero) a quantidade de dias de vencimento
 					 */
 					Integer quantidadeDiasVencido = 0;
 					
@@ -13110,7 +13115,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					}
 					
 					/*
-					 * Ano e Mês de Referência dos documentos a receber (PARM_AMREFERENCIAFATURAMENTO - 1 da 
+					 * Ano e Mï¿½s de Referï¿½ncia dos documentos a receber (PARM_AMREFERENCIAFATURAMENTO - 1 da 
 					 * tabela SISTEMA_PARAMETROS)
 					 */
 					documentosAReceberResumo.setAnoMesReferenciaRecebimentos(anoMesReferenciaFaturamento);
@@ -13126,7 +13131,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					
 					/*
 					 * INDICADOR SITUCAO DOCUMENTO
-					 * Para os documentos do tipo CONTA E GUIA DE PAGAMENTO colocar 2 - VENCIDO, já para os documentos
+					 * Para os documentos do tipo CONTA E GUIA DE PAGAMENTO colocar 2 - VENCIDO, jï¿½ para os documentos
 					 * do tipo DEBITO A COBRAR e CREDITO A REALIZAR colocar 1 - A VENCER
 					 */
 					if (documentosAReceberResumo.getDocumentoTipo().getId().equals(DocumentoTipo.CONTA) ||
@@ -13282,11 +13287,11 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	
     /**
      * [UC 0982] Gerar Resumo da Receita
-     * autor: Flávio Cordeiro
+     * autor: Flï¿½vio Cordeiro
      * data: 22/02/2010
      *
-     * Este caso de uso gera o resumo da receita aberta e será executado
-     * através de um batch
+     * Este caso de uso gera o resumo da receita aberta e serï¿½ executado
+     * atravï¿½s de um batch
      */
     
     public void gerarResumoReceita(int idFuncionalidadeIniciada) throws ControladorException{
@@ -13333,11 +13338,11 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     
     /**
      * [UC 0982] Gerar Resumo da Receita
-     * autor: Flávio Cordeiro
+     * autor: Flï¿½vio Cordeiro
      * data: 22/02/2010
      *
-     * Este caso de uso gera o resumo da receita aberta e será executado
-     * através de um batch
+     * Este caso de uso gera o resumo da receita aberta e serï¿½ executado
+     * atravï¿½s de um batch
      */
     public void inserirDadosContasResumoReceita(String dataInicial, String dataFinal, SistemaParametro sistemaParametro){
   	  	
@@ -13630,11 +13635,11 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     
     /**
      * [UC 0982] Gerar Resumo da Receita
-     * autor: Flávio Cordeiro
+     * autor: Flï¿½vio Cordeiro
      * data: 22/02/2010
      *
-     * Este caso de uso gera o resumo da receita aberta e será executado
-     * através de um batch
+     * Este caso de uso gera o resumo da receita aberta e serï¿½ executado
+     * atravï¿½s de um batch
      */
     public void inserirDadosContasHistoricoResumoReceita(String dataInicial, String dataFinal, SistemaParametro sistemaParametro){
 	  	
@@ -13925,11 +13930,11 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     
     /**
      * [UC 0982] Gerar Resumo da Receita
-     * autor: Flávio Cordeiro
+     * autor: Flï¿½vio Cordeiro
      * data: 22/02/2010
      *
-     * Este caso de uso gera o resumo da receita aberta e será executado
-     * através de um batch
+     * Este caso de uso gera o resumo da receita aberta e serï¿½ executado
+     * atravï¿½s de um batch
      */
     public void inserirDadosContasOutrosResumoReceita(String dataInicial, String dataFinal, SistemaParametro sistemaParametro){
 	  	
@@ -14530,10 +14535,10 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
     /**
      * [UC 0982] Gerar Resumo da Receita
      * 
-     * 1.O sistema apaga os dados da tabela RESUMO_RECEITA referente ao Mês/Ano da 
-     * arrecadação que está aberta.
+     * 1.O sistema apaga os dados da tabela RESUMO_RECEITA referente ao Mï¿½s/Ano da 
+     * arrecadaï¿½ï¿½o que estï¿½ aberta.
      *
-     * Autor: Flávio Cordeiro
+     * Autor: Flï¿½vio Cordeiro
      */
     public void apagarDadosResumoReceitaMesAnoArrecadacao(){
   	  try {
@@ -14570,7 +14575,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
@@ -14645,7 +14650,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
@@ -14716,7 +14721,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
@@ -14789,7 +14794,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
@@ -14864,7 +14869,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
@@ -14938,7 +14943,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
@@ -15104,7 +15109,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
@@ -15271,7 +15276,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
@@ -15435,7 +15440,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
@@ -15601,7 +15606,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
@@ -15676,7 +15681,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
@@ -15844,7 +15849,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
@@ -15919,7 +15924,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
@@ -15995,7 +16000,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
@@ -16176,7 +16181,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
@@ -16343,7 +16348,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
@@ -16419,7 +16424,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
@@ -16496,7 +16501,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @return
 	 * @throws ErroRepositorioException
 	 * 
-	 * Autor: Flávio Cordeiro
+	 * Autor: Flï¿½vio Cordeiro
 	 * [UC 0982] Gerar Resumo da Receita
 	 * [SB 0001] Resumo dos Pagamentos de Contas
 	 * 
