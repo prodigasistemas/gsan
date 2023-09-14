@@ -5,6 +5,7 @@ import gcom.atendimentopublico.ordemservico.FiltroOrdemServico;
 import gcom.atendimentopublico.ordemservico.OrdemServico;
 import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
+import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.endereco.Cep;
 import gcom.cadastro.endereco.EnderecoReferencia;
 import gcom.cadastro.endereco.Logradouro;
@@ -72,6 +73,7 @@ import org.apache.struts.validator.DynaValidatorForm;
  */
 public class AtualizarImovelAction extends GcomAction {
 
+	@SuppressWarnings("unchecked")
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
@@ -309,6 +311,8 @@ public class AtualizarImovelAction extends GcomAction {
 		
 		ImovelAbaCaracteristicasRetornoHelper resultadoAbaCaracteristicas = 
 			fachada.validarImovelAbaCaracteristicas(helperCaracteristica);
+		
+		fachada.validarPerfilImovelAoAtualizarImovelAbaCaracteristicas(imovelAtualizar.getId(), getClienteResponsavel(clientes), new Integer(perfilImovel));
 		
 		if (Util.verificarNaoVazio(areaConstruida)) {
 			imovel.setAreaConstruida(Util.formatarMoedaRealparaBigDecimal(areaConstruida));
@@ -1433,5 +1437,14 @@ public class AtualizarImovelAction extends GcomAction {
 		
 	}
 	
-
+	private ClienteImovel getClienteResponsavel(Collection<ClienteImovel> clientes) {
+    	
+    	for (ClienteImovel clienteImovel : clientes) {
+    		if (clienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.SIM)) {
+    			return clienteImovel;
+    		}
+    	}
+    	
+    	return null;
+    }
 }

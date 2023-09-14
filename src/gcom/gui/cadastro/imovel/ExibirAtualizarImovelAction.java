@@ -247,7 +247,7 @@ public class ExibirAtualizarImovelAction extends GcomAction {
 				throw new ActionServletException("atencao.usuario.sem.permissao.atualizar.usuario.bolsa_agua");
 
         }
-
+        
         //HINT DO IMÓVEL
 		statusWizard.adicionarItemHint("Matrícula:", imovel.getId().toString());
 		statusWizard.adicionarItemHint("Inscrição:", imovel.getInscricaoFormatada());

@@ -15014,6 +15014,14 @@ public class ControladorImovelSEJB extends ControladorComum {
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
+	
+	public Cliente consultarClienteNomeContaDoImovel(Imovel imovel) throws ControladorException {
+		try {
+			return repositorioImovel.consultarClienteNomeContaDoImovel(imovel);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
 
 	public String consultarNomeClienteResponsavelImovel(Integer idImovel) throws ControladorException {
 		String nomeClienteUsuario = null;
@@ -15208,6 +15216,74 @@ public class ControladorImovelSEJB extends ControladorComum {
 			repositorioImovel.atualizarPerfilImovel(idImovel, idPerfil);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+	
+	public void validarPerfilImovelAoAtualizarImovelAbaCaracteristicas(Integer idImovel, ClienteImovel novoClienteImovel,  Integer novoPerfil) throws ControladorException {
+		
+		System.out.println("1 ... ");
+		Imovel imovel = new Imovel(idImovel);
+		
+		if (novoPerfil.equals(ImovelPerfil.BOLSA_AGUA)) {
+			System.out.println("2 ... ");
+			Cliente cliente = null;
+			
+			if (novoClienteImovel != null) {
+				cliente = getControladorCliente().consultarCliente(novoClienteImovel.getCliente().getId());
+				System.out.println("3 ... " + cliente.getId());
+			} else {
+				cliente = this.consultarClienteNomeContaDoImovel(imovel);
+				System.out.println("4 ... " + cliente.getId());
+			}
+
+			System.out.println("5 ... " + cliente.getId());
+			if (verificarSeClienteResponsavelDoImovelPossuiOutroImovelComPerfilAguaPara(imovel, cliente)) {
+				System.out.println("6 ... " + cliente.getId());
+				throw new ControladorException("atencao.cliente.responsavel.ja.possui.imovel.aguapara"	);
+			}
+			
+			System.out.println("7 ... " + cliente.getId());
+			if (!getControladorCliente().verificarSeClientePossuiNis(cliente.getId())) {
+				System.out.println("8 ... " + cliente.getId());
+				throw new ControladorException("atencao.cliente.responsavel.nao.possui.nis"	);
+			}
+
+			System.out.println("10 ... " + cliente.getId());
+		}
+		System.out.println("11... ");
+	}
+	
+	public boolean verificarSeClienteResponsavelDoImovelPossuiOutroImovelComPerfilAguaPara(Imovel imovel, Cliente cliente) throws ControladorException {
+		
+		try {
+			List<ClienteImovel> listaClienteImovel = pesquisarImoveisDoClienteResponsavel(cliente.getId());
+			
+			if (listaClienteImovel.size() > 1) {
+				
+				for (ClienteImovel clienteImovel : listaClienteImovel) {
+					if (clienteImovel.getIndicadorNomeConta().equals(ConstantesSistema.SIM)
+							&& clienteImovel.getImovel().isImovelBolsaAgua()) {
+						return true;
+					}
+				}
+			}
+			return false;
+			
+		} catch (ControladorException e) {
+			throw new ControladorException("Erro ao validar se o imovel pode ser alterado para perfil agua AGUA PARA. ", e);
+		}
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public List<ClienteImovel> pesquisarImoveisDoClienteResponsavel(Integer idCliente) throws ControladorException {
+		try {
+			
+			return repositorioImovel.pesquisarImoveisDoCliente(idCliente);
+
+		} catch (ErroRepositorioException ex) {
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
 		}
 	}
 }
