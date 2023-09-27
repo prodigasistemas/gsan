@@ -10373,12 +10373,16 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "inner join cli.clienteTipo cltp "
 					+ "where imo.id = :idImovel AND "
 					+ "crt.id = :idResponsavel AND "
-					+ "cltp.esferaPoder.id = :esferaPoder AND "
+					+ "cltp.esferaPoder.id in  (:esferaPoderFederal, "
+					+ ":esferaPoderMunicipal, "
+					+ ":esferaPoderEstadual) and "
 					+ "cliImo.dataFimRelacao is null ";
 			retorno = (Integer) session.createQuery(consulta).setInteger(
 					"idImovel", idImovel).setInteger("idResponsavel",
-					ClienteRelacaoTipo.RESPONSAVEL).setInteger("esferaPoder",
-					EsferaPoder.FEDERAL).setMaxResults(1).uniqueResult();
+					ClienteRelacaoTipo.RESPONSAVEL).setInteger("esferaPoderFederal",
+					EsferaPoder.FEDERAL).setInteger("esferaPoderEstadual",
+					EsferaPoder.ESTADUAL).setInteger("esferaPoderMunicipal",
+					EsferaPoder.MUNICIPAL).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
 			// levanta a exce��o para a pr�xima camada
