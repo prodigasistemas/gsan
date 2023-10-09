@@ -66,6 +66,7 @@ public class ExibirManterClienteAction extends GcomAction {
 		String tipoPesquisa  = (String) sessao.getAttribute("tipoPesquisa");
 		String tipoPesquisaNomeMae  = (String) sessao.getAttribute("tipoPesquisaNomeMae");
 		String idEsferaPoder  = (String) sessao.getAttribute("idEsferaPoder");
+		String nis = (String) sessao.getAttribute("nis");
 		
 		
 		
@@ -133,7 +134,7 @@ public class ExibirManterClienteAction extends GcomAction {
 					indicadorUso,
 					tipoPesquisa,
 					tipoPesquisaNomeMae, null,
-					idEsferaPoder);
+					idEsferaPoder, nis);
 
 			// 2º Passo - Chamar a função de Paginação passando o total de registros
 			retorno = this.controlarPaginacao(httpServletRequest, retorno,
@@ -160,7 +161,7 @@ public class ExibirManterClienteAction extends GcomAction {
 					tipoPesquisaNomeMae,
 					null, idEsferaPoder,
 					(Integer) httpServletRequest
-							.getAttribute("numeroPaginasPesquisa"));
+							.getAttribute("numeroPaginasPesquisa"), nis);
 		    
 			if (clientes == null || clientes.isEmpty()) {
 				// Nenhum cliente cadastrado

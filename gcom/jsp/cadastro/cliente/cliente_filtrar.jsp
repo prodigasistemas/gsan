@@ -196,6 +196,7 @@ function limparForm(){
 	form.cpfClienteFiltro.value = "";
 	form.rgClienteFiltro.value = "";
 	form.cnpjClienteFiltro.value = "";
+	form.nisClienteFiltro.value = "";
 	form.codigoClienteFiltro.value = "";
 	form.nomeClienteFiltro.value = "";
     form.nomeMaeClienteFiltro.value = "";
@@ -334,6 +335,14 @@ function valorCheckAtualizar(){
 					</td>
 					<td>
 						<html:text name="FiltrarClienteActionForm" property="cnpjClienteFiltro" size="14" maxlength="14" />
+					</td>
+				</tr>
+				<tr>
+					<td height="30">
+						<strong>NIS:</strong>
+					</td>
+					<td>
+						<html:text name="FiltrarClienteActionForm" property="nisClienteFiltro" size="14" maxlength="14" />
 					</td>
 				</tr>
 				<tr>

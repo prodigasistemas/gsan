@@ -37,7 +37,12 @@ public class FiltroCliente extends Filtro implements Serializable {
 	 * Description of the Field
 	 */
 	public final static String CNPJ = "cnpj";
-
+	
+	/**
+	 * Description of the Field
+	 */
+	public final static String NIS = "numeroNIS";
+	
 	/**
 	 * Description of the Field
 	 */

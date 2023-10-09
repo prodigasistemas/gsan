@@ -1599,7 +1599,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 */
 	public Collection filtrarCliente(String codigo, String cpf, String rg, String cnpj, String nome, String nomeMae, String cep, String idMunicipio,
 			String idBairro, String idLogradouro, String indicadorUso, String tipoPesquisa, String tipoPesquisaNomeMae, String clienteTipo,
-			String idEsferaPoder, Integer numeroPagina) throws ControladorException {
+			String idEsferaPoder, Integer numeroPagina, String nis) throws ControladorException {
 
 		Collection colecaoDadosCliente = null;
 		Collection colecaoClientes = null;
@@ -1607,7 +1607,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 		try {
 
 			colecaoDadosCliente = this.repositorioCliente.filtrarCliente(codigo, cpf, rg, cnpj, nome, nomeMae, cep, idMunicipio, idBairro, idLogradouro,
-					indicadorUso, tipoPesquisa, tipoPesquisaNomeMae, clienteTipo, idEsferaPoder, numeroPagina);
+					indicadorUso, tipoPesquisa, tipoPesquisaNomeMae, clienteTipo, idEsferaPoder, numeroPagina, nis);
 
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
@@ -1707,7 +1707,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 	 * @throws ErroRepositorioException
 	 */
 	public Object filtrarQuantidadeCliente(String codigo, String cpf, String rg, String cnpj, String nome, String nomeMae, String cep, String idMunicipio,
-			String idBairro, String idLogradouro, String indicadorUso, String tipoPesquisa, String tipoPesquisaNomeMae, String clienteTipo, String idEsferaPoder)
+			String idBairro, String idLogradouro, String indicadorUso, String tipoPesquisa, String tipoPesquisaNomeMae, String clienteTipo, String idEsferaPoder, String nis)
 			throws ControladorException {
 
 		Object quantidade = null;
@@ -1715,7 +1715,7 @@ public class ControladorClienteSEJB extends ControladorComum {
 
 		try {
 			quantidade = repositorioCliente.filtrarQuantidadeCliente(codigo, cpf, rg, cnpj, nome, nomeMae, cep, idMunicipio, idBairro, idLogradouro,
-					indicadorUso, tipoPesquisa, tipoPesquisaNomeMae, clienteTipo, idEsferaPoder);
+					indicadorUso, tipoPesquisa, tipoPesquisaNomeMae, clienteTipo, idEsferaPoder, nis);
 
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);

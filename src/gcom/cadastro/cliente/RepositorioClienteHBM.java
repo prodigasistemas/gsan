@@ -556,7 +556,7 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 	@SuppressWarnings("rawtypes")
 	public Collection filtrarCliente(String codigo, String cpf, String rg, String cnpj, String nome, String nomeMae, String cep, String idMunicipio,
 			String idBairro, String idLogradouro, String indicadorUso, String tipoPesquisa, String tipoPesquisaNomeMae, String clienteTipo,
-			String idEsferaPoder, Integer numeroPagina) throws ErroRepositorioException {
+			String idEsferaPoder, Integer numeroPagina, String nis) throws ErroRepositorioException {
 
 		Collection retorno = null;
 		Session session = HibernateUtil.getSession();
@@ -645,6 +645,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			if ((cnpj != null && !cnpj.equals("") && !cnpj.trim().equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString()))) {
 				consulta = consulta + " cliente.cnpj = :cnpj and  ";
 			}
+			//nis
+			if ((nis != null && !nis.equals("") && !nis.trim().equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString()))) {
+				consulta = consulta + " cliente.numeroNIS = :nis and  ";
+			}
 			// nome
 			if (nome != null && !nome.equals("")) {
 				if (tipoPesquisa != null && tipoPesquisa.equals(ConstantesSistema.TIPO_PESQUISA_COMPLETA.toString())) {
@@ -727,6 +731,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			if ((cnpj != null && !cnpj.equals("") && !cnpj.trim().equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString()))) {
 				query.setString("cnpj", cnpj);
 			}
+			// nis
+			if ((nis != null && !nis.equals("") && !nis.trim().equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString()))) {
+				query.setString("nis", nis);
+			}
 			// municipio
 			if (idMunicipio != null && !idMunicipio.equals("")
 					&& !idMunicipio.trim().equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString())) {
@@ -783,7 +791,7 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 	public Object filtrarQuantidadeCliente(String codigo, String cpf, String rg, String cnpj, String nome, String nomeMae, String cep, String idMunicipio,
 			String idBairro, String idLogradouro, String indicadorUso, String tipoPesquisa,
 
-			String tipoPesquisaNomeMae, String clienteTipo, String idEsferaPoder) throws ErroRepositorioException {
+			String tipoPesquisaNomeMae, String clienteTipo, String idEsferaPoder, String nis) throws ErroRepositorioException {
 
 		Object retorno = null;
 		Session session = HibernateUtil.getSession();
@@ -842,6 +850,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			// cpf
 			if ((cpf != null && !cpf.equals("") && !cpf.trim().equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString()))) {
 				consulta = consulta + " cliente.cpf = :cpf  and  ";
+			}
+			//nis
+			if ((nis != null && !nis.equals("") && !nis.trim().equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString()))) {
+				consulta = consulta + " cliente.numeroNIS = :nis  and  ";
 			}
 			// rg
 			if ((rg != null && !rg.equals("") && !rg.trim().equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString()))) {
@@ -920,6 +932,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			// cpf
 			if ((cpf != null && !cpf.equals("") && !cpf.trim().equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString()))) {
 				query.setString("cpf", cpf);
+			}
+			// nis
+			if ((nis != null && !nis.equals("") && !nis.trim().equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString()))) {
+				query.setString("nis", nis);
 			}
 			// rg
 			if ((rg != null && !rg.equals("") && !rg.trim().equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString()))) {

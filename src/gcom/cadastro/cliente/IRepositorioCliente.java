@@ -57,7 +57,7 @@ public interface IRepositorioCliente {
 			String tipoPesquisa,
 			String tipoPesquisaNomeMae,
 			String clienteTipo, String idEsferaPoder,
-		    Integer numeroPagina) throws ErroRepositorioException; 
+		    Integer numeroPagina, String nis) throws ErroRepositorioException; 
 	
 	public Object filtrarQuantidadeCliente(
 			String codigo,
@@ -73,7 +73,7 @@ public interface IRepositorioCliente {
 			String indicadorUso,
 			String tipoPesquisa,
 			String tipoPesquisaNomeMae,
-			String clienteTipo, String idEsferaPoder
+			String clienteTipo, String idEsferaPoder, String nis
 			) throws ErroRepositorioException; 
 	
 	@SuppressWarnings("rawtypes")	

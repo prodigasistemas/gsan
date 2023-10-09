@@ -29,6 +29,7 @@ public class FiltrarClienteActionForm extends ValidatorForm {
 	private String tipoPesquisa;
 	private String tipoPesquisaNomeMae;
 	private String idEsferaPoder;
+	private String nisClienteFiltro;
 	
 	/**
 	 * @return Retorna o campo idEsferaPoder.
@@ -259,6 +260,12 @@ public class FiltrarClienteActionForm extends ValidatorForm {
 	 */
 	public void setTipoPesquisaNomeMae(String tipoPesquisaNomeMae) {
 		this.tipoPesquisaNomeMae = tipoPesquisaNomeMae;
+	}
+	public String getNisClienteFiltro() {
+		return nisClienteFiltro;
+	}
+	public void setNisClienteFiltro(String nisClienteFiltro) {
+		this.nisClienteFiltro = nisClienteFiltro;
 	}
 	
 }

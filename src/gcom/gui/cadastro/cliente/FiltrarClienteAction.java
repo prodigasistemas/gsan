@@ -69,6 +69,7 @@ public class FiltrarClienteAction extends Action {
 		String tipoPesquisaNomeMae = (String) filtrarClienteActionForm.getTipoPesquisaNomeMae();
 		String idEsferaPoder = (String) filtrarClienteActionForm.getIdEsferaPoder();
 		String atualizar = (String)httpServletRequest.getParameter("atualizarFiltro");
+		String nis = (String) filtrarClienteActionForm.getNisClienteFiltro();
 		
 		sessao.setAttribute("atualizar", atualizar);
 		
@@ -180,6 +181,12 @@ public class FiltrarClienteAction extends Action {
 			
 			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ESFERA_PODER_ID, idEsferaPoder));
 		}
+		
+		if (nis != null && !nis.trim().equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
+			peloMenosUmParametroInformado = true;
+			
+			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.NIS, nis));
+		}
 
 		// Erro caso o usuário mandou filtrar sem nenhum parâmetro
 		if (!peloMenosUmParametroInformado) {
@@ -207,7 +214,7 @@ public class FiltrarClienteAction extends Action {
 		sessao.setAttribute("tipoPesquisa",(String) filtrarClienteActionForm.getTipoPesquisa());
 		sessao.setAttribute("tipoPesquisaNomeMae",(String) filtrarClienteActionForm.getTipoPesquisaNomeMae());
 		sessao.setAttribute("idEsferaPoder",(String) filtrarClienteActionForm.getIdEsferaPoder());
-
+		sessao.setAttribute("nis",(String) filtrarClienteActionForm.getNisClienteFiltro());
 		
 		// Devolve o mapeamento de retorno
 		return retorno;

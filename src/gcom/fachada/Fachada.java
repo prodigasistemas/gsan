@@ -16433,10 +16433,10 @@ public class Fachada {
 	}
 
 	public Collection filtrarCliente(String codigo, String cpf, String rg, String cnpj, String nome, String nomeMae, String cep, String idMunicipio, String idBairro, String idLogradouro,
-			String indicadorUso, String tipoPesquisa, String tipoPesquisaNomeMae, String clienteTipo, String idEsferaPoder, Integer numeroPagina) {
+			String indicadorUso, String tipoPesquisa, String tipoPesquisaNomeMae, String clienteTipo, String idEsferaPoder, Integer numeroPagina, String nis) {
 		try {
 			return this.getControladorCliente().filtrarCliente(codigo, cpf, rg, cnpj, nome, nomeMae, cep, idMunicipio, idBairro, idLogradouro, indicadorUso, tipoPesquisa, tipoPesquisaNomeMae,
-					clienteTipo, idEsferaPoder, numeroPagina);
+					clienteTipo, idEsferaPoder, numeroPagina, nis);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
@@ -16444,10 +16444,10 @@ public class Fachada {
 	}
 
 	public Object filtrarQuantidadeCliente(String codigo, String cpf, String rg, String cnpj, String nome, String nomeMae, String cep, String idMunicipio, String idBairro, String idLogradouro,
-			String indicadorUso, String tipoPesquisa, String tipoPesquisaNomeMae, String clienteTipo, String idEsferaPoder) {
+			String indicadorUso, String tipoPesquisa, String tipoPesquisaNomeMae, String clienteTipo, String idEsferaPoder, String nis) {
 		try {
 			return this.getControladorCliente().filtrarQuantidadeCliente(codigo, cpf, rg, cnpj, nome, nomeMae, cep, idMunicipio, idBairro, idLogradouro, indicadorUso, tipoPesquisa,
-					tipoPesquisaNomeMae, clienteTipo, idEsferaPoder);
+					tipoPesquisaNomeMae, clienteTipo, idEsferaPoder, nis);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}

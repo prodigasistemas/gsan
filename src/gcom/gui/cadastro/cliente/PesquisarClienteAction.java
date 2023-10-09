@@ -1,9 +1,11 @@
 package gcom.gui.cadastro.cliente;
 
+import gcom.cadastro.cliente.FiltroCliente;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
+import gcom.util.filtro.ParametroSimples;
 
 import java.util.Collection;
 
@@ -64,6 +66,7 @@ public class PesquisarClienteAction extends GcomAction {
 		String idLogradouro = (String) pesquisarActionForm.get("idLogradouroCliente");
 		String idEsferaPoder = (String) pesquisarActionForm.get("idEsferaPoder");
 		String tipoPesquisa = (String) pesquisarActionForm.get("tipoPesquisa");
+		String nis = (String) pesquisarActionForm.get("nis");
 
 		// filtro para a pesquisa de endereco do cliente
 		/*FiltroCliente filtroCliente = new FiltroCliente();
@@ -150,6 +153,10 @@ public class PesquisarClienteAction extends GcomAction {
 		if (idEsferaPoder != null && !idEsferaPoder.trim().equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 			peloMenosUmParametroInformado = true;
 		}
+		
+		if (nis != null && !nis.trim().equals("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
+			peloMenosUmParametroInformado = true;
+		}
 
 		// Erro caso o usuário mandou filtrar sem nenhum parâmetro
 		if (!peloMenosUmParametroInformado) {
@@ -173,7 +180,7 @@ public class PesquisarClienteAction extends GcomAction {
 				null,
 				tipoPesquisa,
 				null,
-				idTipoCliente.toString(), idEsferaPoder);
+				idTipoCliente.toString(), idEsferaPoder, nis);
 
 		// 2º Passo - Chamar a função de Paginação passando o total de registros
 		retorno = this.controlarPaginacao(httpServletRequest, retorno,
@@ -198,7 +205,7 @@ public class PesquisarClienteAction extends GcomAction {
 				idTipoCliente.toString(),
 				idEsferaPoder,
 				(Integer) httpServletRequest
-						.getAttribute("numeroPaginasPesquisa"));
+						.getAttribute("numeroPaginasPesquisa"), nis);
 		
 
 /*		// 1º Passo - Pegar o total de registros através de um count da consulta que aparecerá na tela

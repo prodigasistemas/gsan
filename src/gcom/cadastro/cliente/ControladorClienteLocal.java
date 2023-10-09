@@ -87,10 +87,10 @@ public interface ControladorClienteLocal extends javax.ejb.EJBLocalObject {
 	@SuppressWarnings("rawtypes")
 	public Collection filtrarCliente(String codigo, String cpf, String rg, String cnpj, String nome, String nomeMae, String cep, String idMunicipio,
 			String idBairro, String idLogradouro, String indicadorUso, String tipoPesquisa, String tipoPesquisaNomeMae, String clienteTipo,
-			String idEsferaPoder, Integer numeroPagina) throws ControladorException;
+			String idEsferaPoder, Integer numeroPagina, String nis) throws ControladorException;
 
 	public Object filtrarQuantidadeCliente(String codigo, String cpf, String rg, String cnpj, String nome, String nomeMae, String cep, String idMunicipio,
-			String idBairro, String idLogradouro, String indicadorUso, String tipoPesquisa, String tipoPesquisaNomeMae, String clienteTipo, String idEsferaPoder)
+			String idBairro, String idLogradouro, String indicadorUso, String tipoPesquisa, String tipoPesquisaNomeMae, String clienteTipo, String idEsferaPoder, String nis)
 			throws ControladorException;
 
 	@SuppressWarnings("rawtypes")
