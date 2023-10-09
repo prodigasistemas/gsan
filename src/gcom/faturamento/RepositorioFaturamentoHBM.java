@@ -7909,7 +7909,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			String diaVencimento, String idCliente, String idClienteTipo,
 			String idClienteRelacaoTipo, String numeroPontosInicial,
 			String numeroPontosFinal, String numeroMoradoresInicial,
-			String numeroMoradoresFinal, String idAreaConstruidaFaixa)
+			String numeroMoradoresFinal, String idAreaConstruidaFaixa,
+			String unidadeRegional, String rotaOrigem, String rotaFinal, 
+			String sequencialRotaInicial, String sequencialRotaFinal)
 			throws ErroRepositorioException {
 
 		Collection retorno = null;
@@ -7948,16 +7950,13 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " left  join imovel.logradouroBairro logradouroBairro  "
 					+ " left  join logradouroBairro.bairro bairro   "
 					+ " left  join bairro.municipio municipio   "
-					+ " left  join imovel.logradouroBairro logradouroBairro "
-					+ " left  join logradouroBairro.bairro bairro   "
 					+ " inner join imovel.quadra quadra   "
+					+ " inner join quadra.rota rota "
 					+ " left  join imovel.logradouroCep logradouroCep "
 					+ " left  join logradouroCep.cep cep   "
-					+ " left  join imovel.logradouroCep logradouroCep "
 					+ " left  join logradouroCep.logradouro logradouro   "
 					+ " left  join imovel.imovelCondominio imovelCondominio   "
 					+ " left  join imovel.imovelPrincipal imovelPrincipal   "
-					// + " left join imovel.nomeConta nomeConta "
 					+ " left  join imovel.ligacaoAguaSituacao ligacaoAguaSituacao "
 					+ " left  join imovel.ligacaoAgua ligacaoAgua  "
 					+ " left  join imovel.ligacaoEsgotoSituacao ligacaoEsgotoSituacao "
@@ -7971,11 +7970,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " left  join imovel.cadastroOcorrencia cadastroOcorrencia "
 					+ " left  join imovel.areaConstruidaFaixa areaConstruidaFaixa  "
 					+ " left  join imovel.consumoTarifa consumoTarifa   "
-					+ " left  join imovel.ligacaoAguaSituacao ligacaoAguaSituacao "
-					+ " left  join imovel.ligacaoAgua ligacaoAgua   "
-					+ " left  join ligacaoAgua.hidrometroInstalacaoHistorico hidrometroInstalacaoHistorico "
-					+ " left  join imovel.hidrometroInstalacaoHistorico hidrometroInstalacaoHistoricoImovel  "
-					+ " left  join imovel.ligacaoAgua ligacaoAgua   "
 					+ " left  join ligacaoAgua.hidrometroInstalacaoHistorico hidrometroInstalacaoHistorico "
 					+ " left join imovel.consumosHistoricos consumosHistorico   "
 					+ " left join imovel.medicaoHistoricos medicaoHistorico   "
@@ -7983,12 +7977,11 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " left join clienteImoveis.clienteRelacaoTipo clienteRelacaoTipo "
 					+ " left join clienteImoveis.cliente cliente "
 					+ " left join cliente.clienteTipo clienteTipo "
-					+ " left join imovel.consumosHistoricos consumosHistorico "
 					+ " left outer join imovel.clienteImoveis clienteImoveisUsuario with (clienteImoveisUsuario.clienteRelacaoTipo.id = "
 					+ ClienteRelacaoTipo.USUARIO.toString()
 					+ ") and clienteImoveisUsuario.dataFimRelacao is null "
-					+ " left outer join clienteImoveisUsuario.cliente clienteUsuario ";
-
+					+ " left outer join clienteImoveisUsuario.cliente clienteUsuario";
+			
 			consulta = consulta
 					+ montarCondicaoWhereFiltrarImovelOutrosCriterio(
 							idImovelCondominio, idImovelPrincipal, idNomeConta,
@@ -8018,7 +8011,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							idClienteTipo, idClienteRelacaoTipo,
 							numeroPontosInicial, numeroPontosFinal,
 							numeroMoradoresInicial, numeroMoradoresFinal,
-							idAreaConstruidaFaixa);
+							idAreaConstruidaFaixa , unidadeRegional, 
+							rotaOrigem, rotaFinal, sequencialRotaInicial, sequencialRotaFinal);
 
 			/*
 			 * # COLOCANDO O VALOR NAS CONDI��ES#
@@ -8058,7 +8052,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					quantidadeEconomiasFinal, diaVencimento, idCliente,
 					idClienteTipo, idClienteRelacaoTipo, numeroPontosInicial,
 					numeroPontosFinal, numeroMoradoresInicial,
-					numeroMoradoresFinal, idAreaConstruidaFaixa);
+					numeroMoradoresFinal, idAreaConstruidaFaixa, unidadeRegional, 
+					rotaOrigem, rotaFinal, sequencialRotaInicial, sequencialRotaFinal);
 
 			retorno = query.list();
 
@@ -8100,7 +8095,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			String diaVencimento, String idCliente, String idClienteTipo,
 			String idClienteRelacaoTipo, String numeroPontosInicial,
 			String numeroPontosFinal, String numeroMoradoresInicial,
-			String numeroMoradoresFinal, String idAreaConstruidaFaixa) {
+			String numeroMoradoresFinal, String idAreaConstruidaFaixa, String unidadeNegocio, 
+			String rotaOrigem, String rotaFinal, String sequencialRotaInicial, String sequencialRotaFinal) {
 
 		String consulta = "";
 		/*
@@ -8108,6 +8104,28 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		 */
 		consulta = consulta + " where ";
 
+		// unidade regional
+		if(unidadeNegocio != null
+				&& !unidadeNegocio.equals("")
+				&& !unidadeNegocio.trim().equalsIgnoreCase(
+						new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO)
+								.toString())) {
+			consulta = consulta + " localidade.unidadeNegocio = :unidadeNegocio  and  ";
+		}
+		
+		// rota origem
+		if (rotaOrigem != null && !rotaOrigem.equals("") && !rotaOrigem.trim()
+				.equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString())) {
+			consulta = consulta + " rota.codigo >= :rotaOrigem  and rota.codigo <= :rotaFinal  and  ";
+		}
+
+
+		// sequencia rota inicial
+		if (sequencialRotaInicial != null && !sequencialRotaInicial.equals("") && !sequencialRotaInicial.trim()
+				.equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString())) {
+			consulta = consulta + " imovel.numeroSequencialRota >=:sequencialRotaInicial  and  imovel.numeroSequencialRota <= :sequencialRotaFinal  and  ";
+		}
+		
 		// cliente
 		if (idCliente != null
 				&& !idCliente.equals("")
@@ -8143,7 +8161,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO)
 								.toString())) {
 			consulta = consulta
-					+ " gerenciaRegional.id = :idGerenciaRegional and ";
+					+ " gerenciaRegional.id = :idGerenciaRegional  and  ";
 		}
 		// localidade inicial e final
 		if (((idLocalidadeInicial != null && !idLocalidadeInicial.equals("") && !idLocalidadeInicial
@@ -8570,8 +8588,34 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			String diaVencimento, String idCliente, String idClienteTipo,
 			String idClienteRelacaoTipo, String numeroPontosInicial,
 			String numeroPontosFinal, String numeroMoradoresInicial,
-			String numeroMoradoresFinal, String idAreaConstruidaFaixa) {
+			String numeroMoradoresFinal, String idAreaConstruidaFaixa, String idUnidadeNegocio, 
+			String rotaOrigem, String rotaFinal, String sequencialRotaInicial, String sequencialRotaFinal) {
 
+		// unidade regional
+		if (idUnidadeNegocio != null && !idUnidadeNegocio.equals("") && !idUnidadeNegocio.trim()
+				.equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString())) {
+			query.setInteger("unidadeNegocio", new Integer(idUnidadeNegocio).intValue());
+		}
+		// rota inicial
+		if (rotaOrigem != null && !rotaOrigem.equals("") && !rotaOrigem.trim()
+				.equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString())) {
+			query.setInteger("rotaOrigem", new Integer(rotaOrigem).intValue());
+		}
+		// rota final
+		if (rotaFinal != null && !rotaFinal.equals("") && !rotaFinal.trim()
+				.equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString())) {
+			query.setInteger("rotaFinal", new Integer(rotaFinal).intValue());
+		}
+		// sequencia rota inicial
+		if (sequencialRotaInicial != null && !sequencialRotaInicial.equals("") && !sequencialRotaInicial.trim()
+				.equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString())) {
+			query.setInteger("sequencialRotaInicial", new Integer(sequencialRotaInicial).intValue());
+		}
+		// seqeuncial rota final
+		if (sequencialRotaFinal != null && !sequencialRotaFinal.equals("") && !sequencialRotaFinal.trim()
+				.equalsIgnoreCase(new Integer(ConstantesSistema.NUMERO_NAO_INFORMADO).toString())) {
+			query.setInteger("sequencialRotaFinal", new Integer(sequencialRotaFinal).intValue());
+		}
 		// gerencia regional
 		if (idGerenciaRegional != null
 				&& !idGerenciaRegional.equals("")
@@ -40407,7 +40451,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			String diaVencimento, String idCliente, String idClienteTipo,
 			String idClienteRelacaoTipo, String numeroPontosInicial,
 			String numeroPontosFinal, String numeroMoradoresInicial,
-			String numeroMoradoresFinal, String idAreaConstruidaFaixa)
+			String numeroMoradoresFinal, String idAreaConstruidaFaixa, String idUnidadeNegocio, 
+			String rotaOrigem, String rotaFinal, String sequencialRotaInicial, String sequencialRotaFinal)
 			throws ErroRepositorioException {
 
 		Integer retorno = null;
@@ -40427,12 +40472,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " left  join imovel.logradouroBairro logradouroBairro  "
 					+ " left  join logradouroBairro.bairro bairro   "
 					+ " left  join bairro.municipio municipio   "
-					+ " left  join imovel.logradouroBairro logradouroBairro "
-					+ " left  join logradouroBairro.bairro bairro   "
 					+ " inner join imovel.quadra quadra   "
+					+ " inner join quadra.rota rota "
 					+ " left  join imovel.logradouroCep logradouroCep "
 					+ " left  join logradouroCep.cep cep   "
-					+ " left  join imovel.logradouroCep logradouroCep "
 					+ " left  join logradouroCep.logradouro logradouro   "
 					+ " left  join imovel.imovelCondominio imovelCondominio   "
 					+ " left  join imovel.imovelPrincipal imovelPrincipal   "
@@ -40449,11 +40492,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " left  join imovel.cadastroOcorrencia cadastroOcorrencia "
 					+ " left  join imovel.areaConstruidaFaixa areaConstruidaFaixa  "
 					+ " left  join imovel.consumoTarifa consumoTarifa   "
-					+ " left  join imovel.ligacaoAguaSituacao ligacaoAguaSituacao "
-					+ " left  join imovel.ligacaoAgua ligacaoAgua   "
-					+ " left  join ligacaoAgua.hidrometroInstalacaoHistorico hidrometroInstalacaoHistorico "
-					+ " left  join imovel.hidrometroInstalacaoHistorico hidrometroInstalacaoHistoricoImovel  "
-					+ " left  join imovel.ligacaoAgua ligacaoAgua   "
 					+ " left  join ligacaoAgua.hidrometroInstalacaoHistorico hidrometroInstalacaoHistorico "
 					+ " left join imovel.consumosHistoricos consumosHistorico   "
 					+ " left join imovel.medicaoHistoricos medicaoHistorico   "
@@ -40461,7 +40499,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " left join clienteImoveis.clienteRelacaoTipo clienteRelacaoTipo "
 					+ " left join clienteImoveis.cliente cliente "
 					+ " left join cliente.clienteTipo clienteTipo "
-					+ " left join imovel.consumosHistoricos consumosHistorico "
 					+ " left outer join imovel.clienteImoveis clienteImoveisUsuario with (clienteImoveisUsuario.clienteRelacaoTipo.id = "
 					+ ClienteRelacaoTipo.USUARIO.toString()
 					+ ") and clienteImoveisUsuario.dataFimRelacao is null "
@@ -40496,7 +40533,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							idClienteTipo, idClienteRelacaoTipo,
 							numeroPontosInicial, numeroPontosFinal,
 							numeroMoradoresInicial, numeroMoradoresFinal,
-							idAreaConstruidaFaixa);
+							idAreaConstruidaFaixa, idUnidadeNegocio, rotaOrigem,
+							rotaFinal, sequencialRotaInicial, sequencialRotaFinal);
 
 			Query query = session.createQuery(consulta.substring(0, (consulta
 					.length() - 6)));
@@ -40524,7 +40562,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					quantidadeEconomiasFinal, diaVencimento, idCliente,
 					idClienteTipo, idClienteRelacaoTipo, numeroPontosInicial,
 					numeroPontosFinal, numeroMoradoresInicial,
-					numeroMoradoresFinal, idAreaConstruidaFaixa);
+					numeroMoradoresFinal, idAreaConstruidaFaixa, idUnidadeNegocio, 
+					rotaOrigem, rotaFinal, sequencialRotaInicial, sequencialRotaFinal);
 
 			retorno = (Integer) query.uniqueResult();
 

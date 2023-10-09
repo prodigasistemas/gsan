@@ -7678,7 +7678,8 @@ public class Fachada {
 			String idLocalidadeFinal, String setorComercialInicial, String setorComercialFinal, String quadraInicial, String quadraFinal, String loteOrigem, String loteDestno, String cep,
 			String logradouro, String bairro, String municipio, String idTipoMedicao, String indicadorMedicao, String idSubCategoria, String idCategoria, String quantidadeEconomiasInicial,
 			String quantidadeEconomiasFinal, String diaVencimento, String idCliente, String idClienteTipo, String idClienteRelacaoTipo, String numeroPontosInicial, String numeroPontosFinal,
-			String numeroMoradoresInicial, String numeroMoradoresFinal, String idAreaConstruidaFaixa, int anoMesReferencia) {
+			String numeroMoradoresInicial, String numeroMoradoresFinal, String idAreaConstruidaFaixa, String idUnidadeNegocio,String rotaOrigem, String rotaFinal,String sequencialRotaInicial,
+            String sequencialRotaFinal,int anoMesReferencia) {
 		try {
 			return getControladorFaturamento().gerarRelacaoAcompanhamentoFaturamento(idImovelCondominio, idImovelPrincipal, idNomeConta, idSituacaoLigacaoAgua, consumoMinimoInicialAgua,
 					consumoMinimoFinalAgua, idSituacaoLigacaoEsgoto, consumoMinimoInicialEsgoto, consumoMinimoFinalEsgoto, intervaloValorPercentualEsgotoInicial, intervaloValorPercentualEsgotoFinal,
@@ -7689,7 +7690,7 @@ public class Fachada {
 					idCadastroOcorrencia, idConsumoTarifa, idGerenciaRegional, idLocalidadeInicial, idLocalidadeFinal, setorComercialInicial, setorComercialFinal, quadraInicial, quadraFinal,
 					loteOrigem, loteDestno, cep, logradouro, bairro, municipio, idTipoMedicao, indicadorMedicao, idSubCategoria, idCategoria, quantidadeEconomiasInicial, quantidadeEconomiasFinal,
 					diaVencimento, idCliente, idClienteTipo, idClienteRelacaoTipo, numeroPontosInicial, numeroPontosFinal, numeroMoradoresInicial, numeroMoradoresFinal, idAreaConstruidaFaixa,
-					anoMesReferencia
+					idUnidadeNegocio, rotaOrigem, rotaFinal, sequencialRotaInicial, sequencialRotaFinal, anoMesReferencia
 
 			);
 		} catch (ControladorException e) {
@@ -29617,7 +29618,8 @@ public class Fachada {
 			String idLocalidadeFinal, String setorComercialInicial, String setorComercialFinal, String quadraInicial, String quadraFinal, String loteOrigem, String loteDestno, String cep,
 			String logradouro, String bairro, String municipio, String idTipoMedicao, String indicadorMedicao, String idSubCategoria, String idCategoria, String quantidadeEconomiasInicial,
 			String quantidadeEconomiasFinal, String diaVencimento, String idCliente, String idClienteTipo, String idClienteRelacaoTipo, String numeroPontosInicial, String numeroPontosFinal,
-			String numeroMoradoresInicial, String numeroMoradoresFinal, String idAreaConstruidaFaixa, int anoMesReferencia) {
+			String numeroMoradoresInicial, String numeroMoradoresFinal, String idAreaConstruidaFaixa, String idUnidadeNegocio,String rotaOrigem, String rotaFinal,String sequencialRotaInicial,
+            String sequencialRotaFinal,int anoMesReferencia) {
 		try {
 			return getControladorFaturamento().gerarRelacaoAcompanhamentoFaturamentoCount(idImovelCondominio, idImovelPrincipal, idNomeConta, idSituacaoLigacaoAgua, consumoMinimoInicialAgua,
 					consumoMinimoFinalAgua, idSituacaoLigacaoEsgoto, consumoMinimoInicialEsgoto, consumoMinimoFinalEsgoto, intervaloValorPercentualEsgotoInicial, intervaloValorPercentualEsgotoFinal,
@@ -29627,10 +29629,8 @@ public class Fachada {
 					idImovelPerfil, idPocoTipo, idFaturamentoSituacaoTipo, idCobrancaSituacaoTipo, idSituacaoEspecialCobranca, idEloAnormalidade, areaConstruidaInicial, areaConstruidaFinal,
 					idCadastroOcorrencia, idConsumoTarifa, idGerenciaRegional, idLocalidadeInicial, idLocalidadeFinal, setorComercialInicial, setorComercialFinal, quadraInicial, quadraFinal,
 					loteOrigem, loteDestno, cep, logradouro, bairro, municipio, idTipoMedicao, indicadorMedicao, idSubCategoria, idCategoria, quantidadeEconomiasInicial, quantidadeEconomiasFinal,
-					diaVencimento, idCliente, idClienteTipo, idClienteRelacaoTipo, numeroPontosInicial, numeroPontosFinal, numeroMoradoresInicial, numeroMoradoresFinal, idAreaConstruidaFaixa,
-					anoMesReferencia
-
-			);
+					diaVencimento, idCliente, idClienteTipo, idClienteRelacaoTipo, numeroPontosInicial, numeroPontosFinal, numeroMoradoresInicial, numeroMoradoresFinal, idAreaConstruidaFaixa, 
+					 idUnidadeNegocio, rotaOrigem, rotaFinal, sequencialRotaInicial, sequencialRotaFinal, anoMesReferencia);
 		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 

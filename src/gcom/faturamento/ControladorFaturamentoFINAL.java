@@ -27424,7 +27424,8 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 			String quantidadeEconomiasFinal, String diaVencimento, String idCliente, String idClienteTipo,
 			String idClienteRelacaoTipo, String numeroPontosInicial, String numeroPontosFinal,
 			String numeroMoradoresInicial, String numeroMoradoresFinal, String idAreaConstruidaFaixa,
-			int anoMesReferencia) throws ControladorException {
+			String idUnidadeNegocio, String rotaOrigem, String rotaFinal, String sequencialRotaInicial,
+			String sequencialRotaFinal, int anoMesReferencia) throws ControladorException {
 
 		Collection colecaoImoveis = null;
 
@@ -27446,7 +27447,7 @@ public class ControladorFaturamentoFINAL extends ControladorComum {
 					logradouro, bairro, municipio, idTipoMedicao, indicadorMedicao, idSubCategoria, idCategoria,
 					quantidadeEconomiasInicial, quantidadeEconomiasFinal, diaVencimento, idCliente, idClienteTipo,
 					idClienteRelacaoTipo, numeroPontosInicial, numeroPontosFinal, numeroMoradoresInicial,
-					numeroMoradoresFinal, idAreaConstruidaFaixa);
+					numeroMoradoresFinal, idAreaConstruidaFaixa, idUnidadeNegocio, rotaOrigem, rotaFinal, sequencialRotaInicial, sequencialRotaFinal);
 		} catch (ErroRepositorioException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);

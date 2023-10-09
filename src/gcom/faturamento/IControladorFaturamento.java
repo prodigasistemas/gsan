@@ -309,7 +309,8 @@ public interface IControladorFaturamento {
 			String idLocalidadeFinal, String setorComercialInicial, String setorComercialFinal, String quadraInicial, String quadraFinal, String loteOrigem, String loteDestno, String cep,
 			String logradouro, String bairro, String municipio, String idTipoMedicao, String indicadorMedicao, String idSubCategoria, String idCategoria, String quantidadeEconomiasInicial,
 			String quantidadeEconomiasFinal, String diaVencimento, String idCliente, String idClienteTipo, String idClienteRelacaoTipo, String numeroPontosInicial, String numeroPontosFinal,
-			String numeroMoradoresInicial, String numeroMoradoresFinal, String idAreaConstruidaFaixa, int anoMesReferencia
+			String numeroMoradoresInicial, String numeroMoradoresFinal, String idAreaConstruidaFaixa, String idUnidadeNegocio, String rotaOrigem, String rotaFinal, String sequencialRotaInicial,
+			String sequencialRotaFinal, int anoMesReferencia
 	) throws ControladorException;
 
 	public Collection<FaturamentoAtividadeCronograma> pesquisarRelacaoAtividadesGrupo(Integer faturamentoGrupoId) throws ControladorException;
@@ -878,7 +879,7 @@ public interface IControladorFaturamento {
 			String idTipoMedicao, String indicadorMedicao, String idSubCategoria, String idCategoria, String quantidadeEconomiasInicial,
 			String quantidadeEconomiasFinal, String diaVencimento, String idCliente, String idClienteTipo, String idClienteRelacaoTipo,
 			String numeroPontosInicial, String numeroPontosFinal, String numeroMoradoresInicial, String numeroMoradoresFinal, String idAreaConstruidaFaixa,
-			int anoMesReferencia
+			String idUnidadeNegocio, String rotaOrigem, String rotaFinal, String sequencialRotaInicial, String sequencialRotaFinal, int anoMesReferencia
 
 	) throws ControladorException;
 

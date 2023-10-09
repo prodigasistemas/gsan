@@ -168,6 +168,16 @@ public class RelatorioAcompanhamentoFaturamento extends TarefaRelatorio {
 		
 		int tipoFormatoRelatorio = (Integer) getParametro("tipoFormatoRelatorio");
 		
+		String idUnidadeNegocio = (String) getParametro("unidadeNegocio");
+		
+		String rotaOrigem = (String) getParametro("cdRotaInicial");
+		
+		String rotaFinal = (String) getParametro("cdRotaFinal");
+		
+		String sequencialRotaInicial = (String) getParametro("sequencialRotaInicial");
+		
+		String sequencialRotaFinal = (String) getParametro("sequencialRotaFinal");
+		
 		//Collection imoveisRelatoriosHelper = (Collection) getParametro("imoveisRelatoriosHelper");
 
 		// valor de retorno
@@ -238,6 +248,11 @@ public class RelatorioAcompanhamentoFaturamento extends TarefaRelatorio {
 	             numeroMoradoresInicial,
 	             numeroMoradoresFinal,
 	             areaConstruidaFaixa,
+	             idUnidadeNegocio,
+	             rotaOrigem,
+	             rotaFinal,
+	             sequencialRotaInicial,
+	             sequencialRotaFinal,
 	             anoMesReferencia) ;
 
 		

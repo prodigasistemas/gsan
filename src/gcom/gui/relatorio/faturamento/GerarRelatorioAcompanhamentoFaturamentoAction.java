@@ -274,11 +274,27 @@ public class GerarRelatorioAcompanhamentoFaturamentoAction extends ExibidorProce
 		// anormalidade Elo
 		relatorioAcompanhamentoFaturamento.addParametro("anormalidadeElo",
 				imovelOutrosCriteriosActionForm.getAnormalidadeElo());
+		// anormalidade Elo
+		relatorioAcompanhamentoFaturamento.addParametro("unidadeNegocio",
+				imovelOutrosCriteriosActionForm.getUnidadeNegocio());
+		// anormalidade Elo
+		relatorioAcompanhamentoFaturamento.addParametro("cdRotaInicial",
+				imovelOutrosCriteriosActionForm.getCdRotaInicial());
+		// anormalidade Elo
+		relatorioAcompanhamentoFaturamento.addParametro("cdRotaFinal",
+				imovelOutrosCriteriosActionForm.getCdRotaFinal());
+		// anormalidade Elo
+		relatorioAcompanhamentoFaturamento.addParametro("sequencialRotaInicial",
+				imovelOutrosCriteriosActionForm.getSequencialRotaInicial());
+		// anormalidade Elo
+		relatorioAcompanhamentoFaturamento.addParametro("sequencialRotaFinal",
+				imovelOutrosCriteriosActionForm.getSequencialRotaFinal());
 
 		String tipoRelatorio = httpServletRequest.getParameter("tipoRelatorio");
 		if (tipoRelatorio == null) {
 			tipoRelatorio = TarefaRelatorio.TIPO_PDF + "";
-		}
+		}		
+		
 		Fachada fachada = Fachada.getInstancia();
 		
 		SistemaParametro sistemaParametros = fachada
@@ -341,6 +357,11 @@ public class GerarRelatorioAcompanhamentoFaturamentoAction extends ExibidorProce
 	             imovelOutrosCriteriosActionForm.getNumeroMoradoresInicial(),
 	             imovelOutrosCriteriosActionForm.getNumeroMoradoresFinal(),
 	             imovelOutrosCriteriosActionForm.getAreaConstruidaFaixa(),
+	             imovelOutrosCriteriosActionForm.getUnidadeNegocio(),
+	             imovelOutrosCriteriosActionForm.getCdRotaInicial(),
+	             imovelOutrosCriteriosActionForm.getCdRotaFinal(),
+	             imovelOutrosCriteriosActionForm.getSequencialRotaInicial(),
+	             imovelOutrosCriteriosActionForm.getSequencialRotaFinal(),
 	             anoMesReferencia);
 		
 		if ( relacaoAcompanhamentoFaturamento == null || relacaoAcompanhamentoFaturamento == 0 ) {

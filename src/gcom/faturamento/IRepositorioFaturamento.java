@@ -441,7 +441,9 @@ public interface IRepositorioFaturamento {
 			String diaVencimento, String idCliente, String idClienteTipo,
 			String idClienteRelacaoTipo, String numeroPontosInicial,
 			String numeroPontosFinal, String numeroMoradoresInicial,
-			String numeroMoradoresFinal, String idAreaConstruidaFaixa
+			String numeroMoradoresFinal, String idAreaConstruidaFaixa,
+			String unidadeNegocio, String rotaOrigem, String rotaFinal,
+			String sequencialRotaInicial, String sequencialRotaFinal
 
 	) throws ErroRepositorioException;
 
@@ -1924,7 +1926,9 @@ public interface IRepositorioFaturamento {
 			String diaVencimento, String idCliente, String idClienteTipo,
 			String idClienteRelacaoTipo, String numeroPontosInicial,
 			String numeroPontosFinal, String numeroMoradoresInicial,
-			String numeroMoradoresFinal, String idAreaConstruidaFaixa)
+			String numeroMoradoresFinal, String idAreaConstruidaFaixa, 
+			String idUnidadeNegocio, String rotaOrigem, String rotaFinal, 
+			String sequencialRotaInicial, String sequencialRotaFinal)
 			throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
