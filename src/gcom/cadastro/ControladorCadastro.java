@@ -14708,6 +14708,7 @@ public class ControladorCadastro extends ControladorComum {
 	
 	public void isNisValido(String numeroNIS, Short tipoPessoa, Integer idCliente, Short tipoOperacao)
 			throws ControladorException {
+		validarNIS(numeroNIS);
 		if (numeroNIS.trim().length() != 11) {
 			throw new ControladorException("atencao.erro_tamanho_do_nis_invalido");
 		}
@@ -14723,6 +14724,37 @@ public class ControladorCadastro extends ControladorComum {
 		if (!tipoPessoa.equals(ClienteTipo.INDICADOR_PESSOA_FISICA) && !numeroNIS.equals("")) {
 			throw new ControladorException("atencao.erro_pessoa_juridica_com_nis");
 		}
+	}
+	
+	public void validarNIS(String numeroNis) throws ControladorException {
+		String[] arrayNis = numeroNis.split("");
+		Integer peso1 = 3;
+		Integer peso2 = 9;
+		Integer soma = 0;
+		String zero = "00000000000";
+		
+		for(int i = 1; i < 3; i++){
+			soma += peso1 * Integer.parseInt(arrayNis[i]);
+			peso1--;
+		}
+		
+		for(int i = 3; i < 11; i++){
+			soma += peso2 * Integer.parseInt(arrayNis[i]);
+			peso2--;
+		}
+		
+		Integer resultado = 11 - (soma % 11);
+		
+		if(resultado == 10 || resultado == 11) {
+			resultado = 0;
+		}
+		
+		if(!(resultado == Integer.parseInt(arrayNis[11]))) {
+			throw new ControladorException("atencao.erro_nis_invalido");
+		}
+		if(numeroNis.equals(zero)) {
+			throw new ControladorException("atencao.erro_nis_invalido");
+		}	
 	}
 
 }

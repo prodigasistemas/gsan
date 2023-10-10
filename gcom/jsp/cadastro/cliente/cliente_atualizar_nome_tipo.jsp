@@ -174,6 +174,7 @@ function validarNIS(event) {
 	var peso1 = 3;
 	var peso2 = 9;
 	var soma = 0;
+	var zero = 00000000000;
 	
 	for(var i = 0; i < 2; i++){
 		soma += peso1 * arrayNis[i];
@@ -194,7 +195,9 @@ function validarNIS(event) {
 	if(!(resultado == arrayNis[10])) {
 		alert("Número NIS Inválido. Por Favor, verificar os dígitos.")
 	}
-		
+	if(numeroNis == zero) {
+		alert("Número NIS Inválido. Por Favor, verificar os dígitos.")
+	}	
 }
 
 

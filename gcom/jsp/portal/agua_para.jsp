@@ -135,13 +135,14 @@ function submeterCadastro(form){
 	      	
 }
 
- function validarNIS(event) {
+function validarNIS(event) {
 	event.preventDefault();
 	var numeroNis = event.target.value;
 	var arrayNis = numeroNis.split("");
 	var peso1 = 3;
 	var peso2 = 9;
 	var soma = 0;
+	var zero = 00000000000;
 	
 	for(var i = 0; i < 2; i++){
 		soma += peso1 * arrayNis[i];
@@ -162,7 +163,9 @@ function submeterCadastro(form){
 	if(!(resultado == arrayNis[10])) {
 		alert("Número NIS Inválido. Por Favor, verificar os dígitos.")
 	}
-		
+	if(numeroNis == zero) {
+		alert("Número NIS Inválido. Por Favor, verificar os dígitos.")
+	}	
 }
 
 function ehUmCPF(event) {
