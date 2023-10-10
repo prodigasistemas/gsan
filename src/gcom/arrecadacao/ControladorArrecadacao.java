@@ -1921,7 +1921,7 @@ public class ControladorArrecadacao extends ControladorComum {
 									dataInvalida = Util.validarAnoMesDiaSemBarra(registroHelperCodigoF.getDataDebito());
 									if (dataInvalida) {
 										dataExcludentes = true;
-										descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO INVÁLIDA";
+										descricaoOcorrenciaMovimento = "DATA DE DEBITO/PAGAMENTO INVALIDA";
 									}
 									// caso a data seja inválida não verifica se
 									// é maior que a data atual
@@ -1934,7 +1934,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 										if (dataDebito.after(new Date())
 												&& (registroHelperCodigoF.getCodigoRetorno().equals("00") || registroHelperCodigoF.getCodigoRetorno().equals("31"))) {
-											descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO POSTERIOR A DATA CORRENTE";
+											descricaoOcorrenciaMovimento = "DATA DE DEBITO/PAGAMENTO POSTERIOR A DATA CORRENTE";
 										}
 									}
 
@@ -1947,13 +1947,13 @@ public class ControladorArrecadacao extends ControladorComum {
 									}
 
 									if (anoMesReferencia) {
-										descricaoOcorrenciaMovimento = "ANO/MÊS DE REFERÊNCIA DA CONTA INVÁLIDA";
+										descricaoOcorrenciaMovimento = "ANO/MES DE REFERENCIA DA CONTA INVALIDA";
 									}
 
 									// valida o valor de debito recebido
 									valorDebitoInvalido = Util.validarValorNaoNumerico(registroHelperCodigoF.getValorDebito());
 									if (valorDebitoInvalido) {
-										descricaoOcorrenciaMovimento = "VALOR DEBITADO/RECEBIDO NÃO NUMÉRICO";
+										descricaoOcorrenciaMovimento = "VALOR DEBITADO/RECEBIDO NAO NUMERICO";
 									}
 
 									// verifica se existe a matricula do imóvel
@@ -1966,7 +1966,7 @@ public class ControladorArrecadacao extends ControladorComum {
 
 									if (codigoDebitoAutomaticoInvalido) {
 										System.out.println("Linha 783");
-										descricaoOcorrenciaMovimento = "CÓDIGO PARA DÉBITO AUTOMÁTICO INVÁLIDO";
+										descricaoOcorrenciaMovimento = "CODIGO PARA DEBITO AUTOMATICO INVALIDO";
 									}
 
 									Integer codigoDebitoAutomatico = new Integer(registroHelperCodigoF.getIdClienteEmpresa());
@@ -1991,7 +1991,7 @@ public class ControladorArrecadacao extends ControladorComum {
 											Imovel imovel = (Imovel) colecaoImoveisAntigo.iterator().next();
 											idImovelNaBase = imovel.getId();
 										} else {
-											descricaoOcorrenciaMovimento = "DÉBITO AUTOMÁTICO NÃO CADASTRADO";
+											descricaoOcorrenciaMovimento = "DEBITO AUTOMATICO NAO CADASTRADO";
 										}
 									}
 
@@ -4080,7 +4080,7 @@ public class ControladorArrecadacao extends ControladorComum {
         if (!registroHelperCodigoB.getCodigoMovimento().equals(RegistroHelperCodigoB.EXCLUSAO_DEBITO_AUTOMATICO) && 
         	!registroHelperCodigoB.getCodigoMovimento().equals(RegistroHelperCodigoB.INCLUSAO_DEBITO_AUTOMATICO)) {
             
-        	descricaoOcorrenciaMovimento = "CÓDIGO DE MOVIMENTO INVÁLIDO";
+        	descricaoOcorrenciaMovimento = "CODIGO DE MOVIMENTO INVALIDO";
 
         }
         
@@ -4088,7 +4088,7 @@ public class ControladorArrecadacao extends ControladorComum {
         dataInvalida = Util.validarAnoMesDiaSemBarra(registroHelperCodigoB
                         .getDataOpcaoExclusao());
         if (dataInvalida) {
-            descricaoOcorrenciaMovimento = "DATA DE OPÇÃO/EXCLUSÃO INVÁLIDA";
+            descricaoOcorrenciaMovimento = "DATA DE OPCAO/EXCLUSAO INVALIDA";
         }
         
         // Valida código para debito automático
@@ -4096,7 +4096,7 @@ public class ControladorArrecadacao extends ControladorComum {
         
         if(codigoDebitoAutomaticoInvalido){
         	System.out.println("Linha 2916");
-        	descricaoOcorrenciaMovimento = "CÓDIGO PARA DÉBITO AUTOMÁTICO INVÁLIDO";
+        	descricaoOcorrenciaMovimento = "CODIGO PARA DEBITO AUTOMATICO INVALIDO";
         }
         
         // caso a descricao de movimento seja igual a OK
@@ -4175,7 +4175,7 @@ public class ControladorArrecadacao extends ControladorComum {
          		}
          		else{
          			System.out.println("Linha 2993");
-         			descricaoOcorrenciaMovimento = "CÓDIGO PARA DÉBITO AUTOMÁTICO INVÁLIDO";
+         			descricaoOcorrenciaMovimento = "CODIGO PARA DEBITO AUTOMATICO INVALIDO";
          		}
             }
      		
