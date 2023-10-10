@@ -9,6 +9,7 @@ import gcom.cobranca.parcelamento.ParcelamentoPerfil;
 import gcom.fachada.Fachada;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.credito.CreditoOrigem;
+import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.financeiro.FinanciamentoTipo;
@@ -453,36 +454,46 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
                         Iterator creditoARealizarValores = colecaoCreditoARealizar.iterator();
                         Collection<CreditoARealizar> creditosRemovidos = new ArrayList<CreditoARealizar>();
 
-                        while (creditoARealizarValores.hasNext()) {
-                            CreditoARealizar creditoARealizar = (CreditoARealizar) creditoARealizarValores.next();
+						while (creditoARealizarValores.hasNext()) {
+							CreditoARealizar creditoARealizar = (CreditoARealizar) creditoARealizarValores.next();
+							if (verificaReferenciaIgualReferencialFaturamento(
+									Util.recuperaAnoMesDaData(creditoARealizar.getGeracaoCredito()))
+									|| creditoARealizar.getCreditoTipo().getId()
+											.equals(CreditoTipo.CREDITO_BOLSA_AGUA)) {
+								creditosRemovidos.add(creditoARealizar);
+								continue;
+							}
 
-                            if (verificaReferenciaIgualReferencialFaturamento(Util.recuperaAnoMesDaData(creditoARealizar.getGeracaoCredito()))) {
-                                creditosRemovidos.add(creditoARealizar);
-                                continue;
-                            }
+								if (isCreditoDeParcelamento(creditoARealizar)) {
+									BigDecimal[] valores = fachada.obterValorCurtoELongoPrazoParaParcelamento(
+											creditoARealizar.getNumeroPrestacaoCredito(),
+											creditoARealizar.getNumeroPrestacaoRealizada(),
+											creditoARealizar.getValorCredito(),
+											creditoARealizar.getValorNaoConcedido());
 
-                            if (isCreditoDeParcelamento(creditoARealizar)) {
-                                BigDecimal[] valores = fachada.obterValorCurtoELongoPrazoParaParcelamento(
-                                        creditoARealizar.getNumeroPrestacaoCredito(), 
-                                        creditoARealizar.getNumeroPrestacaoRealizada(), 
-                                        creditoARealizar.getValorCredito(), creditoARealizar.getValorNaoConcedido());
-                                
-                                BigDecimal valorCurtoPrazo = new BigDecimal("0.00");
-                                valorCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-                                valorCurtoPrazo = valorCurtoPrazo.add(valores[indiceCurtoPrazo]);
-                                
-                                BigDecimal valorLongoPrazo = new BigDecimal("0.00");                                
-                                valorLongoPrazo.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-                                valorLongoPrazo = valorLongoPrazo.add(valores[indiceLongoPrazo]);
-                                
-                                valorCreditosAnterioresCurtoPrazo = valorCreditosAnterioresCurtoPrazo.add(valorCurtoPrazo);
-                                valorCreditosAnterioresLongoPrazo = valorCreditosAnterioresLongoPrazo.add(valorLongoPrazo);
-                                valorTotalCreditosAnteriores = valorTotalCreditosAnteriores.add(valorCurtoPrazo).add(valorLongoPrazo);
-                            } else {
-                                valorCreditoARealizar.setScale(Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO);
-                                valorCreditoARealizar = valorCreditoARealizar.add(creditoARealizar.getValorTotalComBonus());
-                            }
-                        }
+									BigDecimal valorCurtoPrazo = new BigDecimal("0.00");
+									valorCurtoPrazo.setScale(Parcelamento.CASAS_DECIMAIS,
+											Parcelamento.TIPO_ARREDONDAMENTO);
+									valorCurtoPrazo = valorCurtoPrazo.add(valores[indiceCurtoPrazo]);
+
+									BigDecimal valorLongoPrazo = new BigDecimal("0.00");
+									valorLongoPrazo.setScale(Parcelamento.CASAS_DECIMAIS,
+											Parcelamento.TIPO_ARREDONDAMENTO);
+									valorLongoPrazo = valorLongoPrazo.add(valores[indiceLongoPrazo]);
+
+									valorCreditosAnterioresCurtoPrazo = valorCreditosAnterioresCurtoPrazo
+											.add(valorCurtoPrazo);
+									valorCreditosAnterioresLongoPrazo = valorCreditosAnterioresLongoPrazo
+											.add(valorLongoPrazo);
+									valorTotalCreditosAnteriores = valorTotalCreditosAnteriores.add(valorCurtoPrazo)
+											.add(valorLongoPrazo);
+								} else {
+									valorCreditoARealizar.setScale(Parcelamento.CASAS_DECIMAIS,
+											Parcelamento.TIPO_ARREDONDAMENTO);
+									valorCreditoARealizar = valorCreditoARealizar
+											.add(creditoARealizar.getValorTotalComBonus());
+								}
+						}
 
                         if (!creditosRemovidos.isEmpty())
                             colecaoCreditoARealizar.removeAll(creditosRemovidos);
